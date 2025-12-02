@@ -36,7 +36,7 @@ const isHome = Astro.url.pathname === "/";
         <Header title={SITE_TITLE} />
         <div class="md:flex md:justify-center">
           <!-- ✅ Also reinforced text scale inside main -->
-          <main class="p-6 pt-10 lg:max-w-[1000px] xl:max-w-[1100px] 2xl:max-w-[1320px] text-base leading-relaxed md:text-[1.05rem]">
+          <main class="p-6 pt-10 text-base leading-relaxed md:text-[1.05rem]">
             <slot />
           </main>
         </div>
