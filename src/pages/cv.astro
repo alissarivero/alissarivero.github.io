@@ -40,13 +40,20 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
   <a
     href="https://docs.google.com/document/d/1pGDpktHWTOFIAoS9j6Z6NZcigpKv67fye2jeIm_RL6U/edit?usp=sharing"
     target="_blank"
-    class="block w-[260px] rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm px-6 py-5 shadow-lg hover:bg-white/8 transition"
+    class="group block w-[260px] rounded-2xl border border-white/10
+           bg-white/5 backdrop-blur-sm px-6 py-5
+           shadow-lg transition-all duration-300
+           hover:-translate-y-1 hover:shadow-2xl hover:bg-white/10"
   >
     <div class="text-xs uppercase tracking-[0.18em] text-white/50 mb-2">
       Curriculum Vitae
     </div>
-    <div class="text-xl font-semibold text-white">
-      View Full CV →
+
+    <div class="text-xl font-semibold text-white flex items-center gap-2">
+      View Full CV
+      <span class="transition-transform duration-300 group-hover:translate-x-1">
+        →
+      </span>
     </div>
   </a>
 </div>
