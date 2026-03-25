@@ -4,10 +4,7 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
 ---
 
 <BaseLayout title="CV" sideBarActiveItemID="cv">
-
-  {/* CENTER PAGE CONTENT */}
   <div class="max-w-5xl mx-auto">
-
     <div class="mb-6">
       <div class="text-5xl font-bold text-white">CV</div>
     </div>
@@ -18,64 +15,52 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
       <div class="text-3xl font-bold text-white">Education</div>
     </div>
 
-    {/* ===== GRID ===== */}
-<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-10 items-start">
+      <div class="time-line-container grid gap-4 max-w-2xl">
+        <TimeLineElement
+          title="Duke University"
+          subtitle="Ph.D. in Developmental Psychology"
+          caption="2026–present | Advisors: Dr. Dorsa Amir and Dr. Tamar Kushnir"
+        />
+        <TimeLineElement
+          title="Duke University"
+          subtitle="B.A. in Psychology, Minor in Evolutionary Anthropology"
+          caption="2021–2025 | Advisor: Dr. Michael Tomasello"
+        />
+      </div>
 
-  {/* TIMELINE */}
-  <div class="time-line-container grid gap-4 mb-4 max-w-2xl">
-    <TimeLineElement
-      title="Duke University"
-      subtitle="Ph.D. in Developmental Psychology"
-      caption="2026–present | Advisors: Dr. Dorsa Amir and Dr. Tamar Kushnir"
-    />
-    <TimeLineElement
-      title="Duke University"
-      subtitle="B.A. in Psychology, Minor in Evolutionary Anthropology"
-      caption="2021–2025 | Advisor: Dr. Michael Tomasello"
-    />
-  </div>
-
-  {/* BUTTON COLUMN */}
-  <div class="flex justify-center lg:justify-start">
-  <a
-    href="https://docs.google.com/document/d/1pGDpktHWTOFIAoS9j6Z6NZcigpKv67fye2jeIm_RL6U/edit?usp=sharing"
-    target="_blank"
-    class="group block w-[260px] rounded-2xl border border-white/10
-           bg-white/5 backdrop-blur-sm px-6 py-5
-           shadow-lg transition-all duration-300
-           hover:-translate-y-1 hover:shadow-2xl hover:bg-white/10"
-  >
-    <div class="text-xs uppercase tracking-[0.18em] text-white/50 mb-2">
-      Curriculum Vitae
+      <div class="flex justify-start lg:justify-center pt-2">
+        <a
+          href="https://docs.google.com/document/d/1pGDpktHWTOFIAoS9j6Z6NZcigpKv67fye2jeIm_RL6U/edit?usp=sharing"
+          target="_blank"
+          class="group block w-[280px] rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm px-6 py-5 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-white/10"
+        >
+          <div class="mb-2 text-xs uppercase tracking-[0.18em] text-white/50">
+            Curriculum Vitae
+          </div>
+          <div class="flex items-center gap-2 text-xl font-semibold text-white">
+            View Full CV
+            <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </div>
+        </a>
+      </div>
     </div>
 
-    <div class="text-xl font-semibold text-white flex items-center gap-2">
-      View Full CV
-      <span class="transition-transform duration-300 group-hover:translate-x-1">
-        →
-      </span>
-    </div>
-  </a>
-</div>
+    <div class="mx-auto mt-10 mb-6 h-[2px] w-full bg-white opacity-80"></div>
 
-<div class="mx-auto mt--3 mb-8 h-[2px] w-full bg-white opacity-80"></div>
-
-    {/* PHOTOS */}
-    <div class="flex flex-col sm:flex-row justify-center gap-6 mt-6">
+    <div class="flex flex-col sm:flex-row justify-center gap-6">
       <img
         src="/baby.webp"
         alt="Baby Alissa"
-        class="rounded-xl shadow-md object-cover w-full sm:w-1/2"
+        class="rounded-xl shadow-md object-cover w-full sm:w-[48%] max-h-[340px]"
         loading="lazy"
       />
       <img
         src="/child.webp"
         alt="Young Alissa"
-        class="rounded-xl shadow-md object-cover w-full sm:w-1/2"
+        class="rounded-xl shadow-md object-cover w-full sm:w-[48%] max-h-[340px]"
         loading="lazy"
       />
     </div>
-
   </div>
-
 </BaseLayout>
