@@ -3,27 +3,22 @@ const { title, subtitle, caption } = Astro.props;
 ---
 
 <div class="flex">
-  {/* timeline */}
-  <div class="flex flex-col items-center">
-    <span class="w-4 h-4 bg-[#E7D6DC] rounded-full mt-1"></span>
-    <span class="bg-[#E7D6DC] w-[2px] flex-1 mt-1"></span>
+  <div class="education__time">
+    <span class="w-4 h-4 bg-[#E7D6DC] block rounded-full mt-1"></span>
+    <span class="education__line bg-[#E7D6DC] block h-full w-[2px] translate-x-[7px]"></span>
   </div>
 
-  {/* content */}
-  <div class="px-5 pb-7">
-    {/* title */}
-    <h3 class="text-white font-semibold text-lg leading-snug">
+  <div class="experience__data bd-grid px-5 pb-6">
+    <h3 class="text-white font-semibold text-lg leading-snug mb-1">
       {title}
     </h3>
 
-    {/* authors */}
-    <div class="text-white/80 text-sm mt-1">
+    <div class="text-white text-sm">
       {subtitle}
     </div>
 
-    {/* journal */}
     {caption && (
-      <div class="text-[#C7A9B4] text-sm italic mt-2">
+      <div class="mt-2 text-sm italic text-white">
         {caption}
       </div>
     )}
