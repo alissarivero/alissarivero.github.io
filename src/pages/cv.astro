@@ -5,56 +5,65 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
 
 <BaseLayout title="CV" sideBarActiveItemID="cv">
 
-  <div class="mb-6">
-    <div class="text-5xl font-bold text-white">CV</div>
-  </div>
+  {/* CENTER PAGE CONTENT */}
+  <div class="max-w-5xl mx-auto">
 
-  <div class="mx-auto mt-4 mb-8 h-[2px] w-7/8 bg-white opacity-80"></div>
+    <div class="mb-6">
+      <div class="text-5xl font-bold text-white">CV</div>
+    </div>
 
-  <div class="mb-5">
-    <div class="text-3xl font-bold text-white">Education</div>
-  </div>
+    <div class="mx-auto mt-4 mb-8 h-[2px] w-full bg-white opacity-80"></div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,700px)_220px] gap-8 items-start">
+    <div class="mb-5">
+      <div class="text-3xl font-bold text-white">Education</div>
+    </div>
 
-    <div class="time-line-container grid gap-4 mb-6">
-      <TimeLineElement
-        title="Duke University"
-        subtitle="Ph.D. in Developmental Psychology"
-        caption="2026–present | Advisors: Dr. Dorsa Amir and Dr. Tamar Kushnir"
+    {/* ===== GRID ===== */}
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 items-start">
+
+      {/* TIMELINE */}
+      <div class="time-line-container grid gap-4 mb-4 max-w-2xl">
+        <TimeLineElement
+          title="Duke University"
+          subtitle="Ph.D. in Developmental Psychology"
+          caption="2026–present | Advisors: Dr. Dorsa Amir and Dr. Tamar Kushnir"
+        />
+        <TimeLineElement
+          title="Duke University"
+          subtitle="B.A. in Psychology, Minor in Evolutionary Anthropology"
+          caption="2021–2025 | Advisor: Dr. Michael Tomasello"
+        />
+      </div>
+
+      {/* BUTTON */}
+      <div class="lg:sticky lg:top-28 pt-2">
+        <a
+          href="https://docs.google.com/document/d/1pGDpktHWTOFIAoS9j6Z6NZcigpKv67fye2jeIm_RL6U/edit?usp=sharing"
+          target="_blank"
+          class="btn btn-outline whitespace-nowrap"
+        >
+          View Full CV →
+        </a>
+      </div>
+
+    </div>
+
+    {/* PHOTOS */}
+    <div class="flex flex-col sm:flex-row justify-center gap-6 mt-6">
+      <img
+        src="/baby.webp"
+        alt="Baby Alissa"
+        class="rounded-xl shadow-md object-cover w-full sm:w-1/2"
+        loading="lazy"
       />
-      <TimeLineElement
-        title="Duke University"
-        subtitle="B.A. in Psychology, Minor in Evolutionary Anthropology"
-        caption="2021–2025 | Advisor: Dr. Michael Tomasello"
+      <img
+        src="/child.webp"
+        alt="Young Alissa"
+        class="rounded-xl shadow-md object-cover w-full sm:w-1/2"
+        loading="lazy"
       />
     </div>
 
-    <div class="lg:sticky lg:top-14">
-      <a
-        href="https://docs.google.com/document/d/1pGDpktHWTOFIAoS9j6Z6NZcigpKv67fye2jeIm_RL6U/edit?usp=sharing"
-        target="_blank"
-        class="btn btn-outline w-full text-center"
-      >
-        View Full CV →
-      </a>
-    </div>
-
-  </div>
-
-  <div class="flex flex-col sm:flex-row justify-center gap-6 mt-8">
-    <img
-      src="/baby.webp"
-      alt="Baby Alissa"
-      class="rounded-xl shadow-md object-cover w-full sm:w-1/2"
-      loading="lazy"
-    />
-    <img
-      src="/child.webp"
-      alt="Young Alissa"
-      class="rounded-xl shadow-md object-cover w-full sm:w-1/2"
-      loading="lazy"
-    />
   </div>
 
 </BaseLayout>
