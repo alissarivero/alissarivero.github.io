@@ -3,15 +3,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const posters = [
   {
-    src: "/posters/poster1.webp",
+    src: `${import.meta.env.BASE_URL}posters/poster1.webp`,
     alt: "Dyad/Triad",
     title: "Cognitive Development Society (2026)",
   },
   {
-    src: "/posters/poster2.webp",
+    src: `${import.meta.env.BASE_URL}posters/poster2.webp`,
     alt: "CREATE",
     title: "NC Cognition Conference (2026)",
-  }
+  },
 ];
 ---
 
@@ -23,30 +23,82 @@ const posters = [
   <div class="mx-auto mt-4 mb-8 h-[2px] w-7/8 bg-white opacity-80"></div>
 
   <section class="w-full">
-    <div
-      class="flex gap-6 overflow-x-auto pb-6 px-2 snap-x snap-mandatory scroll-smooth"
-      style="scrollbar-width: thin;"
-    >
-      {posters.map((poster) => (
-        <figure
-          class="flex-shrink-0 snap-center w-[75vw] sm:w-[55vw] md:w-[40vw] lg:w-[28vw] xl:w-[24vw]"
-        >
-          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg">
-            <img
-              src={poster.src}
-              alt={poster.alt}
-              class="w-full aspect-[4/3] object-cover"
-              loading="lazy"
-            />
-          </div>
+    <div class="mx-auto w-full max-w-5xl">
+      <div
+        id="poster-carousel"
+        class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
+      >
+        {posters.map((poster, index) => (
+          <div class="w-full flex-shrink-0 snap-center px-4">
+            <figure class="flex flex-col items-center">
+              <div class="w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg">
+                <img
+                  src={poster.src}
+                  alt={poster.alt}
+                  class="w-full aspect-[4/3] object-contain"
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+              </div>
 
-          {poster.title && (
-            <figcaption class="mt-3 text-center text-sm md:text-base text-white/80">
-              {poster.title}
-            </figcaption>
-          )}
-        </figure>
-      ))}
+              {poster.title && (
+                <figcaption class="mt-4 text-center text-sm md:text-base text-white/80">
+                  {poster.title}
+                </figcaption>
+              )}
+            </figure>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-6 flex justify-center gap-3">
+        {posters.map((_, index) => (
+          <button
+            class={`poster-dot h-3 w-3 rounded-full transition ${index === 0 ? "bg-white/90" : "bg-white/30"}`}
+            data-index={index}
+            aria-label={`Go to poster ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
   </section>
+
+  <script>
+    const carousel = document.getElementById("poster-carousel");
+    const dots = Array.from(document.querySelectorAll(".poster-dot"));
+
+    function updateDots() {
+      if (!carousel) return;
+      const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("bg-white/90", i === index);
+        dot.classList.toggle("bg-white/30", i !== index);
+      });
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const index = Number(dot.getAttribute("data-index"));
+        carousel.scrollTo({
+          left: carousel.clientWidth * index,
+          behavior: "smooth",
+        });
+      });
+    });
+
+    carousel?.addEventListener("scroll", updateDots);
+    window.addEventListener("resize", updateDots);
+    updateDots();
+  </script>
+
+  <style>
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
 </BaseLayout>
