@@ -1,11 +1,52 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posters = [
+  {
+    src: "/posters/poster1.webp",
+    alt: "Dyad/Triad",
+    title: "Cognitive Development Society (2026)",
+  },
+  {
+    src: "/posters/poster2.webp",
+    alt: "CREATE",
+    title: "NC Cognition Conference (2026)",
+  }
+];
 ---
 
 <BaseLayout title="Posters" sideBarActiveItemID="posters">
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Posters</div>
+  <div class="mb-8 text-center">
+    <div class="text-4xl md:text-5xl font-bold text-white">Posters</div>
   </div>
 
+  <div class="mx-auto mt-4 mb-8 h-[2px] w-7/8 bg-white opacity-80"></div>
 
+  <section class="w-full">
+    <div
+      class="flex gap-6 overflow-x-auto pb-6 px-2 snap-x snap-mandatory scroll-smooth"
+      style="scrollbar-width: thin;"
+    >
+      {posters.map((poster) => (
+        <figure
+          class="flex-shrink-0 snap-center w-[75vw] sm:w-[55vw] md:w-[40vw] lg:w-[28vw] xl:w-[24vw]"
+        >
+          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg">
+            <img
+              src={poster.src}
+              alt={poster.alt}
+              class="w-full aspect-[4/3] object-cover"
+              loading="lazy"
+            />
+          </div>
+
+          {poster.title && (
+            <figcaption class="mt-3 text-center text-sm md:text-base text-white/80">
+              {poster.title}
+            </figcaption>
+          )}
+        </figure>
+      ))}
+    </div>
+  </section>
 </BaseLayout>
