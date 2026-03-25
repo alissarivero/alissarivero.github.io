@@ -1,17 +1,33 @@
 ---
-const { title, subtitle } = Astro.props;
+const { title, subtitle, caption } = Astro.props;
 ---
 
 <div class="flex">
-  <div class="education__time">
-    <span class="w-4 h-4 bg-primary block rounded-full mt-1"></span>
-    <span class="education__line bg-primary block h-full w-[2px] translate-x-[7px]"></span>
+  {/* timeline */}
+  <div class="flex flex-col items-center">
+    <span class="w-4 h-4 bg-[#E7D6DC] rounded-full mt-1"></span>
+    <span class="bg-[#E7D6DC] w-[2px] flex-1 mt-1"></span>
   </div>
-  <div class="experience__data bd-grid px-5">
-    <h3 class="font-semibold mb-1">{title}</h3>
-    <span class="font-light text-sm">{subtitle}</span>
-    <p class="my-2 text-justify">
-      <slot />
-    </p>
+
+  {/* content */}
+  <div class="px-5 pb-7">
+    {/* title */}
+    <h3 class="text-white font-semibold text-lg leading-snug">
+      {title}
+    </h3>
+
+    {/* authors */}
+    <div class="text-white/80 text-sm mt-1">
+      {subtitle}
+    </div>
+
+    {/* journal */}
+    {caption && (
+      <div class="text-[#C7A9B4] text-sm italic mt-2">
+        {caption}
+      </div>
+    )}
+
+    <slot />
   </div>
 </div>
