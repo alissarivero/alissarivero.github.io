@@ -48,18 +48,25 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
 
     <div class="mx-auto mt-8 mb-6 h-[2px] w-full bg-white opacity-80"></div>
 
-    <div class="flex flex-col sm:flex-row justify-center items-start gap-6">
-  <img
-    src="/baby.webp"
-    alt="Baby Alissa"
-    class="rounded-xl shadow-md w-full sm:w-[48%] h-auto object-contain"
-    loading="lazy"
-  />
-  <img
-    src="/child.webp"
-    alt="Young Alissa"
-    class="rounded-xl shadow-md w-full sm:w-[48%] h-auto object-contain"
-    loading="lazy"
-  />
+   <div class="flex flex-col sm:flex-row justify-center items-start gap-6">
+  
+  <div class="w-full sm:w-[48%] h-[340px] overflow-hidden rounded-xl shadow-md">
+    <img
+      src="/baby.webp"
+      alt="Baby Alissa"
+      class="w-full h-full object-cover"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="w-full sm:w-[48%] h-[340px] overflow-hidden rounded-xl shadow-md">
+    <img
+      src="/child.webp"
+      alt="Young Alissa"
+      class="w-full h-full object-cover object-center"
+      loading="lazy"
+    />
+  </div>
+
 </div>
 </BaseLayout>
