@@ -3,12 +3,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const posters = [
   {
-    src: `${import.meta.env.BASE_URL}posters/poster1.webp`,
+    src: `${import.meta.env.BASE_URL}posters/poster1.png`,
     alt: "Dyad/Triad",
     title: "Cognitive Development Society (2026)",
   },
   {
-    src: `${import.meta.env.BASE_URL}posters/poster2.webp`,
+    src: `${import.meta.env.BASE_URL}posters/poster2.png`,
     alt: "CREATE",
     title: "NC Cognition Conference (2026)",
   },
@@ -16,50 +16,52 @@ const posters = [
 ---
 
 <BaseLayout title="Posters" sideBarActiveItemID="posters">
-  <div class="mb-8 text-center">
+
+  <div class="mb-6 text-center">
     <div class="text-4xl md:text-5xl font-bold text-white">Posters</div>
   </div>
 
   <div class="mx-auto mt-4 mb-8 h-[2px] w-7/8 bg-white opacity-80"></div>
 
-  <section class="w-full">
-    <div class="mx-auto w-full max-w-5xl">
-      <div
-        id="poster-carousel"
-        class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
-      >
-        {posters.map((poster, index) => (
-          <div class="w-full flex-shrink-0 snap-center px-4">
-            <figure class="flex flex-col items-center">
-              <div class="w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg">
-                <img
-                  src={poster.src}
-                  alt={poster.alt}
-                  class="w-full aspect-[4/3] object-contain"
-                  loading={index === 0 ? "eager" : "lazy"}
-                />
-              </div>
+  <section class="w-screen relative left-1/2 right-1/2 -mx-[50vw]">
 
-              {poster.title && (
-                <figcaption class="mt-4 text-center text-sm md:text-base text-white/80">
-                  {poster.title}
-                </figcaption>
-              )}
-            </figure>
-          </div>
-        ))}
-      </div>
+    <div
+      id="poster-carousel"
+      class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
+    >
+      {posters.map((poster, index) => (
+        <div class="w-screen flex-shrink-0 snap-center flex justify-center px-6">
+          <figure class="flex flex-col items-center w-full">
+            
+            <img
+              src={poster.src}
+              alt={poster.alt}
+              class="max-h-[80vh] w-auto max-w-[95vw] object-contain rounded-xl shadow-2xl"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
 
-      <div class="mt-6 flex justify-center gap-3">
-        {posters.map((_, index) => (
-          <button
-            class={`poster-dot h-3 w-3 rounded-full transition ${index === 0 ? "bg-white/90" : "bg-white/30"}`}
-            data-index={index}
-            aria-label={`Go to poster ${index + 1}`}
-          />
-        ))}
-      </div>
+            {poster.title && (
+              <figcaption class="mt-6 text-center text-white/80 text-sm md:text-base">
+                {poster.title}
+              </figcaption>
+            )}
+
+          </figure>
+        </div>
+      ))}
     </div>
+
+    <div class="mt-6 flex justify-center gap-3">
+      {posters.map((_, index) => (
+        <button
+          class={`poster-dot h-3 w-3 rounded-full transition ${
+            index === 0 ? "bg-white" : "bg-white/30"
+          }`}
+          data-index={index}
+        />
+      ))}
+    </div>
+
   </section>
 
   <script>
@@ -67,18 +69,17 @@ const posters = [
     const dots = Array.from(document.querySelectorAll(".poster-dot"));
 
     function updateDots() {
-      if (!carousel) return;
       const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
 
       dots.forEach((dot, i) => {
-        dot.classList.toggle("bg-white/90", i === index);
+        dot.classList.toggle("bg-white", i === index);
         dot.classList.toggle("bg-white/30", i !== index);
       });
     }
 
     dots.forEach((dot) => {
       dot.addEventListener("click", () => {
-        const index = Number(dot.getAttribute("data-index"));
+        const index = Number(dot.dataset.index);
         carousel.scrollTo({
           left: carousel.clientWidth * index,
           behavior: "smooth",
@@ -86,19 +87,18 @@ const posters = [
       });
     });
 
-    carousel?.addEventListener("scroll", updateDots);
+    carousel.addEventListener("scroll", updateDots);
     window.addEventListener("resize", updateDots);
-    updateDots();
   </script>
 
   <style>
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
-
     .no-scrollbar {
-      -ms-overflow-style: none;
       scrollbar-width: none;
+      -ms-overflow-style: none;
     }
   </style>
+
 </BaseLayout>
