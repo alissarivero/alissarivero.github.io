@@ -15,11 +15,9 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
     <div class="text-3xl font-bold text-white">Education</div>
   </div>
 
-  {/* ===== MAIN GRID ===== */}
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12 items-start">
+  <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,700px)_220px] gap-8 items-start">
 
-    {/* ===== TIMELINE ===== */}
-    <div class="time-line-container grid gap-4 mb-10">
+    <div class="time-line-container grid gap-4 mb-6">
       <TimeLineElement
         title="Duke University"
         subtitle="Ph.D. in Developmental Psychology"
@@ -32,9 +30,7 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
       />
     </div>
 
-    {/* ===== RIGHT COLUMN ===== */}
-    <div class="lg:sticky lg:top-32">
-
+    <div class="lg:sticky lg:top-28">
       <a
         href="https://docs.google.com/document/d/1pGDpktHWTOFIAoS9j6Z6NZcigpKv67fye2jeIm_RL6U/edit?usp=sharing"
         target="_blank"
@@ -42,13 +38,11 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
       >
         View Full CV →
       </a>
-
     </div>
 
   </div>
 
-  {/* ===== PHOTOS ===== */}
-  <div class="flex flex-col sm:flex-row justify-center gap-6 mt-16">
+  <div class="flex flex-col sm:flex-row justify-center gap-6 mt-8">
     <img
       src="/baby.webp"
       alt="Baby Alissa"
