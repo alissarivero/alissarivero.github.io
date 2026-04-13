@@ -3,98 +3,88 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Research Interests" sideBarActiveItemID="research-interests">
-    <div class="mb-5 text-center">
+  <div class="mb-5 text-center">
     <div class="text-5xl w-full font-bold">Research Interests</div>
   </div>
 
-     <div class="mx-auto mt-4 mb-4 h-[2px] w-7/8 bg-white opacity-80"></div>
-  </div>
+  <div class="mx-auto mt-4 mb-4 h-[2px] w-7/8 bg-white opacity-80"></div>
 
   <div class="space-y-20">
-    <!-- Great Ideas section -->
+    <!-- Intro -->
     <section>
-      <h2 class="text-3xl font-bold mb-6 mt-4 text-center px-4 md:px-10 xl:px-16">Where Do Great Ideas Come From?</h2>
+      <div class="text-center px-4 md:px-10 xl:px-16">
+        <p class="text-lg leading-relaxed max-w-4xl mx-auto">
+          Broadly, my research centers on how human cognition is organized across development and how the sources of social learning change across the lifespan.
+        </p>
+      </div>
+    </section>
 
-                 <div class="mx-auto mt-4 mb-4 h-[2px] w-7/8 bg-white opacity-80"></div>
-        </div>
+    <!-- Cognitive Priorities section -->
+    <section>
+      <h2 class="text-3xl font-bold mb-6 mt-4 text-center px-4 md:px-10 xl:px-16">
+        Cognitive Priorities Across the Lifespan
+      </h2>
+
+      <div class="mx-auto mt-4 mb-4 h-[2px] w-7/8 bg-white opacity-80"></div>
 
       <div class="grid md:grid-cols-[30%_70%] gap-8 items-center">
-        <!-- Left: Image (left inset to match text; full height to match text column) -->
+        <!-- Left: Image -->
         <div class="pl-4 md:pl-10 xl:pl-16">
           <img
             src="/great_ideas.webp"
-            alt="Where Do Great Ideas Come From?"
+            alt="Cognitive Priorities Across the Lifespan"
             class="w-full object-contain"
           />
         </div>
 
-        <!-- Right: Background Text -->
+        <!-- Right: Text -->
         <div class="text-left leading-relaxed px-4 md:px-10 xl:px-16">
-          <h2 class="text-xl font-bold mb-4">Background</h2>
           <p>
-            Bayesian learning can explain remarkably complex real-world inference, but it is less clear where new priors
-            originate. Babies and young children constantly generate fresh hypotheses about the world. How do they do this
-            so effectively? And how might treating Bayesian learning as a developmentally conditioned process (shaped by
-            agentic exploration, social interaction, and maturation) help explain where ideas come from?
+            This line of work examines the cognitive priorities that guide learning, exploration, and action across development. I am especially interested in when human cognition privileges efficiency, when it favors exploration, and how these priorities shift across the lifespan.
           </p>
 
-          <h2 class="text-xl font-bold mb-2 mt-5">Big Questions</h2>
-        <ul class="list-disc pl-6 space-y-2">
-          <li>
-            Many of our best ideas come when we least expect them.
-            The harder we look, the more elusive creative solutions seem to become.
-            But, what if we could use computational models to predict moments of insight?
-            Could we reliably produce great ideas?
-          </li>
-          <li>
-            Adults tend to converge on the right way to do something.
-            To our detriment, we pre-screen possibilities through the lens of practicality.
-            Children, on the other hand, explore the hypothesis space without regard for reality.
-            What if we could be a little more like them—would we be more creative, imaginative, and innovative?
-            Would we generate more great ideas?
-          </li>
-        </ul>
+          <h2 class="text-xl font-bold mb-2 mt-5">Current Questions</h2>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Do children exploit when they care about the goal?</li>
+            <li>Is speed–accuracy integration a core feature of human cognition or a WEIRD phenomenon?</li>
+            <li>How is generativity conventionalized across the lifespan?</li>
+            <li>Is “resetting” an intuitive heuristic that allows children to be more exploratory in their production?</li>
+          </ul>
         </div>
       </div>
 
-        <div class="mx-auto mt-8 mb-4 h-[2px] w-7/8 bg-white opacity-80"></div>
-  </div>
-      <!-- Acute Changes section -->
+      <div class="mx-auto mt-8 mb-4 h-[2px] w-7/8 bg-white opacity-80"></div>
+    </section>
+
+    <!-- Evolving Sources of Social Learning section -->
     <section>
-      <h2 class="text-3xl font-bold mb-6 text-center px-4 md:px-10 xl:px-16">Acute Changes to Childhood</h2>
+      <h2 class="text-3xl font-bold mb-6 text-center px-4 md:px-10 xl:px-16">
+        Evolving Sources of Social Learning
+      </h2>
 
-           <div class="mx-auto mt-4 mb-4 h-[2px] w-7/8 bg-white opacity-80"></div>
-          </div>
+      <div class="mx-auto mt-4 mb-4 h-[2px] w-7/8 bg-white opacity-80"></div>
 
-      <!-- Image and Background side-by-side -->
       <div class="grid md:grid-cols-[30%_70%] gap-8 items-center">
-        <!-- Left: Image (left inset to match text; full height to match text column) -->
+        <!-- Left: Image -->
         <div class="pl-4 md:pl-10 xl:pl-16">
           <img
             src="/acute_changes.webp"
-            alt="Acute Changes to Childhood"
+            alt="Evolving Sources of Social Learning"
             class="w-full object-contain"
           />
         </div>
 
-        <!-- Right: Background Text -->
+        <!-- Right: Text -->
         <div class="text-left leading-relaxed px-4 md:px-10 xl:px-16">
-          <h2 class="text-xl font-bold mb-4 ">Background</h2>
           <p>
-            Children are spending more time interacting with adults and technology, and less time interacting with peers.
-            Importantly, when children interact with peers, they co-construct knowledge with an intellectual equal. In contrast,
-            adult-directed activities and virtual environments lead to more passive forms of learning.
-            As a result, these acute changes to childhood may have important implications for children's cooperation,
-            learning, exploration, and idea-generation. My research aims to understand how these shifts impact children's social and
-            cognitive development, with the ultimate goal of informing educational practices and parenting strategies.
+            This line of work focuses on how learning changes as a function of who provides information and how that information is presented. I am particularly interested in how children learn from adults versus peers, and in how instructional contexts shape persistence, exploration, and discovery.
           </p>
-        
-          <h2 class="text-xl font-bold mb-2 mt-5">Big Questions</h2>
-        <ul class="list-disc pl-6 space-y-2">
-          <li>How does adult presence and direction shape children's exploration and cooperative learning?</li>
-          <li>What is the variability across children's information processing, construction, and discovery? How do acute changes to childhood shape this variability?</li>
-          <li>How does living in a virtual environment impact children's social learning and cognitive flexibility?</li>
-        </ul>
+
+          <h2 class="text-xl font-bold mb-2 mt-5">Current Questions</h2>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>How do children respond when instructions go away, and how is that influenced by how an adult initially presents those instructions?</li>
+            <li>How do children learn differently from peer versus adult instruction?</li>
+          </ul>
         </div>
       </div>
 
@@ -105,3 +95,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           class="h-90 md:h-95 object-contain w-[95%] md:w-[100%] max-w-[1000px] z-0"
         />
       </div>
+    </section>
+  </div>
+</BaseLayout>
