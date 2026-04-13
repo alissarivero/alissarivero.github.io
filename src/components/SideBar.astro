@@ -5,33 +5,41 @@ import SideBarMenu from "./SideBarMenu.astro";
 const { sideBarActiveItemID } = Astro.props;
 ---
 
-<!-- Must be a direct child of the .drawer container in BaseLayout -->
 <div class="drawer-side z-40 bg-white-500">
   <label for="my-drawer" class="drawer-overlay"></label>
 
-  <!-- Sidebar shell: fixed viewport height, NO scroll here -->
   <aside
     data-theme="sidebarDark"
     class="w-full md:w-[25rem]
-           h-[100svh] md:h-screen  /* safe viewport height on mobile */
+           h-[100svh] md:h-screen
            flex flex-col
            px-6 pt-6 md:px-8 md:pt-8
            text-base-content
-           overflow-hidden           /* prevent double scroll on mobile */
-    "
+           overflow-hidden"
   >
     <!-- Top: avatar -->
     <div class="w-fit mx-auto mt-2 mb-6 md:mt-4 md:mb-6">
-      <a href="/">
+      <a href="/" class="block">
         <div class="avatar transition ease-in-out hover:scale-[103%] block m-auto">
-          <div class="w-[11rem] md:w-[16rem]">
+          <div class="group relative w-[11rem] md:w-[16rem] aspect-square overflow-hidden mask mask-circle">
+            <!-- Default image -->
             <Image
-              class="mask mask-circle object-cover"
+              class="absolute inset-0 h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-0"
               format="webp"
               width={500}
               height={500}
               src="/profile.webp"
               alt="Profile image"
+            />
+
+            <!-- Hover image -->
+            <Image
+              class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              format="webp"
+              width={500}
+              height={500}
+              src="/baby-swing.webp"
+              alt="Baby Pic"
             />
           </div>
         </div>
@@ -43,7 +51,7 @@ const { sideBarActiveItemID } = Astro.props;
       <SideBarMenu sideBarActiveItemID={sideBarActiveItemID} />
     </div>
 
-    <!-- Bottom: footer pinned by flex (no sticky needed) -->
+    <!-- Bottom: footer pinned by flex -->
     <div class="pt-4">
       <SideBarFooter />
     </div>
@@ -51,16 +59,14 @@ const { sideBarActiveItemID } = Astro.props;
 </div>
 
 <style is:global>
-  /* Make sure the drawer container stretches, so the sidebar can fill it */
   .drawer { min-height: 100svh; }
 
-  /* Larger, consistent menu text (includes <summary>) */
   aside[data-theme="sidebarDark"] .menu,
   aside[data-theme="sidebarDark"] .menu :is(a, button, span, summary) {
     font-size: 1.2rem !important;
     line-height: 1.35 !important;
   }
-  /* Ensure dropdown header (“Research”) isn’t down-sized by DaisyUI */
+
   aside[data-theme="sidebarDark"] .menu :where(li > details > summary),
   aside[data-theme="sidebarDark"] .menu :where(li > details[open] > summary) {
     font-size: 1.2rem !important;
@@ -71,6 +77,5 @@ const { sideBarActiveItemID } = Astro.props;
     cursor: pointer;
   }
 
-  /* Optional: slightly tighter list spacing */
   aside[data-theme="sidebarDark"] .menu li { margin: 0.25rem 0; }
 </style>
