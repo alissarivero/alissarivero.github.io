@@ -3,63 +3,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import TimeLineElement from "../components/cv/TimeLine.astro";
 ---
 
-<BaseLayout title="CV" sideBarActiveItemID="cv">
-  <div class="max-w-5xl mx-auto">
-    <div class="mb-6">
-      <div class="text-5xl font-bold text-white">CV</div>
-    </div>
-
-    <div class="mx-auto mt-4 mb-8 h-[2px] w-full bg-white opacity-80"></div>
-
-    <div class="mb-5">
-      <div class="text-3xl font-bold text-white">Education</div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-10 items-start">
-      <!-- Left column -->
-      <div class="time-line-container grid gap-4 max-w-2xl">
-        <TimeLineElement
-          title="Duke University"
-          subtitle="Ph.D. in Developmental Psychology"
-          caption="2026–present | Advisors: Dr. Dorsa Amir and Dr. Tamar Kushnir"
-        />
-        <TimeLineElement
-          title="Duke University"
-          subtitle="B.A. in Psychology, Minor in Evolutionary Anthropology"
-          caption="2021–2025 | Advisor: Dr. Michael Tomasello"
-        />
-      </div>
-
-      <!-- Right column -->
-      <div class="flex flex-col items-center">
-        <a
-          href="https://docs.google.com/document/d/1pGDpktHWTOFIAoS9j6Z6NZcigpKv67fye2jeIm_RL6U/edit?usp=sharing"
-          target="_blank"
-          class="btn btn-outline mb-6 z-10 relative"
-        >
-          Click here for my Curriculum Vitae
-        </a>
-
-        <div class="w-full flex flex-col gap-6">
-          <div class="w-full h-[500px] overflow-hidden rounded-xl shadow-md">
-            <img
-              src="/baby.webp"
-              alt="Baby Alissa"
-              class="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-
-          <div class="w-full h-[500px] overflow-hidden rounded-xl shadow-md">
-            <img
-              src="/child.webp"
-              alt="Young Alissa"
-              class="w-full h-full object-cover object-center"
-              loading="lazy"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+   <BaseLayout title="CV" sideBarActiveItemID="cv">
+  <div class="w-full h-[calc(100vh-80px)]">
+    <iframe 
+      src="https://drive.google.com/file/d/1pGDpktHWTOFIAoS9j6Z6NZcigpKv67fye2jeIm_RL6U/preview"
+      class="w-full h-full border-0">
+    </iframe>
   </div>
 </BaseLayout>
