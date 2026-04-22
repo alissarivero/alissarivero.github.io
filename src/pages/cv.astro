@@ -1,13 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import TimeLineElement from "../components/cv/TimeLine.astro";
 ---
 
 <BaseLayout title="CV" sideBarActiveItemID="cv">
-  <div class="w-screen h-[calc(100vh-80px)] relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+  <div class="fixed inset-0 top-[80px]">
     <iframe 
-      src="/AlissaRivero_CV.pdf"
-      class="w-full h-full border-0">
+      src="https://docs.google.com/document/d/e/2PACX-1vRH5g06LDnaVPF2hrc2Knvgh8E6TzC3x7W0ysO4uYue3a-HUAKOH3dYvhPHVOqE130mcTxMdt7Fyy7p/pub?embedded=true"
+      class="w-full h-full border-0 bg-white">
     </iframe>
   </div>
 </BaseLayout>
