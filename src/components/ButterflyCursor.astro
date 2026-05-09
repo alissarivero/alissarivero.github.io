@@ -75,32 +75,27 @@
 
     let started = false;
     let raf = 0;
-    let idleFrames = 0;
+    let lastAngle = 0;
 
     const applyTransform = () => {
       const dx = mx - bx;
       const dy = my - by;
-      const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-      root.style.transform = `translate3d(${bx}px, ${by}px, 0) translate(-50%, -50%) rotate(${angle + 90}deg)`;
+      const dist = Math.hypot(dx, dy);
+      if (dist > 0.75) {
+        lastAngle = (Math.atan2(dy, dx) * 180) / Math.PI;
+      }
+      root.style.transform = `translate3d(${bx}px, ${by}px, 0) translate(-50%, -50%) rotate(${lastAngle + 90}deg)`;
     };
 
+    /** Every frame: ease toward cursor; snap when essentially on the pointer. */
     const tick = () => {
       bx += (mx - bx) * lag;
       by += (my - by) * lag;
-      applyTransform();
-
-      const settled =
-        Math.abs(mx - bx) < 0.45 && Math.abs(my - by) < 0.45;
-      if (settled) {
-        idleFrames += 1;
-        if (idleFrames > 36) {
-          raf = 0;
-          return;
-        }
-      } else {
-        idleFrames = 0;
+      if (Math.hypot(mx - bx, my - by) < 0.03) {
+        bx = mx;
+        by = my;
       }
-
+      applyTransform();
       raf = requestAnimationFrame(tick);
     };
 
@@ -114,13 +109,8 @@
         by = my;
         root.classList.add("is-active");
         applyTransform();
-        idleFrames = 0;
-        if (!raf) raf = requestAnimationFrame(tick);
-        return;
+        raf = requestAnimationFrame(tick);
       }
-
-      idleFrames = 0;
-      if (!raf) raf = requestAnimationFrame(tick);
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
