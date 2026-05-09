@@ -9,10 +9,10 @@ function questionHtml(raw: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
-  // Longer words first so "peers" wins over "peer"
+  // Longer phrases first: "peer instruction" before "peer"; "peers" before "peer"
   return safe.replace(
-    /\b(coordinate|exploit|peers|effort|peer|reset)\b/gi,
-    '<span class="text-[#D4A6B2]">$1</span>'
+    /\b(coordinate|exploit|peer instruction|peers|effort|peer|reset)\b/gi,
+    '<span style="color:#D4A6B2">$1</span>'
   );
 }
 ---
