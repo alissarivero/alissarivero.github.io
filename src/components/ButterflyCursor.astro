@@ -1,0 +1,99 @@
+---
+/* Follows the pointer with eased motion (non-home pages). */
+---
+
+<div id="cursor-butterfly-root" class="butterfly-cursor-root" aria-hidden="true">
+  <img src="/butterfly.svg" alt="" width="52" height="52" decoding="async" />
+</div>
+
+<style>
+  .butterfly-cursor-root {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 65;
+    width: var(--bf-cursor-size, 52px);
+    height: var(--bf-cursor-size, 52px);
+    pointer-events: none;
+    will-change: left, top, transform;
+  }
+
+  .butterfly-cursor-root img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 50%;
+    animation: bf-cursor-flap 0.68s ease-in-out infinite;
+  }
+
+  @keyframes bf-cursor-flap {
+    0%,
+    100% {
+      transform: rotate(-3deg) scale(1);
+    }
+    50% {
+      transform: rotate(3deg) scale(1.04);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .butterfly-cursor-root {
+      display: none !important;
+    }
+    .butterfly-cursor-root img {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  let cleanup = null;
+
+  function setupCursorButterfly() {
+    cleanup?.();
+    cleanup = null;
+
+    const root = document.getElementById("cursor-butterfly-root");
+    if (!root) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let mx = window.innerWidth * 0.5;
+    let my = window.innerHeight * 0.5;
+    let bx = mx;
+    let by = my;
+    /** Lower = snappier; higher = more “behind” the cursor */
+    const lag = 0.1;
+
+    const onMove = (e) => {
+      mx = e.clientX;
+      my = e.clientY;
+    };
+
+    let raf = 0;
+    const tick = () => {
+      bx += (mx - bx) * lag;
+      by += (my - by) * lag;
+      const dx = mx - bx;
+      const dy = my - by;
+      const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+      root.style.left = `${bx}px`;
+      root.style.top = `${by}px`;
+      /* Point sprite toward cursor (same +90 idea as offset-rotate on home butterflies) */
+      root.style.transform = `translate(-50%, -50%) rotate(${angle + 90}deg)`;
+      raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("mousemove", onMove, { passive: true });
+    raf = requestAnimationFrame(tick);
+
+    cleanup = () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+    };
+  }
+
+  document.addEventListener("astro:page-load", setupCursorButterfly);
+  /* Cold load on non-home (and backup if page-load order varies) */
+  requestAnimationFrame(() => setupCursorButterfly());
+</script>
