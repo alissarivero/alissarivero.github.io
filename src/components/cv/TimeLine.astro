@@ -12,12 +12,12 @@ const isQA = typeof answer === "string" && answer.length > 0;
   <div class="experience__data bd-grid px-5 pb-6">
     {isQA ? (
       <>
-        <h3 class="font-semibold text-lg leading-snug mb-1 md:text-xl text-[#A88990]">
+        <h3 class="font-semibold text-lg leading-snug mb-1 md:text-xl text-white/90">
           <span>Q.</span>
           <span class="pl-1.5 tracking-[0.04em]">{title}</span>
         </h3>
-        <div class="text-base leading-relaxed text-white/90 mt-1">
-          <span class="text-white/80 font-medium">A.</span>
+        <div class="text-base leading-relaxed text-white/90 mt-2.5">
+          <span class="text-white/90 font-medium">A.</span>
           <span class="pl-1.5">{answer}</span>
         </div>
       </>
