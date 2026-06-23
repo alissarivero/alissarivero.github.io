@@ -1,5 +1,5 @@
 ---
-/* Follows the pointer with eased motion (non-home pages). */
+/* Follows the pointer at a constant slow speed (non-home pages). */
 ---
 
 <div id="cursor-butterfly-root" class="butterfly-cursor-root" aria-hidden="true">
@@ -70,11 +70,12 @@
     let my = window.innerHeight * 0.5;
     let bx = mx;
     let by = my;
-    /** Smaller = slower chase (more “flight” behind the cursor) */
-    const lag = 0.028;
+    /** Constant chase speed (px/s) — no boost when far from the cursor */
+    const speed = 42;
 
     let started = false;
     let raf = 0;
+    let lastTs = 0;
     let lastAngle = 0;
 
     const applyTransform = () => {
@@ -87,11 +88,20 @@
       root.style.transform = `translate3d(${bx}px, ${by}px, 0) translate(-50%, -50%) rotate(${lastAngle + 90}deg)`;
     };
 
-    /** Every frame: ease toward cursor; snap when essentially on the pointer. */
-    const tick = () => {
-      bx += (mx - bx) * lag;
-      by += (my - by) * lag;
-      if (Math.hypot(mx - bx, my - by) < 0.03) {
+    /** Every frame: move toward cursor at fixed speed; snap when on the pointer. */
+    const tick = (ts) => {
+      if (!lastTs) lastTs = ts;
+      const dt = Math.min((ts - lastTs) / 1000, 0.05);
+      lastTs = ts;
+
+      const dx = mx - bx;
+      const dy = my - by;
+      const dist = Math.hypot(dx, dy);
+      if (dist > 0.03) {
+        const step = Math.min(speed * dt, dist);
+        bx += (dx / dist) * step;
+        by += (dy / dist) * step;
+      } else {
         bx = mx;
         by = my;
       }
@@ -120,6 +130,7 @@
       cancelAnimationFrame(raf);
       root.classList.remove("is-active");
       started = false;
+      lastTs = 0;
     };
   }
 
