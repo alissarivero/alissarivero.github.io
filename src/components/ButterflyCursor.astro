@@ -11,7 +11,7 @@
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 65;
+    z-index: 20;
     width: var(--bf-cursor-size, 52px);
     height: var(--bf-cursor-size, 52px);
     pointer-events: none;
@@ -26,12 +26,22 @@
     visibility: visible;
   }
 
+  /* Pause / hide while the mobile drawer is open so taps stay responsive */
+  :global(html.butterflies-paused) .butterfly-cursor-root {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
   .butterfly-cursor-root img {
     display: block;
     width: 100%;
     height: 100%;
     transform-origin: 50% 50%;
     animation: bf-cursor-flap 0.85s ease-in-out infinite;
+  }
+
+  :global(html.butterflies-paused) .butterfly-cursor-root img {
+    animation-play-state: paused !important;
   }
 
   @keyframes bf-cursor-flap {
@@ -88,8 +98,14 @@
       root.style.transform = `translate3d(${bx}px, ${by}px, 0) translate(-50%, -50%) rotate(${lastAngle + 90}deg)`;
     };
 
-    /** Every frame: move toward cursor at fixed speed; snap when on the pointer. */
     const tick = (ts) => {
+      // Stop chasing while the mobile sidebar is open
+      if (document.documentElement.classList.contains("butterflies-paused")) {
+        lastTs = 0;
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+
       if (!lastTs) lastTs = ts;
       const dt = Math.min((ts - lastTs) / 1000, 0.05);
       lastTs = ts;

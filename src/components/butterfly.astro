@@ -1,5 +1,5 @@
 ---
-/* Minimal, no client JS. */
+/* Minimal, no client JS for paths. Paused via html.butterflies-paused when drawer is open. */
 const {
   delay = 0,          // seconds
   duration = 18,      // seconds
@@ -16,7 +16,7 @@ const computedDelay = randomStart ? -(Math.random() * duration) : delay;
   class={`butterfly-fly ${extraClass}`}
   style={`--dur:${duration}s; --delay:${computedDelay}s; --size:${size}px;`}
 >
-  <img src="/butterfly.svg" alt="Butterfly" aria-hidden="true" />
+  <img src="/butterfly.svg" alt="" aria-hidden="true" decoding="async" />
 </div>
 
 <style>
@@ -26,7 +26,7 @@ const computedDelay = randomStart ? -(Math.random() * duration) : delay;
     width: var(--size);
     height: var(--size);
     pointer-events: none;         /* don't block clicks */
-    z-index: 60;
+    z-index: 20;                  /* below drawer (z-50) and mobile header (z-40) */
     offset-rotate: auto 90deg;    /* orient along the path */
   }
 
@@ -123,6 +123,15 @@ const computedDelay = randomStart ? -(Math.random() * duration) : delay;
          C  760  260, 620 440, 960 700"
       );
     }
+  }
+
+  /* Pause flight while mobile sidebar is open */
+  :global(html.butterflies-paused) .butterfly-fly,
+  :global(html.butterflies-paused) .butterfly-fly img {
+    animation-play-state: paused !important;
+  }
+  :global(html.butterflies-paused) .butterfly-fly {
+    visibility: hidden;
   }
 
   /* Respect reduced-motion preference */

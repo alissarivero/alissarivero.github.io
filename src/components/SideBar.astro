@@ -5,8 +5,8 @@ import SideBarMenu from "./SideBarMenu.astro";
 const { sideBarActiveItemID } = Astro.props;
 ---
 
-<div class="drawer-side z-40 bg-white-500">
-  <label for="my-drawer" class="drawer-overlay"></label>
+<div class="drawer-side z-50">
+  <label for="my-drawer" class="drawer-overlay" aria-label="Close menu"></label>
 
   <aside
     data-theme="sidebarDark"
@@ -19,27 +19,31 @@ const { sideBarActiveItemID } = Astro.props;
   >
     <!-- Top: avatar -->
     <div class="w-fit mx-auto mt-2 mb-6 md:mt-4 md:mb-6">
-      <a href="/" class="block">
-        <div class="avatar transition ease-in-out hover:scale-[103%] block m-auto">
+      <a href="/" class="block touch-manipulation">
+        <div class="avatar transition ease-in-out md:hover:scale-[103%] block m-auto">
           <div class="group relative w-[11rem] md:w-[16rem] aspect-square overflow-hidden mask mask-circle">
-            <!-- Default image -->
+            <!-- Default image (smaller decode size on phones) -->
             <Image
-              class="absolute inset-0 h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-0"
+              class="absolute inset-0 h-full w-full object-cover md:transition-opacity md:duration-300 md:group-hover:opacity-0"
               format="webp"
-              width={500}
-              height={500}
+              width={320}
+              height={320}
               src="/profile.webp"
               alt="Profile image"
+              loading="eager"
+              decoding="async"
             />
 
-            <!-- Hover image -->
+            <!-- Hover image: desktop only — avoids loading a 2.4MB asset on mobile -->
             <Image
-              class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              class="absolute inset-0 hidden md:block h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
               format="webp"
-              width={500}
-              height={500}
+              width={320}
+              height={320}
               src="/baby-swing.webp"
               alt="Baby Pic"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>
@@ -65,6 +69,8 @@ const { sideBarActiveItemID } = Astro.props;
   aside[data-theme="sidebarDark"] .menu :is(a, button, span, summary) {
     font-size: 1.2rem !important;
     line-height: 1.35 !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   aside[data-theme="sidebarDark"] .menu :where(li > details > summary),
@@ -78,4 +84,54 @@ const { sideBarActiveItemID } = Astro.props;
   }
 
   aside[data-theme="sidebarDark"] .menu li { margin: 0.25rem 0; }
+
+  /* Make tap targets more reliable on phones */
+  aside[data-theme="sidebarDark"] .menu a {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+  }
 </style>
+
+<script>
+  function closeMobileDrawer() {
+    const toggle = document.getElementById("my-drawer");
+    if (!(toggle instanceof HTMLInputElement)) return;
+    if (!window.matchMedia("(max-width: 1023px)").matches) return;
+    toggle.checked = false;
+  }
+
+  function syncButterflyPause() {
+    const toggle = document.getElementById("my-drawer");
+    const mobile = window.matchMedia("(max-width: 1023px)").matches;
+    const open =
+      toggle instanceof HTMLInputElement && toggle.checked && mobile;
+    document.documentElement.classList.toggle("butterflies-paused", open);
+  }
+
+  // One delegated listener — survives View Transitions without stacking handlers
+  if (!window.__drawerNavWired) {
+    window.__drawerNavWired = true;
+    document.addEventListener(
+      "click",
+      (e) => {
+        const target = e.target;
+        if (!(target instanceof Element)) return;
+        if (!target.closest(".drawer-side a")) return;
+        closeMobileDrawer();
+        // Drawer closes asynchronously via checkbox; sync on next frame
+        requestAnimationFrame(syncButterflyPause);
+      },
+      { passive: true }
+    );
+    document.addEventListener("change", (e) => {
+      if (e.target && e.target.id === "my-drawer") syncButterflyPause();
+    });
+    window.addEventListener("resize", syncButterflyPause, { passive: true });
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    closeMobileDrawer();
+    syncButterflyPause();
+  });
+</script>
