@@ -43,7 +43,7 @@ const skillBuilding = [
         Slide decks and workshops for building research and technical skills.
       </p>
 
-      <div class="time-line-container grid gap-4 max-w-4xl">
+      <div class="time-line-container grid gap-1 max-w-4xl">
         {
           skillBuilding.map((item) => (
             <TimeLineElement
@@ -51,6 +51,7 @@ const skillBuilding = [
               titleHref={item.href}
               caption={item.caption}
               captionHref={item.captionHref}
+              compact
             />
           ))
         }
