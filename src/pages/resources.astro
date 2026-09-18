@@ -5,7 +5,9 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
 const skillBuilding = [
   {
     title: "Creating a Personal Website",
-    href: "https://github.com/alissarivero/personal-website-template",
+    href: "https://canva.link/bxtwqgoknl8bdjb",
+    caption: "https://github.com/alissarivero/personal-website-template",
+    captionHref: "https://github.com/alissarivero/personal-website-template",
   },
   {
     title: "Identifying a Research Question",
@@ -44,7 +46,12 @@ const skillBuilding = [
       <div class="time-line-container grid gap-4 max-w-4xl">
         {
           skillBuilding.map((item) => (
-            <TimeLineElement title={item.title} titleHref={item.href} />
+            <TimeLineElement
+              title={item.title}
+              titleHref={item.href}
+              caption={item.caption}
+              captionHref={item.captionHref}
+            />
           ))
         }
       </div>

@@ -1,5 +1,5 @@
 ---
-const { title, subtitle, caption, answer, titleHref } = Astro.props;
+const { title, subtitle, caption, answer, titleHref, captionHref } = Astro.props;
 const isQA = typeof answer === "string" && answer.length > 0;
 
 /** Escape then wrap Research-Questions keywords in timeline-line pink (#D4A6B2). */
@@ -68,7 +68,18 @@ function questionHtml(raw: string): string {
 
         {caption && (
           <div class="mt-2 text-sm italic text-white">
-            {caption}
+            {captionHref ? (
+              <a
+                href={captionHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="not-italic underline decoration-[#D4A6B2]/60 underline-offset-4 hover:decoration-[#E7D6DC] hover:text-[#E7D6DC] transition-colors break-all"
+              >
+                {caption}
+              </a>
+            ) : (
+              caption
+            )}
           </div>
         )}
       </>
