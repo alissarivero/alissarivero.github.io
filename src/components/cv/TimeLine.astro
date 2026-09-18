@@ -48,7 +48,18 @@ function questionHtml(raw: string): string {
     ) : (
       <>
         <h3 class="text-white font-semibold text-lg leading-snug mb-1">
-          {title}
+          {titleHref ? (
+            <a
+              href={titleHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline decoration-[#D4A6B2]/60 underline-offset-4 hover:decoration-[#E7D6DC] hover:text-[#E7D6DC] transition-colors"
+            >
+              {title}
+            </a>
+          ) : (
+            title
+          )}
         </h3>
 
         <div class="text-white text-sm">

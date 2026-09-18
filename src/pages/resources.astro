@@ -1,0 +1,89 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import TimeLineElement from "../components/cv/TimeLine.astro";
+
+const skillBuilding = [
+  {
+    title: "Creating a Personal Website",
+    href: "https://canva.link/bxtwqgoknl8bdjb",
+  },
+  {
+    title: "Identifying a Research Question",
+    href: "https://canva.link/1ruzgydixp1gkhq",
+  },
+  {
+    title: "Research Talks & Posters",
+    href: "https://canva.link/p0bd72401l6pbsf",
+  },
+  {
+    title: "Data Analysis",
+    href: "https://canva.link/fo4bfy7xesrhuhv",
+  },
+  {
+    title: "Vibe Coding & Computational Modeling",
+    href: "https://canva.link/gwa7qh3efgr3ute",
+  },
+];
+---
+
+<BaseLayout title="Resources" sideBarActiveItemID="resources">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-5 text-center">
+      <div class="text-5xl w-full font-bold">Resources</div>
+    </div>
+
+    <div class="mx-auto mt-4 mb-8 h-[2px] w-full bg-white opacity-80"></div>
+
+    <!-- Skill-building -->
+    <section class="px-4 md:px-10 xl:px-16 mb-12">
+      <h2 class="text-3xl font-bold text-white mb-2">Skill-building</h2>
+      <p class="text-base text-white/70 mb-6 max-w-3xl">
+        Slide decks and workshops for building research and technical skills.
+      </p>
+
+      <div class="time-line-container grid gap-4 max-w-4xl">
+        {
+          skillBuilding.map((item) => (
+            <TimeLineElement
+              title={item.title}
+              titleHref={item.href}
+              caption="Canva presentation"
+            />
+          ))
+        }
+      </div>
+    </section>
+
+    <div class="mx-auto mt-4 mb-8 h-[2px] w-full bg-white opacity-80"></div>
+
+    <!-- Accessible Research -->
+    <section class="px-4 md:px-10 xl:px-16 pb-8">
+      <h2 class="text-3xl font-bold text-white mb-2">Accessible Research</h2>
+      <p class="text-base leading-relaxed text-white/80 mb-6 max-w-3xl">
+        I work with the Anti-Racism Community at Duke. We host programs to make research more
+        accessible to underrepresented communities:
+      </p>
+
+      <div class="time-line-container grid gap-4 max-w-4xl">
+        <TimeLineElement
+          title="PhD Application Mentorship Program (PAMP)"
+          subtitle="We meet one-on-one with prospective applicants and provide feedback on application materials."
+        />
+        <TimeLineElement
+          title="Undergraduate Research Opportunities Program (UROP)"
+          subtitle="We connect local students from non-R1 universities with research opportunities at Duke."
+        />
+      </div>
+    </section>
+
+    <div class="mt-8 flex flex-col items-center relative">
+      <div class="flex justify-center w-full relative -mt-12">
+        <img
+          src="/grass_draw.webp"
+          alt="Grass illustration"
+          class="h-76 md:h-80 object-contain w-[95%] md:w-[100%] max-w-[1000px] z-0"
+        />
+      </div>
+    </div>
+  </div>
+</BaseLayout>
