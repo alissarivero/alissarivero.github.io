@@ -1,6 +1,5 @@
 <section class="hero">
   <canvas id="psych-hero" aria-hidden="true"></canvas>
-  <p class="hero-caption">People become points. The line is the one that shrinks the vertical gaps.</p>
 </section>
 
 <script>
@@ -48,7 +47,7 @@
     observer.observe(canvas);
 
     function plotBox(width: number, height: number) {
-      return { l: 54, r: width - 28, t: 28, b: height - 78 };
+      return { l: 54, r: width - 28, t: 28, b: height - 36 };
     }
 
     function frame(now: number) {
