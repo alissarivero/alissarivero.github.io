@@ -62,12 +62,11 @@
       }
       const box = plotBox(width, height);
       const cycle = reduced ? 0.86 : (now % 18000) / 18000;
-      const morph = smooth(segment(cycle, 0.16, 0.38));
-      const onto = smooth(segment(cycle, 0.34, 0.56));
+      const morph = smooth(segment(cycle, 0.28, 0.62));
+      const onto = smooth(segment(cycle, 0.22, 0.64));
       const axes = smooth(segment(cycle, 0.4, 0.55));
       const residuals = smooth(segment(cycle, 0.56, 0.74));
       const lineIn = smooth(segment(cycle, 0.62, 0.82));
-      const hold = cycle > 0.9 ? 1 : 0;
 
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = "#fff";
@@ -80,7 +79,7 @@
         const plot = toPlot(box, p.x, p.y);
         const crowdX = 20 + p.homeX * (width - 40);
         const crowdY = 16 + p.homeY * (box.b - 24);
-        const bob = reduced ? 0 : Math.sin(now / 620 + p.phase) * (1 - onto) * 3.2;
+        const bob = reduced ? 0 : Math.sin(now / 620 + p.phase) * (1 - onto) * 2.2;
         const tx = crowdX + (plot.x - crowdX) * onto;
         const ty = crowdY + bob + (plot.y - crowdY) * onto;
         if (!p.placed) {
@@ -88,10 +87,15 @@
           p.py = ty;
           p.placed = true;
         } else {
-          p.px += (tx - p.px) * (reduced ? 1 : 0.12);
-          p.py += (ty - p.py) * (reduced ? 1 : 0.12);
+          const follow = reduced ? 1 : 0.16 + onto * 0.2;
+          p.px += (tx - p.px) * follow;
+          p.py += (ty - p.py) * follow;
+          if (Math.hypot(tx - p.px, ty - p.py) < 0.45) {
+            p.px = tx;
+            p.py = ty;
+          }
         }
-        drawPerson(ctx, p.px, p.py, p, morph, onto, hold);
+        drawPerson(ctx, p.px, p.py, p, morph, onto);
       });
 
       if (!reduced) requestAnimationFrame(frame);
@@ -187,11 +191,11 @@
     y: number,
     person: { skin: string; hair: string; shirt: string; lean: number },
     morph: number,
-    onto: number,
-    hold: number
+    onto: number
   ) {
-    const s = 1.05 - onto * 0.2;
+    const s = 1.05 - onto * 0.08;
     const body = 1 - morph;
+    const headR = 5.7 * s * (1 - morph) + (3.15 + morph * 0.35) * morph;
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(person.lean * body * 0.2);
@@ -201,47 +205,42 @@
       ctx.globalAlpha = body;
       ctx.fillStyle = "rgba(36, 32, 28, 0.08)";
       ctx.beginPath();
-      ctx.ellipse(0, 14 * s, 7 * s, 2 * s, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 22 * s, 7 * s, 2 * s, 0, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.strokeStyle = person.skin;
       ctx.lineWidth = 2.4 * s;
       ctx.lineCap = "round";
       ctx.beginPath();
-      ctx.moveTo(-3.1 * s, 1 * s);
-      ctx.lineTo(-4.2 * s, 12 * s);
-      ctx.moveTo(3.1 * s, 1 * s);
-      ctx.lineTo(4.4 * s, 12 * s);
+      ctx.moveTo(-3.1 * s, 8 * s);
+      ctx.lineTo(-4.2 * s, 20 * s);
+      ctx.moveTo(3.1 * s, 8 * s);
+      ctx.lineTo(4.4 * s, 20 * s);
       ctx.stroke();
 
       ctx.fillStyle = person.shirt;
-      roundBody(ctx, -6.2 * s, -8.5 * s, 12.4 * s, 11.5 * s, 4.2 * s);
+      roundBody(ctx, -6.2 * s, -1.2 * s, 12.4 * s, 11.5 * s, 4.2 * s);
       ctx.fill();
 
       ctx.strokeStyle = person.skin;
       ctx.beginPath();
-      ctx.moveTo(-6 * s, -4 * s);
-      ctx.lineTo(-9 * s, 2 * s);
-      ctx.moveTo(6 * s, -4 * s);
-      ctx.lineTo(9 * s, 2 * s);
+      ctx.moveTo(-6 * s, 3 * s);
+      ctx.lineTo(-9 * s, 9 * s);
+      ctx.moveTo(6 * s, 3 * s);
+      ctx.lineTo(9 * s, 9 * s);
       ctx.stroke();
 
       ctx.fillStyle = person.hair;
       ctx.beginPath();
-      ctx.arc(0, -16.4 * s, 6.4 * s, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = person.skin;
-      ctx.beginPath();
-      ctx.arc(0, -13.6 * s, 5.7 * s, 0, Math.PI * 2);
+      ctx.arc(0, -2.6 * s, 6.4 * s, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
 
-    ctx.globalAlpha = 0.15 + morph * 0.85;
+    ctx.globalAlpha = 1;
     ctx.fillStyle = person.skin;
     ctx.beginPath();
-    ctx.arc(0, (1 - morph) * -14.5 * s, 3.2 + morph * 1.3 + hold * 0.15, 0, Math.PI * 2);
+    ctx.arc(0, 0, headR, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }
