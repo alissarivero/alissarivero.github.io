@@ -705,6 +705,20 @@
   flex-wrap: wrap;
   gap: 0.7rem;
   align-items: center;
+  margin-top: 1.5rem;
+}
+
+.psych-shell button#mark-complete {
+  background: #fff;
+  color: #00539B;
+  border: 1.5px solid #00539B;
+  font-weight: 750;
+  padding: 0.6rem 1.1rem;
+}
+
+.psych-shell button#mark-complete.is-done {
+  background: #00539B;
+  color: #fff;
 }
 
 .path a.nested-card {

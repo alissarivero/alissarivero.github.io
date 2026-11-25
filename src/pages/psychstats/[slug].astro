@@ -68,38 +68,57 @@ const kicker =
             badge={module.badge}
           />
         )}
-        {module.selfCheck && (
-          <p class="self-check">
-            <button type="button" id="self-check" data-slug={module.slug} data-xp={module.xp} data-badge={module.badge || ""}>
-              Mark this project complete
-            </button>
-            <span id="self-check-status" role="status"></span>
-          </p>
-        )}
+        <p class="self-check">
+          <button
+            type="button"
+            id="mark-complete"
+            data-slug={module.slug}
+            data-xp={module.xp}
+            data-badge={module.badge || ""}
+          >
+            Mark as completed
+          </button>
+          <span id="mark-status" role="status"></span>
+        </p>
       </article>
     </CourseLayout>
   )
 }
 
 <script>
-  import { saveProgress } from "../../lib/progress";
+  import { loadProgress, saveProgress } from "../../lib/progress";
 
-  function boot() {
-    const button = document.getElementById("self-check");
+  function paint(button: HTMLButtonElement, done: boolean) {
+    button.dataset.done = done ? "1" : "0";
+    button.textContent = done ? "Mark as not completed" : "Mark as completed";
+    button.classList.toggle("is-done", done);
+    const node = document.querySelector<HTMLElement>(`#course-path [data-module="${button.dataset.slug}"]`);
+    node?.classList.toggle("done", done);
+  }
+
+  async function boot() {
+    const button = document.getElementById("mark-complete") as HTMLButtonElement | null;
     if (!button || button.dataset.ready) return;
     button.dataset.ready = "1";
+    const rows = await loadProgress();
+    const current = rows.find((row) => row.slug === button.dataset.slug);
+    paint(button, current?.status === "checked");
     button.addEventListener("click", async () => {
-      const saved = await saveProgress({
-        slug: button.dataset.slug || "",
-        status: "checked",
-        xp: Number(button.dataset.xp || 0),
-        badges: button.dataset.badge ? [button.dataset.badge] : [],
-      });
-      const status = document.getElementById("self-check-status");
+      const done = button.dataset.done !== "1";
+      const saved = await saveProgress(
+        {
+          slug: button.dataset.slug || "",
+          status: done ? "checked" : "started",
+          xp: done ? Number(button.dataset.xp || 0) : 0,
+          badges: done && button.dataset.badge ? [button.dataset.badge] : [],
+        },
+        true
+      );
+      paint(button, done);
+      const status = document.getElementById("mark-status");
       if (status) {
-        status.textContent = saved.remote
-          ? "Marked complete and saved to your account."
-          : "Marked complete on this device.";
+        const where = saved.remote ? "Saved to your account." : "Saved on this device.";
+        status.textContent = done ? `Marked completed. ${where}` : `Marked not completed. ${where}`;
       }
     });
   }

@@ -41,15 +41,17 @@ export async function loadProgress(): Promise<ProgressRow[]> {
   }));
 }
 
-export async function saveProgress(row: ProgressRow) {
+export async function saveProgress(row: ProgressRow, replace = false) {
   const next = readLocal().filter((r) => r.slug !== row.slug);
   const previous = readLocal().find((r) => r.slug === row.slug);
-  const merged: ProgressRow = {
-    ...row,
-    badges: Array.from(new Set([...(previous?.badges ?? []), ...row.badges])),
-    xp: Math.max(previous?.status === "checked" ? previous.xp : 0, row.xp),
-    status: previous?.status === "checked" || row.status === "checked" ? "checked" : "started",
-  };
+  const merged: ProgressRow = replace
+    ? { ...previous, ...row, badges: row.badges.length ? row.badges : previous?.badges ?? [] }
+    : {
+        ...row,
+        badges: Array.from(new Set([...(previous?.badges ?? []), ...row.badges])),
+        xp: Math.max(previous?.status === "checked" ? previous.xp : 0, row.xp),
+        status: previous?.status === "checked" || row.status === "checked" ? "checked" : "started",
+      };
   if (merged.status === "checked" && previous?.status === "checked") {
     merged.xp = Math.max(previous.xp, row.xp);
   }
