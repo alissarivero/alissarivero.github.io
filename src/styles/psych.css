@@ -294,6 +294,15 @@
   font-weight: 750;
 }
 
+.welcome a.continue {
+  background: #00539B;
+  color: #fff;
+}
+
+.welcome a.continue[hidden] {
+  display: none;
+}
+
 .welcome a.start-course {
   color: #fff;
 }
@@ -590,9 +599,10 @@
   color: #fff;
 }
 
-.welcome-actions .continue {
+.welcome-actions .continue:not([hidden]) {
   display: inline-flex;
   align-items: center;
+  color: #fff;
 }
 
 .course-path.is-collapsed .trail {

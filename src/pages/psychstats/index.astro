@@ -18,7 +18,7 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
     </p>
     <div class="welcome-actions">
       <a class="start-course" href="#sign-up">Start the course</a>
-      <a id="continue" class="continue" href={firstStep?.href ?? "#course-path"}>Continue where you left off</a>
+      <a id="continue" class="continue" href={firstStep?.href ?? "#course-path"} hidden>Continue where you left off</a>
       <button type="button" class="topic-search" id="topic-search-btn">Search for a specific topic</button>
     </div>
     <form id="topic-search" class="topic-search-form" hidden>
@@ -49,6 +49,20 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
 </CourseLayout>
 
 <script>
+  import { getSupabase } from "../../lib/supabase";
+
+  async function showContinue() {
+    const cont = document.getElementById("continue");
+    if (!cont) return;
+    const sb = getSupabase();
+    if (!sb) {
+      cont.hidden = true;
+      return;
+    }
+    const { data } = await sb.auth.getUser();
+    cont.hidden = !data.user;
+  }
+
   function bootTopicSearch() {
     const open = document.getElementById("topic-search-btn");
     const form = document.getElementById("topic-search");
@@ -113,5 +127,10 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
   }
 
   bootTopicSearch();
-  document.addEventListener("astro:page-load", bootTopicSearch);
+  void showContinue();
+  window.addEventListener("psychstats-auth", () => void showContinue());
+  document.addEventListener("astro:page-load", () => {
+    bootTopicSearch();
+    void showContinue();
+  });
 </script>
