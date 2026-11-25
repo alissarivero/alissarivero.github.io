@@ -8,13 +8,22 @@ interface Props {
 }
 
 const { overview, detailed, figures = [] } = Astro.props;
+const hasDetail = detailed.length > 0;
 ---
 
 <div class="levels">
-  <div class="level-tabs" role="tablist" aria-label="Depth of explanation">
-    <button type="button" role="tab" aria-selected="true" data-tab="overview">Overview</button>
-    <button type="button" role="tab" aria-selected="false" data-tab="detailed">Detailed description</button>
-  </div>
+  {
+    hasDetail && (
+      <div class="level-tabs" role="tablist" aria-label="Depth of explanation">
+        <button type="button" role="tab" aria-selected="true" data-tab="overview">
+          Overview
+        </button>
+        <button type="button" role="tab" aria-selected="false" data-tab="detailed">
+          More detail
+        </button>
+      </div>
+    )
+  }
   <div class="level-panel" data-panel="overview">
     {
       overview.map((paragraph, index) => (
@@ -26,7 +35,7 @@ const { overview, detailed, figures = [] } = Astro.props;
     }
   </div>
   <div class="level-panel" data-panel="detailed" hidden>
-    {detailed.map((paragraph) => <p>{paragraph}</p>)}
+    {hasDetail && detailed.map((paragraph) => <p>{paragraph}</p>)}
   </div>
 </div>
 
