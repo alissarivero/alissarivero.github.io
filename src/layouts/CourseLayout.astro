@@ -23,8 +23,8 @@ const { title, description, current = "hub" } = Astro.props;
       <p class="psych-tag">Statistics, from a psychologist's perspective</p>
       <a class="psych-exit" id="psych-account" href="/psychstats/portal/">Login</a>
     </header>
-    <div class="psych-frame">
-      <CourseNav current={current} />
+    <div class:list={["psych-frame", { "psych-home": current === "hub" }]}>
+      {current !== "hub" && <CourseNav current={current} />}
       <main class="psych-main">
         <slot />
       </main>

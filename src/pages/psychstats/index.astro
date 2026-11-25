@@ -3,13 +3,12 @@ import CourseLayout from "../../layouts/CourseLayout.astro";
 import Hero from "../../components/psychstats/Hero.astro";
 import { MODULES } from "../../data/psychstats/modules";
 
-const lessons = MODULES.filter((m) => m.kind === "lesson");
-const projects = MODULES.filter((m) => m.kind === "project");
-const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
+const firstLesson = MODULES.find((m) => m.kind === "lesson");
 ---
 
 <CourseLayout title="Psych Stats" description="Statistics for psychology, taught without a mathematical track." current="hub">
   <section class="welcome">
+    <p class="psych-kicker">Intro Psych Stats</p>
     <h1>Welcome to Intro Psych Stats!</h1>
     <p>
       We have created this free online resource to help make the statistics that psychologists use every day more
@@ -20,6 +19,7 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
       <a href="/psychstats/portal/">join</a> / <a href="/psychstats/teach/">create</a> a course if you are a student or
       instructor. If you do not want to sign up, all materials are freely accessible.
     </p>
+    <a class="start-course" href={firstLesson?.href ?? "/psychstats/introduction/"}>Start the course</a>
     <p class="welcome-sign">
       Anti-Racist Community, Department of Psychology &amp; Neuroscience at Duke University
     </p>
@@ -28,98 +28,18 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
     </p>
   </section>
   <Hero />
-  <div class="scorebar">
-    <div>
-      <p class="psych-kicker">Your path</p>
-      <h2>Statistics, one step at a time</h2>
-    </div>
-    <div class="scorebar-side">
-      <p id="xp-line" class="xp-total">0 XP</p>
-      <a id="continue" class="continue" href={lessons[0]?.href ?? "/psychstats/"}>Continue</a>
-    </div>
-  </div>
-  <div class="badges" id="badge-row"></div>
-  <ol class="trail">
-    {
-      lessons.map((lesson, i) => (
-        <li class="unit">
-          <header class="unit-head">
-            <span>Unit {i + 1}</span>
-            <h2>{lesson.title}</h2>
-            <p>{lesson.blurb}</p>
-          </header>
-          <div class="nodes">
-            <a class="node guide" href={lesson.href} data-module={lesson.slug} data-kind="guide">
-              <span class="bubble">Read</span>
-              <span class="node-label">{lesson.short}</span>
-            </a>
-            {under(lesson.slug).map((task) => (
-              <a class="node" href={task.href} data-module={task.slug} data-xp={task.xp} data-kind="check">
-                <span class="bubble">{task.xp}</span>
-                <span class="node-label">{task.short}</span>
-              </a>
-            ))}
-          </div>
-        </li>
-      ))
-    }
-    <li class="unit">
-      <header class="unit-head">
-        <span>Quests</span>
-        <h2>Projects</h2>
-        <p>Longer work that uses the lessons together.</p>
-      </header>
-      <div class="nodes">
-        {projects.map((project) => (
-          <a class="node quest" href={project.href} data-module={project.slug} data-xp={project.xp} data-kind="check">
-            <span class="bubble">{project.xp}</span>
-            <span class="node-label">{project.short}</span>
-          </a>
-        ))}
-      </div>
+  <ul class="home-points">
+    <li>
+      <h2>Free to use</h2>
+      <p>Every lesson, practice, and project is open in the browser. An account is optional.</p>
     </li>
-  </ol>
+    <li>
+      <h2>No background required</h2>
+      <p>The course starts from everyday questions in psychology, then introduces R as you need it.</p>
+    </li>
+    <li>
+      <h2>For a class or on your own</h2>
+      <p>Students can join a course. Instructors can create one and assign modules.</p>
+    </li>
+  </ul>
 </CourseLayout>
-
-<script>
-  import { loadProgress } from "../../lib/progress";
-
-  async function boot() {
-    const line = document.getElementById("xp-line");
-    if (!line || line.dataset.ready) return;
-    line.dataset.ready = "1";
-    const rows = await loadProgress();
-    const done = new Map(rows.map((row) => [row.slug, row]));
-    const total = rows.reduce((sum, row) => sum + (row.status === "checked" ? row.xp : 0), 0);
-    line.textContent = `${total} XP`;
-    const badgeRow = document.getElementById("badge-row");
-    if (badgeRow) {
-      for (const badge of new Set(rows.flatMap((row) => row.badges))) {
-        const chip = document.createElement("span");
-        chip.className = "badge";
-        chip.textContent = badge;
-        badgeRow.appendChild(chip);
-      }
-    }
-    const nodes = [...document.querySelectorAll<HTMLElement>(".node")];
-    let next: HTMLElement | null = null;
-    for (const node of nodes) {
-      const row = done.get(node.dataset.module || "");
-      if (row?.status === "checked") node.classList.add("done");
-      else if (row) node.classList.add("started");
-      if (!next && node.dataset.kind === "check" && row?.status !== "checked") next = node;
-    }
-    const guide = nodes.find((node) => node.dataset.kind === "guide" && !done.get(node.dataset.module || ""));
-    const current = next || guide || null;
-    current?.classList.add("up-next");
-    const cont = document.getElementById("continue");
-    if (cont && current) {
-      cont.setAttribute("href", current.getAttribute("href") || "/psychstats/");
-      cont.textContent = current.classList.contains("done") ? "Review" : "Continue";
-    }
-  }
-  void boot();
-  document.addEventListener("astro:page-load", () => {
-    void boot();
-  });
-</script>
