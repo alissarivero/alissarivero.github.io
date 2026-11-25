@@ -17,7 +17,7 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
       accessible to students and trainees. No statistical knowledge or experience in R required!
     </p>
     <div class="welcome-actions">
-      <a class="start-course" href="#course-path">Start the course</a>
+      <a class="start-course" href="#sign-up">Start the course</a>
       <button type="button" class="topic-search" id="topic-search-btn">Search for a specific topic</button>
     </div>
     <form id="topic-search" class="topic-search-form" hidden>
@@ -27,7 +27,7 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
     </form>
   </section>
   <Hero />
-  <section class="welcome welcome-after">
+  <section class="welcome welcome-after" id="sign-up">
     <p>
       You can <a href="/psychstats/portal/">sign up</a> to save your progress, or
       <a href="/psychstats/portal/">join</a> / <a href="/psychstats/teach/">create</a> a course if you are a student or
