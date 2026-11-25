@@ -14,6 +14,8 @@ export type PsychModule = {
   kind: Kind;
   /** Assignment pages sit under this lesson slug. */
   parent?: string;
+  /** On the path, place this assignment after the page or assignment with this slug. */
+  after?: string;
   datasetNote?: string;
   levels: { overview: string[]; detailed: string[] };
   figures?: { after: number; id: string }[];
@@ -64,6 +66,7 @@ const RAW: PsychModule[] = [
     slug: "r-setup",
     kind: "assignment",
     parent: "why-r",
+    after: "why-researchers-use-r",
     title: "Getting R set up on your computer",
     short: "Install R",
     blurb: "Install R and RStudio, open a script, and run one line on your own machine.",
@@ -222,6 +225,7 @@ const RAW: PsychModule[] = [
     slug: "r-1",
     kind: "assignment",
     parent: "why-r",
+    after: "r-setup",
     title: "Introduction to R, part 1",
     short: "R, part 1",
     blurb: "Make an object, put numbers in it, and look at the mean.",
@@ -244,6 +248,7 @@ mean(ages)`,
     slug: "describe",
     kind: "assignment",
     parent: "understanding-data",
+    after: "describing-a-column",
     title: "Descriptive statistics",
     short: "Descriptives",
     blurb: "Mean, median, and spread for reaction time, by condition.",
@@ -270,6 +275,7 @@ tapply(stroop$rt_ms, stroop$condition, sd)`,
     slug: "r-2",
     kind: "assignment",
     parent: "understanding-data",
+    after: "describe",
     title: "Introduction to R, part 2",
     short: "R, part 2",
     blurb: "Load a file, name the columns, and look at the first rows.",
@@ -295,6 +301,7 @@ head(stroop)`,
     slug: "visualize",
     kind: "assignment",
     parent: "understanding-data",
+    after: "ggplot-layers",
     title: "Data visualizations",
     short: "Plots",
     blurb: "Draw the comparison in base R, and read the ggplot version you will use in RStudio.",
@@ -320,6 +327,7 @@ boxplot(rt_ms ~ condition, data = stroop,
     slug: "r-3",
     kind: "assignment",
     parent: "understanding-data",
+    after: "visualize",
     title: "Introduction to R, part 3",
     short: "R, part 3",
     blurb: "Treat condition as a category, keep one group, and summarize it.",
@@ -346,6 +354,7 @@ table(stroop$condition)`,
     slug: "t-tests-lab",
     kind: "assignment",
     parent: "analyzing-data",
+    after: "reading-a-t-test",
     title: "T-tests",
     short: "T-tests",
     blurb: "A paired test on Student’s sleep data.",
@@ -369,6 +378,7 @@ table(stroop$condition)`,
     slug: "correlations-lab",
     kind: "assignment",
     parent: "analyzing-data",
+    after: "reading-a-correlation",
     title: "Correlations",
     short: "Correlations",
     blurb: "A correlation on Anscombe’s first pair, which is not a reason to skip the plot.",
@@ -393,6 +403,7 @@ plot(anscombe$x1, anscombe$y1)`,
     slug: "regression-lab",
     kind: "assignment",
     parent: "regression-models",
+    after: "reading-the-line",
     title: "Linear regression",
     short: "Regression lab",
     blurb: "Reaction time on the incongruent indicator. Read the slope in milliseconds.",
@@ -418,6 +429,7 @@ summary(fit)`,
     slug: "glm-lab",
     kind: "assignment",
     parent: "regression-models",
+    after: "logistic",
     title: "GLMs: logistic regression",
     short: "Logistic",
     blurb: "A yes-or-no mistake, modeled with a binomial GLM.",
@@ -446,6 +458,7 @@ summary(fit)`,
     slug: "anova-lab",
     kind: "assignment",
     parent: "analyzing-data",
+    after: "anova-ancova",
     title: "ANOVA and ANCOVA",
     short: "ANOVA",
     blurb: "Tooth growth by dose, then dose holding supplement steady.",
@@ -470,6 +483,7 @@ summary(aov(len ~ dose + supp, data = ToothGrowth))`,
     slug: "multilevel-lab",
     kind: "assignment",
     parent: "regression-models",
+    after: "multilevel",
     title: "Multi-level modeling",
     short: "Multi-level",
     blurb: "Name the trial, the person, and the condition, then average to the person.",
@@ -495,6 +509,7 @@ head(person)`,
     slug: "bayes-lab",
     kind: "assignment",
     parent: "frontiers",
+    after: "bayesian-in-practice",
     title: "Bayesian statistics",
     short: "Bayesian lab",
     blurb: "Update a prior after 8 heads in 10 flips. This is a toy, and it is supposed to be.",
@@ -636,12 +651,22 @@ const toPage = (page: (typeof LESSON_PAGES)[number]): PsychModule =>
     figures: page.slug === "why-researchers-use-r" ? [{ after: 2, id: "ggplot-gallery" }] : undefined,
   });
 
+const withAssignments = (lessonSlug: string): PsychModule[] => {
+  const kids = LESSON_PAGES.filter((page) => page.parent === lessonSlug).map(toPage);
+  for (const assignment of RAW.filter((module) => module.parent === lessonSlug)) {
+    const index = assignment.after ? kids.findIndex((kid) => kid.slug === assignment.after) : -1;
+    if (index >= 0) kids.splice(index + 1, 0, assignment);
+    else kids.push(assignment);
+  }
+  return kids;
+};
+
 export const MODULES: PsychModule[] = [
   ...LESSON_PAGES.filter((page) => page.parent === "course").map(toPage),
   ...RAW.flatMap((module) => {
+    if (module.kind === "assignment") return [];
     if (module.kind !== "lesson") return [module];
-    const pages = LESSON_PAGES.filter((page) => page.parent === module.slug).map(toPage);
-    return [module, ...pages];
+    return [module, ...withAssignments(module.slug)];
   }),
 ];
 
