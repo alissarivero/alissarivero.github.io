@@ -14,9 +14,9 @@
 .psych-shell h2,
 .psych-shell h3 {
   font-family: Fraunces, Georgia, serif;
-  font-weight: 560;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+  font-weight: 680;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
   color: #111;
 }
 
@@ -223,15 +223,17 @@
 }
 
 .welcome h1 {
-  margin: 0 0 0.45rem;
-  font-size: 2.4rem;
+  margin: 0 0 0.55rem;
+  font-size: 3.4rem;
+  line-height: 1.02;
 }
 
 .welcome p {
-  margin: 0 0 0.75rem;
-  max-width: 42rem;
+  margin: 0 0 0.85rem;
+  max-width: 40rem;
   color: #243028;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
+  line-height: 1.5;
 }
 
 .welcome a {
@@ -413,7 +415,7 @@
 
 .scorebar h2 {
   margin: 0;
-  font-size: 2.1rem;
+  font-size: 2.5rem;
 }
 
 .scorebar-side {
@@ -453,20 +455,23 @@
 
 .unit-head span {
   color: #00539B;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 0.84rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .unit-head h2 {
-  margin: 0.15rem 0;
-  font-size: 2.4rem;
+  margin: 0.2rem 0 0.35rem;
+  font-size: 2.85rem;
 }
 
 .unit-head p {
-  margin: 0 0 0.8rem;
+  margin: 0 0 0.9rem;
   color: #5c5852;
+  font-size: 1.12rem;
+  line-height: 1.45;
+  max-width: 36rem;
 }
 
 .course-path.is-collapsed .unit-head,
@@ -623,9 +628,9 @@
   top: 50%;
   width: 12rem;
   transform: translateY(-50%);
-  font-size: 0.98rem;
+  font-size: 1.08rem;
   line-height: 1.25;
-  font-weight: 700;
+  font-weight: 750;
 }
 
 .node:nth-child(odd) .node-label {
@@ -668,17 +673,17 @@
 }
 
 .psych-main > h1 {
-  margin: 0.1rem 0 1rem;
-  font-size: 3.5rem;
-  line-height: 1.05;
+  margin: 0.15rem 0 1.1rem;
+  font-size: 4rem;
+  line-height: 1.02;
 }
 
 .psych-kicker {
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.45rem;
   color: #00539B;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 0.84rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
@@ -785,9 +790,12 @@
 }
 
 .course-points li {
-  margin: 0.35rem 0;
-  padding-left: 1.35rem;
+  margin: 0.45rem 0;
+  padding-left: 1.4rem;
   position: relative;
+  font-size: 1.15rem;
+  font-weight: 620;
+  line-height: 1.4;
 }
 
 .course-points li::before {
@@ -802,7 +810,16 @@
 }
 
 .level-panel p {
-  margin: 0 0 0.9rem;
+  margin: 0 0 1rem;
+  font-size: 1.12rem;
+  line-height: 1.6;
+}
+
+.level-panel p:first-of-type {
+  font-size: 1.38rem;
+  line-height: 1.45;
+  font-weight: 620;
+  color: #1a1a1a;
 }
 
 .level-tabs {
@@ -1016,8 +1033,16 @@
     padding: 1rem 1rem 3rem;
   }
 
-  .psych-main > h1 {
+  .welcome h1 {
     font-size: 2.5rem;
+  }
+
+  .psych-main > h1 {
+    font-size: 2.7rem;
+  }
+
+  .unit-head h2 {
+    font-size: 2.1rem;
   }
 
   .psych-nav {
