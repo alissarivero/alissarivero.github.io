@@ -53,8 +53,8 @@
 }
 
 .psych-join {
-  color: #1f7a4d;
-  border: 1px solid #1f7a4d;
+  color: #00539B;
+  border: 1px solid #00539B;
   border-radius: 999px;
   padding: 0.35rem 0.8rem;
   font-size: 0.92rem;
@@ -67,14 +67,14 @@
 }
 
 .psych-exit {
-  color: #1f7a4d;
+  color: #00539B;
   font-size: 0.92rem;
   font-weight: 750;
   text-decoration: none;
 }
 
 .psych-footer {
-  background: #145c38;
+  background: #00539B;
   color: #fff;
   padding: 1.4rem 1.5rem 1.6rem;
 }
@@ -166,7 +166,7 @@
 .start-course {
   display: inline-block;
   margin: 0;
-  background: #1f7a4d;
+  background: #00539B;
   color: #fff;
   text-decoration: none;
   border-radius: 999px;
@@ -176,14 +176,14 @@
 
 .psych-shell button.topic-search {
   background: #fff;
-  color: #1f7a4d;
-  border: 1.5px solid #1f7a4d;
+  color: #00539B;
+  border: 1.5px solid #00539B;
   padding: 0.7rem 1.25rem;
   font-weight: 750;
 }
 
 .psych-shell button.topic-search:hover {
-  background: #f4faf6;
+  background: #eef4fb;
 }
 
 .topic-search-form[hidden] {
@@ -204,7 +204,7 @@
 }
 
 .topic-search-form input {
-  border: 1.5px solid #1f7a4d;
+  border: 1.5px solid #00539B;
   border-radius: 999px;
   padding: 0.55rem 0.95rem;
   font: inherit;
@@ -215,7 +215,7 @@
 }
 
 .start-course:hover {
-  background: #166340;
+  background: #003f7a;
 }
 
 .welcome {
@@ -235,7 +235,7 @@
 }
 
 .welcome a {
-  color: #1f7a4d;
+  color: #00539B;
   font-weight: 750;
 }
 
@@ -263,7 +263,7 @@
 .nav-label {
   margin: 1.15rem 0 0.35rem;
   padding: 0 0.2rem;
-  color: #1f7a4d;
+  color: #00539B;
   font-family: Fraunces, Georgia, serif;
   font-size: 0.95rem;
   font-weight: 560;
@@ -280,7 +280,7 @@
   max-height: calc(100vh - 6rem);
   overflow: auto;
   padding: 0.85rem 0.85rem 1rem;
-  border: 1px solid #f3d0dc;
+  border: 1px solid #f6e3c4;
   border-radius: 22px;
   background:
     linear-gradient(#fff, #fff) padding-box,
@@ -295,15 +295,15 @@
   padding: 0.45rem 0.8rem;
   border-radius: 999px;
   background: #fff;
-  border: 1px solid #f3d0dc;
+  border: 1px solid #f6e3c4;
   color: #243028;
   text-decoration: none;
   font-weight: 750;
 }
 
 .nav-home[aria-current="page"] {
-  background: #1f7a4d;
-  border-color: #1f7a4d;
+  background: #00539B;
+  border-color: #00539B;
   color: #fff;
 }
 
@@ -313,7 +313,7 @@
   gap: 0.15rem;
   margin-left: 0.45rem;
   padding-left: 0.95rem;
-  border-left: 2px solid #f4c3d2;
+  border-left: 2px solid #E89923;
 }
 
 .nav-stop {
@@ -343,7 +343,7 @@
   height: 9px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid #1f7a4d;
+  border: 2px solid #00539B;
 }
 
 .psych-nav a.nested {
@@ -372,21 +372,21 @@
 .nav-rail a[aria-current="page"],
 .nav-class a[aria-current="page"] {
   background: #f3faf5;
-  color: #145c38;
+  color: #00539B;
   font-weight: 750;
 }
 
 .nav-stop > a[aria-current="page"]::before,
 .nav-rail > a[aria-current="page"]::before {
-  background: #1f7a4d;
-  box-shadow: 0 0 0 4px #e5f5ec;
+  background: #00539B;
+  box-shadow: 0 0 0 4px #d7e6f5;
 }
 
 .psych-nav .num {
   font-family: Fraunces, Georgia, serif;
   font-variant-numeric: tabular-nums;
   font-size: 0.78rem;
-  color: #1f7a4d;
+  color: #00539B;
   min-width: 1.15rem;
 }
 
@@ -396,7 +396,7 @@
 }
 
 .nav-class a {
-  border: 1px solid #f3d0dc;
+  border: 1px solid #f6e3c4;
   border-radius: 999px;
   padding: 0.28rem 0.7rem;
   font-size: 0.86rem;
@@ -430,7 +430,7 @@
 }
 
 .continue {
-  background: #1f7a4d;
+  background: #00539B;
   color: #fff;
   text-decoration: none;
   border-radius: 999px;
@@ -448,7 +448,7 @@
 }
 
 .unit-head span {
-  color: #1f7a4d;
+  color: #00539B;
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -484,7 +484,7 @@
   top: 0.2rem;
   bottom: 0.2rem;
   width: 2px;
-  background: #f4c3d2;
+  background: #E89923;
   transform: translateX(-50%);
 }
 
@@ -516,8 +516,8 @@
   display: inline-flex;
   margin: 0 0 0.85rem;
   background: #fff;
-  color: #1f7a4d;
-  border: 1px solid #1f7a4d;
+  color: #00539B;
+  border: 1px solid #00539B;
   border-radius: 999px;
   font-family: Nunito, sans-serif;
   font-weight: 750;
@@ -534,7 +534,7 @@
 }
 
 .node.here .bubble {
-  box-shadow: 0 0 0 4px #e5f5ec;
+  box-shadow: 0 0 0 4px #d7e6f5;
 }
 
 .psych-frame.path-collapsed {
@@ -593,12 +593,12 @@
 }
 
 .node.guide .bubble {
-  border-color: #1f7a4d;
+  border-color: #00539B;
 }
 
 .node.done .bubble {
-  background: #1f7a4d;
-  border-color: #166340;
+  background: #00539B;
+  border-color: #003f7a;
   color: #fff;
   box-shadow: 0 6px 0 #b7dfc8;
 }
@@ -609,8 +609,8 @@
 }
 
 .node.up-next .bubble {
-  border-color: #1f7a4d;
-  box-shadow: 0 6px 0 #1f7a4d;
+  border-color: #00539B;
+  box-shadow: 0 6px 0 #00539B;
   animation: bob 1.4s ease-in-out infinite;
 }
 
@@ -671,7 +671,7 @@
 
 .psych-kicker {
   margin: 0 0 0.4rem;
-  color: #1f7a4d;
+  color: #00539B;
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -709,13 +709,13 @@
 }
 
 .path a:hover {
-  border-color: #1f7a4d;
+  border-color: #00539B;
 }
 
 .path .idx {
   font-family: Fraunces, Georgia, serif;
   font-size: 1.4rem;
-  color: #1f7a4d;
+  color: #00539B;
   line-height: 1;
   padding-top: 0.15rem;
 }
@@ -748,8 +748,8 @@
 
 .chip.badge-success {
   background: #e7f4f1;
-  border-color: #1f7a4d;
-  color: #145c38;
+  border-color: #00539B;
+  color: #00539B;
 }
 
 .chip.badge-warning {
@@ -766,7 +766,7 @@
 }
 
 .badges .badge {
-  background: #1f7a4d;
+  background: #00539B;
   color: #fff;
   border-radius: 999px;
   padding: 0.15rem 0.6rem;
@@ -837,14 +837,14 @@
 
 .fig-controls input[type="range"] {
   flex: 1;
-  accent-color: #1f7a4d;
+  accent-color: #00539B;
 }
 
 .dataset-note {
   margin: 0 0 1.5rem;
   padding: 0.9rem 1rem;
   background: #fff;
-  border-left: 3px solid #1f7a4d;
+  border-left: 3px solid #00539B;
   border-radius: 0 10px 10px 0;
   color: #2c2a27;
 }
@@ -901,8 +901,8 @@
 .psych-shell button {
   font-family: Nunito, sans-serif;
   border-radius: 999px;
-  border: 1px solid #1f7a4d;
-  background: #1f7a4d;
+  border: 1px solid #00539B;
+  background: #00539B;
   color: #fff;
   padding: 0.45rem 0.95rem;
   cursor: pointer;
@@ -922,9 +922,9 @@
 }
 
 .psych-shell .level-tabs button[aria-selected="true"] {
-  background: #1f7a4d;
+  background: #00539B;
   color: #fff;
-  border-color: #1f7a4d;
+  border-color: #00539B;
 }
 
 .psych-shell button:disabled {
@@ -933,7 +933,7 @@
 }
 
 .psych-shell .link {
-  color: #1f7a4d;
+  color: #00539B;
 }
 
 .psych-shell table {
@@ -1024,6 +1024,6 @@
   .psych-nav a {
     white-space: nowrap;
     background: #fff;
-    border: 1px solid #f3d0dc;
+    border: 1px solid #f6e3c4;
   }
 }

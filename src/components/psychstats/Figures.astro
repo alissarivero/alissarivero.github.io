@@ -119,7 +119,7 @@ const { ids = [] } = Astro.props;
         y1: String(sy(intercept)),
         x2: String(sx(5)),
         y2: String(sy(intercept + slope * 5)),
-        stroke: "#1f7a4d",
+        stroke: "#00539B",
         "stroke-width": "3",
       })
     );
@@ -136,7 +136,7 @@ const { ids = [] } = Astro.props;
         y1: String(sy(intercept)),
         x2: String(sx(5)),
         y2: String(sy(intercept + slope * 5)),
-        stroke: "#1f7a4d",
+        stroke: "#00539B",
         "stroke-width": "3",
       })
     );
@@ -146,8 +146,8 @@ const { ids = [] } = Astro.props;
     const y1 = y0 + slope;
     svg.appendChild(el("line", { x1: String(sx(xStep)), y1: String(sy(y0)), x2: String(sx(xStep + 1)), y2: String(sy(y0)), stroke: "#111", "stroke-width": "2" }));
     svg.appendChild(el("line", { x1: String(sx(xStep + 1)), y1: String(sy(y0)), x2: String(sx(xStep + 1)), y2: String(sy(y1)), stroke: "#111", "stroke-width": "2" }));
-    svg.appendChild(el("circle", { cx: String(sx(0)), cy: String(sy(intercept)), r: "6", fill: "#fff", stroke: "#1f7a4d", "stroke-width": "3" }));
-    const interceptLabel = el("text", { x: String(sx(0) + 10), y: String(sy(intercept) - 10), fill: "#1f7a4d", "font-size": "14", "font-weight": "600" });
+    svg.appendChild(el("circle", { cx: String(sx(0)), cy: String(sy(intercept)), r: "6", fill: "#fff", stroke: "#00539B", "stroke-width": "3" }));
+    const interceptLabel = el("text", { x: String(sx(0) + 10), y: String(sy(intercept) - 10), fill: "#00539B", "font-size": "14", "font-weight": "600" });
     interceptLabel.textContent = "intercept";
     svg.appendChild(interceptLabel);
     const slopeLabel = el("text", { x: String(sx(xStep + 1) + 8), y: String((sy(y0) + sy(y1)) / 2), fill: "#111", "font-size": "14", "font-weight": "600" });
@@ -237,10 +237,10 @@ const { ids = [] } = Astro.props;
         svg.appendChild(el("circle", { cx: String(sx(x, 0, 5)), cy: String(sy(2.2 + (i - 2) * spread, 0, 6)), r: "6", fill: "#161616" }));
       });
       b.forEach((x, i) => {
-        svg.appendChild(el("circle", { cx: String(sx(x, 0, 5)), cy: String(sy(3.6 + (i - 2) * spread, 0, 6)), r: "6", fill: "#1f7a4d" }));
+        svg.appendChild(el("circle", { cx: String(sx(x, 0, 5)), cy: String(sy(3.6 + (i - 2) * spread, 0, 6)), r: "6", fill: "#00539B" }));
       });
       svg.appendChild(el("line", { x1: String(sx(1.2, 0, 5)), y1: String(sy(2.2, 0, 6)), x2: String(sx(1.8, 0, 5)), y2: String(sy(2.2, 0, 6)), stroke: "#161616", "stroke-width": "2" }));
-      svg.appendChild(el("line", { x1: String(sx(3.3, 0, 5)), y1: String(sy(3.6, 0, 6)), x2: String(sx(3.9, 0, 5)), y2: String(sy(3.6, 0, 6)), stroke: "#1f7a4d", "stroke-width": "2" }));
+      svg.appendChild(el("line", { x1: String(sx(3.3, 0, 5)), y1: String(sy(3.6, 0, 6)), x2: String(sx(3.9, 0, 5)), y2: String(sy(3.6, 0, 6)), stroke: "#00539B", "stroke-width": "2" }));
       cap.textContent =
         spread < 0.7
           ? "The mean gap is easy to see because people in a group sit close together. That gap is the estimate."
@@ -284,7 +284,7 @@ const { ids = [] } = Astro.props;
       const r = num / Math.sqrt(dx * dy);
       svg.replaceChildren();
       axes(svg, "one measure", "another measure");
-      svg.appendChild(el("line", { x1: String(sx(0)), y1: String(sy(intercept)), x2: String(sx(5)), y2: String(sy(intercept + slope * 5)), stroke: "#1f7a4d", "stroke-width": "3" }));
+      svg.appendChild(el("line", { x1: String(sx(0)), y1: String(sy(intercept)), x2: String(sx(5)), y2: String(sy(intercept + slope * 5)), stroke: "#00539B", "stroke-width": "3" }));
       dots(svg, pts);
       cap.textContent = `r ≈ ${r.toFixed(2)}. The slope barely moved. What changed is how close the points sit to the line. r is that closeness, not the steepness.`;
     };
@@ -326,11 +326,11 @@ const { ids = [] } = Astro.props;
           const p = 1 / (1 + Math.exp(-(x - 2.5) * 1.6));
           d += `${i === 0 ? "M" : "L"} ${sx(x)} ${sy(p, -0.2, 1.2)} `;
         }
-        svg.appendChild(el("path", { d, fill: "none", stroke: "#1f7a4d", "stroke-width": "3" }));
+        svg.appendChild(el("path", { d, fill: "none", stroke: "#00539B", "stroke-width": "3" }));
         cap.textContent = "A logistic curve stays between 0 and 1. A positive coefficient makes the climb steeper toward yes. The sign is still the direction.";
       }
       for (const [x, y] of yes) {
-        svg.appendChild(el("circle", { cx: String(sx(x)), cy: String(sy(y, -0.2, 1.2)), r: "5.5", fill: y ? "#1f7a4d" : "#161616" }));
+        svg.appendChild(el("circle", { cx: String(sx(x)), cy: String(sy(y, -0.2, 1.2)), r: "5.5", fill: y ? "#00539B" : "#161616" }));
       }
     };
     button.addEventListener("click", () => {
@@ -358,12 +358,12 @@ const { ids = [] } = Astro.props;
       svg.appendChild(el("rect", { x: String(x0), y: "48", width: "140", height: "250", rx: "10", fill: "#fbfaf8", stroke: "#e4e0d8" }));
       if (panel.hint === "histogram") {
         [40, 90, 140, 100, 50].forEach((h, b) => {
-          svg.appendChild(el("rect", { x: String(x0 + 18 + b * 22), y: String(260 - h), width: "18", height: String(h), fill: "#1f7a4d" }));
+          svg.appendChild(el("rect", { x: String(x0 + 18 + b * 22), y: String(260 - h), width: "18", height: String(h), fill: "#00539B" }));
         });
       } else if (panel.hint === "boxes") {
         [70, 110].forEach((cx, b) => {
           svg.appendChild(el("line", { x1: String(x0 + cx - 18), y1: String(150 + b * 10), x2: String(x0 + cx + 18), y2: String(150 + b * 10), stroke: "#161616" }));
-          svg.appendChild(el("rect", { x: String(x0 + cx - 16), y: String(120 + b * 40), width: "32", height: "70", fill: "none", stroke: "#1f7a4d", "stroke-width": "2" }));
+          svg.appendChild(el("rect", { x: String(x0 + cx - 16), y: String(120 + b * 40), width: "32", height: "70", fill: "none", stroke: "#00539B", "stroke-width": "2" }));
         });
       } else if (panel.hint === "scatter") {
         [[30, 180], [50, 150], [70, 140], [90, 100], [110, 80]].forEach(([x, y]) => {
@@ -371,7 +371,7 @@ const { ids = [] } = Astro.props;
         });
       } else {
         [80, 140, 60].forEach((h, b) => {
-          svg.appendChild(el("rect", { x: String(x0 + 25 + b * 36), y: String(260 - h), width: "28", height: String(h), fill: b === 1 ? "#1f7a4d" : "#161616" }));
+          svg.appendChild(el("rect", { x: String(x0 + 25 + b * 36), y: String(260 - h), width: "28", height: String(h), fill: b === 1 ? "#00539B" : "#161616" }));
         });
       }
     });
@@ -387,7 +387,7 @@ const { ids = [] } = Astro.props;
     const errs = [0.35, 0.4];
     means.forEach((m, i) => {
       const x = sx(1.4 + i * 2);
-      svg.appendChild(el("rect", { x: String(x - 28), y: String(sy(m, 0, 4)), width: "56", height: String(sy(0, 0, 4) - sy(m, 0, 4)), fill: i ? "#1f7a4d" : "#161616" }));
+      svg.appendChild(el("rect", { x: String(x - 28), y: String(sy(m, 0, 4)), width: "56", height: String(sy(0, 0, 4) - sy(m, 0, 4)), fill: i ? "#00539B" : "#161616" }));
       svg.appendChild(el("line", { x1: String(x), y1: String(sy(m - errs[i], 0, 4)), x2: String(x), y2: String(sy(m + errs[i], 0, 4)), stroke: "#c4553a", "stroke-width": "2" }));
     });
     const y = sy(3.5, 0, 4);
@@ -408,18 +408,18 @@ const { ids = [] } = Astro.props;
       { x: 428, title: "Small multiples" },
     ];
     panels.forEach((panel) => {
-      svg.appendChild(el("rect", { x: String(panel.x), y: "8", width: "196", height: "200", rx: "12", fill: "#fff", stroke: "#f3d0dc" }));
-      svg.appendChild(el("text", { x: String(panel.x + 98), y: "28", "text-anchor": "middle", fill: "#1f7a4d", "font-size": "13", "font-weight": "700" }));
+      svg.appendChild(el("rect", { x: String(panel.x), y: "8", width: "196", height: "200", rx: "12", fill: "#fff", stroke: "#f6e3c4" }));
+      svg.appendChild(el("text", { x: String(panel.x + 98), y: "28", "text-anchor": "middle", fill: "#00539B", "font-size": "13", "font-weight": "700" }));
       svg.lastChild!.textContent = panel.title;
     });
     const pts: [number, number][] = [[30, 150], [48, 132], [62, 140], [80, 118], [96, 124], [112, 100], [128, 92], [146, 78], [160, 70]];
     pts.forEach(([x, y]) => {
-      svg.appendChild(el("circle", { cx: String(16 + x), cy: String(y), r: "3.5", fill: "#1f7a4d" }));
+      svg.appendChild(el("circle", { cx: String(16 + x), cy: String(y), r: "3.5", fill: "#00539B" }));
     });
-    svg.appendChild(el("path", { d: "M46 148 C 80 130, 120 110, 176 68", fill: "none", stroke: "#145c38", "stroke-width": "2.5" }));
-    svg.appendChild(el("path", { d: "M46 158 C 80 142, 120 122, 176 78 L 176 58 C 120 98, 80 118, 46 138 Z", fill: "#1f7a4d", opacity: "0.15" }));
+    svg.appendChild(el("path", { d: "M46 148 C 80 130, 120 110, 176 68", fill: "none", stroke: "#00539B", "stroke-width": "2.5" }));
+    svg.appendChild(el("path", { d: "M46 158 C 80 142, 120 122, 176 78 L 176 58 C 120 98, 80 118, 46 138 Z", fill: "#00539B", opacity: "0.15" }));
     [0, 1, 2].forEach((g) => {
-      const color = ["#1f7a4d", "#d46b8c", "#c68642"][g];
+      const color = ["#00539B", "#E89923", "#c68642"][g];
       const base = 250 + g * 28;
       svg.appendChild(el("path", {
         d: `M${base} 160 C ${base + 10} ${120 - g * 8}, ${base + 22} ${120 - g * 8}, ${base + 32} 160`,
@@ -434,13 +434,13 @@ const { ids = [] } = Astro.props;
           cx: String(x0 + 16),
           cy: String(168 - h * (0.45 + col * 0.12) + i * 4),
           r: "3",
-          fill: col === 1 ? "#d46b8c" : "#1f7a4d",
+          fill: col === 1 ? "#E89923" : "#00539B",
         }));
       });
       svg.appendChild(el("path", {
         d: `M${x0 + 8} 150 C ${x0 + 16} ${110 - col * 12}, ${x0 + 24} ${100 - col * 8}, ${x0 + 28} 70`,
         fill: "none",
-        stroke: "#145c38",
+        stroke: "#00539B",
         "stroke-width": "1.6",
       }));
     });

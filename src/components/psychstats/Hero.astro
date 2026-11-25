@@ -27,7 +27,7 @@
         lean: rand() * 0.4 - 0.2,
         skin: pick(rand, ["#f8d7c4", "#efc2a4", "#e0a87c", "#c68642", "#a86b3c", "#8d5524", "#6b3a22", "#4a2918"]),
         hair: pick(rand, ["#1c140f", "#3b2416", "#6b4423", "#c4a36a", "#2a2a2a", "#7a4b32"]),
-        shirt: pick(rand, ["#f7f7f5", "#d7e8df", "#f6d5e1", "#d9e4f2", "#efe6d6", "#1f7a4d"]),
+        shirt: pick(rand, ["#f7f7f5", "#d6e4f2", "#E89923", "#d9e4f2", "#efe6d6", "#00539B"]),
         px: 0,
         py: 0,
         placed: false,
@@ -145,7 +145,7 @@
     const p1 = toPlot(box, x1, intercept + slope * x1);
     ctx.save();
     ctx.globalAlpha = 0.35 + lineIn * 0.65;
-    ctx.strokeStyle = "#1f7a4d";
+    ctx.strokeStyle = "#00539B";
     ctx.lineWidth = 2.4;
     ctx.lineCap = "round";
     ctx.beginPath();
