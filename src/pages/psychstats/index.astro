@@ -23,6 +23,7 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
     <form id="topic-search" class="topic-search-form" hidden>
       <label for="topic-q">Topic</label>
       <input id="topic-q" type="search" placeholder="Try regression, t-test, R…" autocomplete="off" />
+      <div id="topic-results" class="topic-results" hidden></div>
     </form>
   </section>
   <Hero />
@@ -55,20 +56,60 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
     if (!open || !form || !input || open.dataset.ready) return;
     open.dataset.ready = "1";
 
-    const apply = () => {
-      const q = input.value.trim().toLowerCase();
-      document.querySelectorAll<HTMLElement>("#course-path .node").forEach((node) => {
-        const label = node.querySelector(".node-label")?.textContent?.toLowerCase() ?? "";
-        node.classList.toggle("topic-miss", q.length > 0 && !label.includes(q));
+    const results = document.getElementById("topic-results");
+    if (!results) return;
+
+    const topics = () =>
+      [...document.querySelectorAll<HTMLElement>("#course-path .node")].map((node) => ({
+        title: node.querySelector(".node-label")?.textContent?.trim() || "",
+        href: node.getAttribute("href") || "#course-path",
+        node,
+      }));
+
+    const paintPath = (q: string) => {
+      topics().forEach(({ title, node }) => {
+        node.classList.toggle("topic-miss", q.length > 0 && !title.toLowerCase().includes(q));
       });
+    };
+
+    const paintSuggestions = () => {
+      const q = input.value.trim().toLowerCase();
+      results.replaceChildren();
+      if (!q) {
+        results.hidden = true;
+        paintPath("");
+        return;
+      }
+      const matches = topics().filter(({ title }) => title.toLowerCase().includes(q));
+      matches.slice(0, 6).forEach(({ title, href }) => {
+        const link = document.createElement("a");
+        link.href = href;
+        link.textContent = title;
+        results.appendChild(link);
+      });
+      if (matches.length === 0) {
+        const empty = document.createElement("p");
+        empty.textContent = "No topics match that search.";
+        results.appendChild(empty);
+      }
+      const all = document.createElement("button");
+      all.type = "button";
+      all.className = "topic-see-all";
+      all.textContent = matches.length ? `See all ${matches.length} on the path` : "See the path";
+      all.addEventListener("click", () => {
+        paintPath(q);
+        document.getElementById("course-path")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      results.appendChild(all);
+      results.hidden = false;
     };
 
     open.addEventListener("click", () => {
       form.hidden = false;
-      input.focus();
+      input.focus({ preventScroll: true });
     });
     form.addEventListener("submit", (event) => event.preventDefault());
-    input.addEventListener("input", apply);
+    input.addEventListener("input", paintSuggestions);
   }
 
   bootTopicSearch();

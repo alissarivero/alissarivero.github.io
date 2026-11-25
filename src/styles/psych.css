@@ -210,6 +210,50 @@
   font: inherit;
 }
 
+.topic-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-top: 0.35rem;
+  padding: 0.4rem;
+  background: #fff;
+  border: 1.5px solid #00539B;
+  border-radius: 16px;
+}
+
+.topic-results[hidden] {
+  display: none;
+}
+
+.topic-results a,
+.topic-results p {
+  margin: 0;
+  padding: 0.45rem 0.7rem;
+  border-radius: 10px;
+  color: #111;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.topic-results a:hover {
+  background: #eef4fb;
+}
+
+.psych-shell button.topic-see-all {
+  margin-top: 0.2rem;
+  background: #fff;
+  color: #00539B;
+  border: none;
+  border-radius: 10px;
+  text-align: left;
+  font-weight: 750;
+  padding: 0.45rem 0.7rem;
+}
+
+.psych-shell button.topic-see-all:hover {
+  background: #fff6e8;
+}
+
 #course-path .node.topic-miss {
   opacity: 0.28;
 }
