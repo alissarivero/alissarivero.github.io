@@ -16,7 +16,14 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
       We have created this free online resource to help make the statistics that psychologists use every day more
       accessible to students and trainees. No statistical knowledge or experience in R required!
     </p>
-    <a class="start-course" href="#course-path">Start the course</a>
+    <div class="welcome-actions">
+      <a class="start-course" href="#course-path">Start the course</a>
+      <button type="button" class="topic-search" id="topic-search-btn">Search for a specific topic</button>
+    </div>
+    <form id="topic-search" class="topic-search-form" hidden>
+      <label for="topic-q">Topic</label>
+      <input id="topic-q" type="search" placeholder="Try regression, t-test, R…" autocomplete="off" />
+    </form>
   </section>
   <Hero />
   <section class="welcome welcome-after">
@@ -39,3 +46,34 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
   <div class="badges" id="badge-row"></div>
   <CoursePath />
 </CourseLayout>
+
+<script>
+  function bootTopicSearch() {
+    const open = document.getElementById("topic-search-btn");
+    const form = document.getElementById("topic-search");
+    const input = document.getElementById("topic-q") as HTMLInputElement | null;
+    if (!open || !form || !input || open.dataset.ready) return;
+    open.dataset.ready = "1";
+
+    const apply = () => {
+      const q = input.value.trim().toLowerCase();
+      const nodes = document.querySelectorAll<HTMLElement>("#course-path .node");
+      nodes.forEach((node) => {
+        const label = node.querySelector(".node-label")?.textContent?.toLowerCase() ?? "";
+        node.classList.toggle("topic-miss", q.length > 0 && !label.includes(q));
+      });
+      const hit = document.querySelector<HTMLElement>("#course-path .node:not(.topic-miss)");
+      if (q && hit) hit.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+
+    open.addEventListener("click", () => {
+      form.hidden = false;
+      input.focus();
+      document.getElementById("course-path")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    input.addEventListener("input", apply);
+  }
+
+  bootTopicSearch();
+  document.addEventListener("astro:page-load", bootTopicSearch);
+</script>

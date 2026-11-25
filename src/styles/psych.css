@@ -156,15 +156,62 @@
   max-width: 820px;
 }
 
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0.35rem 0 1.1rem;
+}
+
 .start-course {
   display: inline-block;
-  margin: 0.35rem 0 1.1rem;
+  margin: 0;
   background: #1f7a4d;
   color: #fff;
   text-decoration: none;
   border-radius: 999px;
   padding: 0.7rem 1.25rem;
   font-weight: 750;
+}
+
+.psych-shell button.topic-search {
+  background: #fff;
+  color: #1f7a4d;
+  border: 1.5px solid #1f7a4d;
+  padding: 0.7rem 1.25rem;
+  font-weight: 750;
+}
+
+.psych-shell button.topic-search:hover {
+  background: #f4faf6;
+}
+
+.topic-search-form[hidden] {
+  display: none;
+}
+
+.topic-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-width: 22rem;
+  margin: -0.4rem 0 1rem;
+}
+
+.topic-search-form label {
+  font-size: 0.85rem;
+  color: #5d675f;
+}
+
+.topic-search-form input {
+  border: 1.5px solid #1f7a4d;
+  border-radius: 999px;
+  padding: 0.55rem 0.95rem;
+  font: inherit;
+}
+
+#course-path .node.topic-miss {
+  opacity: 0.28;
 }
 
 .start-course:hover {
