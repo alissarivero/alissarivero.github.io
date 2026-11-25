@@ -647,11 +647,12 @@
 
 .node.guide .bubble {
   border-color: #00539B;
+  box-shadow: 0 6px 0 #003f7a;
 }
 
 .node.done .bubble {
   background: #00539B;
-  border-color: #003f7a;
+  border-color: #00539B;
   color: #fff;
   box-shadow: 0 6px 0 #003f7a;
 }
@@ -663,7 +664,7 @@
 
 .node.up-next .bubble {
   border-color: #00539B;
-  box-shadow: 0 6px 0 #00539B;
+  box-shadow: 0 6px 0 #003f7a;
   animation: bob 1.4s ease-in-out infinite;
 }
 
