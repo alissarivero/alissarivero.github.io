@@ -5,10 +5,30 @@ interface Props {
   overview: string[];
   detailed: string[];
   points?: string[];
+  credit?: string;
   figures?: { after: number; id: string }[];
 }
 
-const { overview, detailed, points = [], figures = [] } = Astro.props;
+const { overview, detailed, points = [], credit = "", figures = [] } = Astro.props;
+const boldPhrases = ["No prior statistics or programming experience required.", "Completely free"];
+const pieces = (text: string) => {
+  const out: { text: string; bold: boolean }[] = [];
+  let rest = text;
+  while (rest.length > 0) {
+    const hit = boldPhrases
+      .map((phrase) => ({ phrase, index: rest.indexOf(phrase) }))
+      .filter((item) => item.index >= 0)
+      .sort((a, b) => a.index - b.index)[0];
+    if (!hit) {
+      out.push({ text: rest, bold: false });
+      break;
+    }
+    if (hit.index > 0) out.push({ text: rest.slice(0, hit.index), bold: false });
+    out.push({ text: hit.phrase, bold: true });
+    rest = rest.slice(hit.index + hit.phrase.length);
+  }
+  return out;
+};
 const hasDetail = detailed.length > 0;
 ---
 
@@ -29,7 +49,9 @@ const hasDetail = detailed.length > 0;
     {
       overview.map((paragraph, index) => (
         <>
-          <p>{paragraph}</p>
+          <p>
+            {pieces(paragraph).map((part) => (part.bold ? <strong>{part.text}</strong> : part.text))}
+          </p>
           {figures.filter((figure) => figure.after === index).map((figure) => <Figures ids={[figure.id]} />)}
         </>
       ))
@@ -38,11 +60,14 @@ const hasDetail = detailed.length > 0;
       points.length > 0 && (
         <ul class="course-points">
           {points.map((point) => (
-            <li>{point}</li>
+            <li>
+              {pieces(point).map((part) => (part.bold ? <strong>{part.text}</strong> : part.text))}
+            </li>
           ))}
         </ul>
       )
     }
+    {credit && <p class="course-credit">{credit}</p>}
   </div>
   <div class="level-panel" data-panel="detailed" hidden>
     {hasDetail && detailed.map((paragraph) => <p>{paragraph}</p>)}

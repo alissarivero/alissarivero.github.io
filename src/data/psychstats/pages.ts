@@ -7,6 +7,7 @@ export type LessonPage = {
   overview: string[];
   detailed: string[];
   points?: string[];
+  credit?: string;
 };
 
 const page = (
@@ -17,8 +18,9 @@ const page = (
   blurb: string,
   overview: string[],
   detailed: string[],
-  points?: string[]
-): LessonPage => ({ slug, parent, title, short, blurb, overview, detailed, points });
+  points?: string[],
+  credit?: string
+): LessonPage => ({ slug, parent, title, short, blurb, overview, detailed, points, credit });
 
 export const LESSON_PAGES: LessonPage[] = [
   page(
@@ -37,11 +39,9 @@ export const LESSON_PAGES: LessonPage[] = [
     [
       "Completely free",
       "Fully online and self-paced",
-      "No statistical background required",
-      "No experience with R required",
       "Optional sign-in to save your progress and pick up where you left off",
-      "Created by the Anti-Racism Community in the Department of Psychology & Neuroscience at Duke University.",
-    ]
+    ],
+    "Created by the Anti-Racism Community in the Department of Psychology & Neuroscience at Duke University."
   ),
   page(
     "methodology-discovery",

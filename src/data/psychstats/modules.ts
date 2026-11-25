@@ -17,7 +17,7 @@ export type PsychModule = {
   /** On the path, place this assignment after the page or assignment with this slug. */
   after?: string;
   datasetNote?: string;
-  levels: { overview: string[]; detailed: string[]; points?: string[] };
+  levels: { overview: string[]; detailed: string[]; points?: string[]; credit?: string };
   figures?: { after: number; id: string }[];
   showFlow?: boolean;
   starter?: string;
@@ -649,7 +649,7 @@ const toPage = (page: (typeof LESSON_PAGES)[number]): PsychModule =>
     blurb: page.blurb,
     minutes: 8,
     xp: 0,
-    levels: { overview: page.overview, detailed: page.detailed, points: page.points },
+    levels: { overview: page.overview, detailed: page.detailed, points: page.points, credit: page.credit },
     figures: page.slug === "why-researchers-use-r" ? [{ after: 2, id: "ggplot-gallery" }] : undefined,
   });
 
