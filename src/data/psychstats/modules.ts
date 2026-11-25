@@ -650,7 +650,14 @@ const toPage = (page: (typeof LESSON_PAGES)[number]): PsychModule =>
     minutes: 8,
     xp: 0,
     levels: { overview: page.overview, detailed: page.detailed, points: page.points, credit: page.credit },
-    figures: page.slug === "why-researchers-use-r" ? [{ after: 2, id: "ggplot-gallery" }] : undefined,
+    figures:
+      page.slug === "why-researchers-use-r"
+        ? [{ after: 2, id: "ggplot-gallery" }]
+        : page.slug === "significance"
+          ? [{ after: 0, id: "chance-grid" }]
+          : page.slug === "stats-answer-questions"
+            ? [{ after: 0, id: "describe-infer" }]
+            : undefined,
   });
 
 const withAssignments = (lessonSlug: string): PsychModule[] => {

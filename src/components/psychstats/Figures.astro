@@ -447,6 +447,96 @@ const { ids = [] } = Astro.props;
     cap.textContent = "Three ggplot-style figures drawn for this course: a smooth with a band, overlapping groups, and the same comparison repeated in small multiples.";
   }
 
+  function mountChance(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const cols = 10;
+    const gap = 32;
+    const r = 12;
+    const originX = (W - (cols - 1) * gap) / 2;
+    const originY = 24;
+    const rare = new Set([3, 27, 61, 84]);
+    for (let i = 0; i < 100; i++) {
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+      const hot = rare.has(i);
+      svg.appendChild(
+        el("circle", {
+          cx: String(originX + col * gap),
+          cy: String(originY + row * gap),
+          r: String(r),
+          fill: hot ? "#E89923" : "#00539B",
+        })
+      );
+    }
+    cap.textContent =
+      "One hundred studies in which nothing is really going on. The four orange circles are the samples that would look as extreme as yours by chance. That is fewer than 5 in 100.";
+  }
+
+  function mountDescribeInfer(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const sample = [42, 55, 48, 70, 46, 62, 51, 58, 44, 66, 49, 60];
+    const left = 36;
+    const base = 168;
+    sample.forEach((value, i) => {
+      const h = value * 1.15;
+      svg.appendChild(
+        el("rect", {
+          x: String(left + i * 22),
+          y: String(base - h),
+          width: "14",
+          height: String(h),
+          rx: "3",
+          fill: "#00539B",
+        })
+      );
+    });
+    const mean = sample.reduce((sum, value) => sum + value, 0) / sample.length;
+    const meanY = base - mean * 1.15;
+    svg.appendChild(
+      el("line", {
+        x1: String(left),
+        y1: String(meanY),
+        x2: String(left + sample.length * 22),
+        y2: String(meanY),
+        stroke: "#E89923",
+        "stroke-width": "3",
+      })
+    );
+    const leftLabel = el("text", { x: "150", y: "28", "text-anchor": "middle", fill: "#111", "font-size": "16", "font-weight": "700" });
+    leftLabel.textContent = "Descriptive";
+    svg.appendChild(leftLabel);
+    const leftNote = el("text", { x: "150", y: "196", "text-anchor": "middle", fill: "#5c5852", "font-size": "13" });
+    leftNote.textContent = "What this sample did";
+    svg.appendChild(leftNote);
+
+    const means = Array.from({ length: 40 }, (_, i) => 28 + ((i * 17) % 23));
+    const rare = new Set([2, 37]);
+    means.forEach((value, i) => {
+      const x = 360 + (i % 10) * 26;
+      const y = 70 + Math.floor(i / 10) * 28;
+      svg.appendChild(
+        el("circle", {
+          cx: String(x),
+          cy: String(y),
+          r: "8",
+          fill: rare.has(i) ? "#E89923" : "#d7e6f5",
+          stroke: rare.has(i) ? "#E89923" : "#00539B",
+          "stroke-width": "1.5",
+        })
+      );
+    });
+    const rightLabel = el("text", { x: "490", y: "28", "text-anchor": "middle", fill: "#111", "font-size": "16", "font-weight": "700" });
+    rightLabel.textContent = "Inferential";
+    svg.appendChild(rightLabel);
+    const rightNote = el("text", { x: "490", y: "196", "text-anchor": "middle", fill: "#5c5852", "font-size": "13" });
+    rightNote.textContent = "New samples, if nothing is true";
+    svg.appendChild(rightNote);
+    cap.textContent =
+      "Left: the people you measured, and their average. Right: many new samples drawn as if there were no real difference. Only the orange ones look like a strong result.";
+  }
+
   const mounts: Record<string, (root: HTMLElement) => void> = {
     "fit-line": mountFit,
     "read-line": mountRead,
@@ -456,6 +546,8 @@ const { ids = [] } = Astro.props;
     "plot-gallery": mountGallery,
     "ggplot-gallery": mountGgplot,
     "write-sentence": mountSentence,
+    "chance-grid": mountChance,
+    "describe-infer": mountDescribeInfer,
   };
 
   function boot() {

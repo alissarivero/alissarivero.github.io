@@ -61,7 +61,7 @@ export const LESSON_PAGES: LessonPage[] = [
     "Your questions",
     "The test, the mean, and the model are answers to different questions.",
     [
-      "A question about what people did needs a summary: a mean, a spread, a picture. A question about why, after you changed one thing, needs a comparison that separates the change from the noise of who walked in. A question about what someone will do next needs a model that is checked on behavior it has not seen yet.",
+      "A question about what people did needs a summary: a mean, a spread, a picture. That is description, and it stops at the people you measured. The picture below puts that sample on the left. Inference is the question on the right: if there were no real difference in the population, how often would a new sample look like yours? A question about why, after you changed one thing, needs that second picture. A question about what someone will do next needs a model checked on behavior it has not seen yet.",
       "Statistics is how those answers get made. The same spreadsheet can support all three, and the wrong summary answers a question you did not ask. This course stays with that match: name the question, then use the statistic that answers it.",
     ],
     []
@@ -154,7 +154,7 @@ export const LESSON_PAGES: LessonPage[] = [
     "Significance",
     "A small p-value is a comment about the sample, not a stamp that the effect matters.",
     [
-      "A test asks how surprising the result would be if there were truly no difference, or no relationship, of the kind you specified. A small p-value means the data are awkward for that dull story. It does not mean the effect is large, and it does not mean you have found the cause. Psychologists report it because it is a shared threshold, and then they still owe the reader the size of the difference.",
+      "A test asks how surprising the result would be if there were truly no difference, or no relationship, of the kind you specified. The picture is 100 repeated studies under that dull story. The orange circles are the few, fewer than 5 in 100, that would look as extreme as the pattern you found just by chance. A small p-value means your study landed in that orange group. It does not mean the effect is large, and it does not mean you have found the cause. Psychologists report the threshold, and then they still owe the reader the size of the difference.",
     ],
     []
   ),
