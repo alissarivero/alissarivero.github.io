@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CourseNav from "../../components/psychstats/CourseNav.astro";
+import TestFlow from "../../components/psychstats/TestFlow.astro";
+---
+
+<BaseLayout
+  title="Which statistical test should I perform?"
+  description="An interactive path from your question to a test, an assumption check, and a reading of the result."
+  sideBarActiveItemID="psychstats"
+>
+  <article class="max-w-3xl mx-auto">
+    <CourseNav current="which-test" />
+    <h1 class="text-4xl font-bold mb-4">Which statistical test should I perform?</h1>
+    <p class="mb-4">
+      Answer with the outcome you have, not with the test you hope to report. Each stop names one check, how to read it, and where that reading sends you.
+    </p>
+    <p class="mb-6 opacity-80">
+      The code uses names like outcome and group. Swap in your column names. Run the checks in the lesson pages, where R is available in the browser.
+    </p>
+    <TestFlow />
+  </article>
+</BaseLayout>

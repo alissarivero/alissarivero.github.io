@@ -1,0 +1,72 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CourseNav from "../../components/psychstats/CourseNav.astro";
+import { MODULES } from "../../data/psychstats/modules";
+---
+
+<BaseLayout title="Psych Stats" description="A short course in psychology statistics for people who are new to R." sideBarActiveItemID="psychstats">
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-5xl font-bold text-center">Psych Stats</h1>
+    <div class="mx-auto mt-4 mb-6 h-[2px] w-full bg-white opacity-80"></div>
+    <CourseNav current="hub" />
+    <p class="mb-2 text-lg">
+      A practical path through the tests you meet in psychology, written for someone who has not used R before.
+    </p>
+    <p class="mb-6 opacity-80" id="xp-line">Sign in on the portal if a class assigned these modules. Points also save on this device.</p>
+    <div class="flex flex-wrap gap-2 mb-8" id="badge-row"></div>
+    <div class="grid gap-4 md:grid-cols-2">
+      {
+        MODULES.map((m) => (
+          <a class="card bg-base-200 hover:bg-base-300 transition-colors" href={m.href} data-module={m.slug}>
+            <div class="card-body">
+              <div class="flex items-start justify-between gap-3">
+                <h2 class="card-title text-xl">{m.title}</h2>
+                <span class="badge badge-outline progress-chip">Not started</span>
+              </div>
+              <p>{m.blurb}</p>
+              <p class="text-sm opacity-70">
+                You will be able to do this without a stats background. About {m.minutes} minutes. {m.xp} points.
+              </p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { loadProgress } from "../../lib/progress";
+
+  async function boot() {
+    const line = document.getElementById("xp-line");
+    if (!line || line.dataset.ready) return;
+    line.dataset.ready = "1";
+  const rows = await loadProgress();
+  const total = rows.reduce((sum, row) => sum + (row.status === "checked" ? row.xp : 0), 0);
+  const badges = Array.from(new Set(rows.flatMap((row) => row.badges)));
+  if (total > 0) {
+    line.textContent = `${total} points on the modules you have checked.`;
+  }
+  const badgeRow = document.getElementById("badge-row");
+  if (badgeRow) {
+    for (const badge of badges) {
+      const chip = document.createElement("span");
+      chip.className = "badge badge-primary";
+      chip.textContent = badge;
+      badgeRow.appendChild(chip);
+    }
+  }
+  for (const row of rows) {
+    const chip = document.querySelector(`[data-module="${row.slug}"] .progress-chip`);
+    if (!chip) continue;
+    chip.textContent = row.status === "checked" ? "Checked" : "Started";
+    chip.classList.remove("badge-outline");
+    chip.classList.add(row.status === "checked" ? "badge-success" : "badge-warning");
+  }
+  }
+  void boot();
+  document.addEventListener("astro:page-load", () => {
+    void boot();
+  });
+</script>

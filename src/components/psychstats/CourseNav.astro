@@ -1,0 +1,21 @@
+---
+import { MODULES } from "../../data/psychstats/modules";
+
+const { current } = Astro.props;
+---
+
+<nav class="flex flex-wrap gap-2 mb-8" aria-label="Course modules">
+  <a class:list={["btn btn-sm", current === "hub" ? "btn-primary" : "btn-ghost"]} href="/psychstats/">Course</a>
+  {
+    MODULES.map((m) => (
+      <a
+        class:list={["btn btn-sm", current === m.slug ? "btn-primary" : "btn-ghost"]}
+        href={m.href}
+      >
+        {m.short}
+      </a>
+    ))
+  }
+  <a class:list={["btn btn-sm", current === "portal" ? "btn-primary" : "btn-ghost"]} href="/psychstats/portal/">Portal</a>
+  <a class:list={["btn btn-sm", current === "teach" ? "btn-primary" : "btn-ghost"]} href="/psychstats/teach/">Teach</a>
+</nav>

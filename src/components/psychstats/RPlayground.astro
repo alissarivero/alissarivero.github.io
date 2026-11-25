@@ -1,0 +1,211 @@
+---
+interface Props {
+  slug: string;
+  starter: string;
+  setup?: string;
+  check: string;
+  checkHint: string;
+  xp: number;
+  badge?: string;
+}
+
+const { slug, starter, setup = "", check, checkHint, xp, badge = "" } = Astro.props;
+---
+
+<section class="r-playground space-y-3" data-slug={slug} data-xp={xp} data-badge={badge} data-check={check}>
+  <h2 class="text-2xl font-semibold">Try it</h2>
+  <p class="text-sm opacity-80">
+    R runs in your browser. The first run downloads the engine and can take a little while.
+  </p>
+  <textarea class="textarea textarea-bordered w-full font-mono text-sm min-h-[12rem]" spellcheck="false">{starter}</textarea>
+  <div class="flex flex-wrap gap-2">
+    <button type="button" class="btn btn-primary run-btn">Run</button>
+    <button type="button" class="btn btn-outline check-btn">Check my work</button>
+  </div>
+  <p class="status text-sm" role="status"></p>
+  <pre class="output bg-base-200 rounded-box p-4 overflow-x-auto text-sm min-h-[4rem] whitespace-pre-wrap"></pre>
+  <img class="plot max-w-full hidden rounded-box" alt="Plot from the code you ran" />
+  <p class="hint text-sm opacity-70">{checkHint}</p>
+  <script type="application/json" class="setup-json" set:html={JSON.stringify(setup)} />
+</section>
+
+<script>
+  import { saveProgress } from "../../lib/progress";
+
+  type WebRLike = {
+    init: () => Promise<void>;
+    evalR: (code: string) => Promise<{ toJs: () => Promise<{ values?: string[] } | string> }>;
+    FS: {
+      mkdir: (path: string) => Promise<void>;
+      writeFile: (path: string, data: string | Uint8Array) => Promise<void>;
+      readFile: (path: string) => Promise<Uint8Array>;
+      unlink?: (path: string) => Promise<void>;
+    };
+  };
+
+  let engine: Promise<WebRLike> | null = null;
+  let csvReady = false;
+
+  function textOf(value: { values?: string[] } | string) {
+    if (typeof value === "string") return value;
+    if (value?.values) return value.values.join("");
+    return String(value ?? "");
+  }
+
+  async function getEngine() {
+    if (!engine) {
+      engine = (async () => {
+        const mod = await import(/* @vite-ignore */ "https://webr.r-wasm.org/v0.4.2/webr.mjs");
+        const webR = new mod.WebR() as WebRLike;
+        await webR.init();
+        return webR;
+      })();
+    }
+    return engine;
+  }
+
+  async function ensureCsv(webR: WebRLike) {
+    if (csvReady) return;
+    const res = await fetch("/psychstats/stroop.csv");
+    const csv = await res.text();
+    try {
+      await webR.FS.mkdir("/data");
+    } catch {
+      /* already exists */
+    }
+    await webR.FS.writeFile("/data/stroop.csv", csv);
+    csvReady = true;
+  }
+
+  async function evalString(webR: WebRLike, code: string) {
+    const result = await webR.evalR(code);
+    return textOf(await result.toJs());
+  }
+
+  async function runCode(webR: WebRLike, setup: string, user: string) {
+    await ensureCsv(webR);
+    await webR.FS.writeFile("/tmp/setup.R", setup);
+    await webR.FS.writeFile("/tmp/user.R", user);
+    const expr = `
+      err <- NULL
+      setup_out <- capture.output({
+        tryCatch(source("/tmp/setup.R", local = TRUE, echo = FALSE, print.eval = TRUE),
+                 error = function(e) { err <<- conditionMessage(e) })
+      })
+      user_out <- capture.output({
+        tryCatch(source("/tmp/user.R", local = TRUE, echo = FALSE, print.eval = TRUE),
+                 error = function(e) { err <<- conditionMessage(e) })
+      })
+      paste(c(setup_out, user_out, if (!is.null(err)) paste("Error:", err) else NULL), collapse = "\\n")
+    `;
+    return evalString(webR, expr);
+  }
+
+  async function maybePlot(webR: WebRLike, user: string) {
+    if (!/\b(plot|boxplot|hist|barplot)\s*\(/.test(user)) return null;
+    await webR.FS.writeFile("/tmp/plot_user.R", user);
+    const expr = `
+      ok <- TRUE
+      tryCatch({
+        png("/tmp/plot.png", width = 640, height = 420)
+        source("/tmp/plot_user.R", local = TRUE)
+        dev.off()
+      }, error = function(e) { ok <<- FALSE })
+      ok
+    `;
+    const ok = await evalString(webR, expr);
+    if (!ok.includes("TRUE")) return null;
+    try {
+      const bytes = await webR.FS.readFile("/tmp/plot.png");
+      const blob = new Blob([bytes], { type: "image/png" });
+      return URL.createObjectURL(blob);
+    } catch {
+      return null;
+    }
+  }
+
+  function init(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const slug = root.dataset.slug || "";
+    const xp = Number(root.dataset.xp || 0);
+    const badge = root.dataset.badge || "";
+    const check = root.dataset.check || "";
+    const area = root.querySelector("textarea") as HTMLTextAreaElement;
+    const output = root.querySelector(".output") as HTMLElement;
+    const status = root.querySelector(".status") as HTMLElement;
+    const plot = root.querySelector(".plot") as HTMLImageElement;
+    const setup = JSON.parse(root.querySelector(".setup-json")?.textContent || '""') as string;
+    const runBtn = root.querySelector(".run-btn") as HTMLButtonElement;
+    const checkBtn = root.querySelector(".check-btn") as HTMLButtonElement;
+
+    async function execute() {
+      status.textContent = "Starting R…";
+      runBtn.disabled = true;
+      checkBtn.disabled = true;
+      try {
+        const webR = await getEngine();
+        status.textContent = "Running…";
+        const text = await runCode(webR, setup, area.value);
+        output.textContent = text || "(no printed output)";
+        const url = await maybePlot(webR, area.value);
+        if (url) {
+          plot.src = url;
+          plot.classList.remove("hidden");
+        }
+        await saveProgress({
+          slug,
+          status: "started",
+          xp: 0,
+          badges: ["first-run"],
+          lastCode: area.value,
+        });
+        status.textContent = "Finished.";
+        return text;
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        output.textContent = message;
+        status.textContent = "R could not run this code.";
+        return "";
+      } finally {
+        runBtn.disabled = false;
+        checkBtn.disabled = false;
+      }
+    }
+
+    runBtn.addEventListener("click", () => {
+      void execute();
+    });
+
+    checkBtn.addEventListener("click", async () => {
+      const text = await execute();
+      let pattern: RegExp;
+      try {
+        pattern = new RegExp(check);
+      } catch {
+        status.textContent = "This lesson's check is misconfigured.";
+        return;
+      }
+      if (pattern.test(text)) {
+        const saved = await saveProgress({
+          slug,
+          status: "checked",
+          xp,
+          badges: badge ? [badge, "first-run"] : ["first-run"],
+          lastCode: area.value,
+        });
+        status.textContent = saved.remote
+          ? `Check passed. ${xp} points saved to your account.`
+          : `Check passed. ${xp} points saved on this device. Sign in on the portal to keep them with your class.`;
+      } else {
+        status.textContent = "Not yet. Read the hint under the output and run the starter code.";
+      }
+    });
+  }
+
+  function boot() {
+    document.querySelectorAll<HTMLElement>(".r-playground").forEach(init);
+  }
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>

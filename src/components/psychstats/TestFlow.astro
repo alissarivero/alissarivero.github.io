@@ -1,0 +1,194 @@
+---
+---
+
+<section class="space-y-4" id="test-flow">
+  <p id="flow-prompt" class="text-xl"></p>
+  <div id="flow-choices" class="flex flex-wrap gap-2"></div>
+  <article id="flow-result" class="hidden space-y-3 bg-base-200 rounded-box p-5"></article>
+  <p id="flow-status" class="text-sm" role="status"></p>
+  <button type="button" id="flow-back" class="btn btn-ghost btn-sm hidden">Start over</button>
+</section>
+
+<script>
+  import { saveProgress } from "../../lib/progress";
+
+  type Choice = { id: string; label: string; next: string };
+  type Step =
+    | { type: "ask"; prompt: string; choices: Choice[] }
+    | {
+        type: "end";
+        title: string;
+        assumption: string;
+        assumptionRead: string;
+        analysis: string;
+        analysisRead: string;
+      };
+
+  const steps: Record<string, Step> = {
+    start: {
+      type: "ask",
+      prompt: "What did you measure as the outcome?",
+      choices: [
+        { id: "num", label: "A number, such as reaction time", next: "numeric" },
+        { id: "yes", label: "Yes or no, such as made an error", next: "yesno" },
+        { id: "rank", label: "Ranks, or a number you do not trust as a real scale", next: "ranks" },
+      ],
+    },
+    numeric: {
+      type: "ask",
+      prompt: "How is that number organized?",
+      choices: [
+        { id: "one", label: "One group, compared with a fixed number", next: "one" },
+        { id: "two", label: "Two groups", next: "two" },
+        { id: "more", label: "Three or more groups", next: "more" },
+        { id: "pair", label: "Two numeric columns on the same rows", next: "corr" },
+      ],
+    },
+    two: {
+      type: "ask",
+      prompt: "Are the two groups the same people measured twice, or different people?",
+      choices: [
+        { id: "paired", label: "Same people twice", next: "paired" },
+        { id: "indep", label: "Different people", next: "indep" },
+      ],
+    },
+    one: {
+      type: "end",
+      title: "One-sample t-test",
+      assumption: "shapiro.test(outcome)",
+      assumptionRead:
+        "Shapiro-Wilk asks whether the outcome looks consistent with a normal curve. A small p-value means the curve is a poor description. With a clear skew or a tiny sample, use wilcox.test(outcome, mu = the number) instead, and say you compared typical ranks rather than means.",
+      analysis: "t.test(outcome, mu = 0)",
+      analysisRead:
+        "The mean of x minus mu is the estimate. A small p-value means a difference of this size would be surprising if the true mean were mu. It does not say the difference matters in the lab.",
+    },
+    paired: {
+      type: "end",
+      title: "Paired t-test",
+      assumption: "shapiro.test(after - before)",
+      assumptionRead:
+        "Check the differences, not the two raw columns. A small Shapiro p-value means those differences are not roughly normal. Then wilcox.test(after, before, paired = TRUE) is the safer summary.",
+      analysis: "t.test(after, before, paired = TRUE)",
+      analysisRead:
+        "mean of the differences is the estimate: how much the second measure moved. A small p-value speaks to a zero difference, not to whether the move is large.",
+    },
+    indep: {
+      type: "end",
+      title: "Two-sample t-test (Welch by default)",
+      assumption: "var.test(outcome ~ group)",
+      assumptionRead:
+        "var.test compares the two spreads. A small p-value means the groups do not share a variance. Leave t.test at its default (Welch), which does not assume equal spread. Use var.equal = TRUE only when this check does not object and the groups were designed to match.",
+      analysis: "t.test(outcome ~ group, data = dat)",
+      analysisRead:
+        "The printed mean difference is the estimate. A small p-value means that difference would be surprising if the two group means were the same.",
+    },
+    more: {
+      type: "end",
+      title: "One-way ANOVA, or Welch's version",
+      assumption: "bartlett.test(outcome ~ group)",
+      assumptionRead:
+        "Bartlett's test asks whether several groups share a spread. A small p-value means they do not. Use oneway.test(outcome ~ group), which allows unequal spreads. If the p-value is not small, aov(outcome ~ group) is the ordinary analysis of variance.",
+      analysis: "oneway.test(outcome ~ group)",
+      analysisRead:
+        "A small p-value means the group means are not all equal. It does not say which groups differ. Follow it with a pairwise comparison you planned, or say that you only know the set of means is uneven.",
+    },
+    corr: {
+      type: "end",
+      title: "Pearson correlation",
+      assumption: "plot(x, y)",
+      assumptionRead:
+        "Look at the plot before cor.test. A fan shape, a curve, or one extreme point means r is the wrong summary. A curve can still be a real association. Then describe the curve, or use a rank correlation: cor.test(x, y, method = 'spearman').",
+      analysis: "cor.test(x, y)",
+      analysisRead:
+        "cor is the estimate, from -1 to 1. A small p-value means a correlation this far from zero would be surprising if the true straight-line association were zero. It is not evidence that x causes y.",
+    },
+    yesno: {
+      type: "end",
+      title: "Logistic regression, a binomial GLM",
+      assumption: "table(outcome, group)",
+      assumptionRead:
+        "Count the cells first. If a cell is empty or nearly empty, the model will be unstable and the coefficient will look huge. With only two groups and no other predictors, chisq.test(table(outcome, group)) answers the same question with less machinery. Use the GLM when you have several predictors.",
+      analysis: "glm(outcome ~ group, family = binomial)",
+      analysisRead:
+        "The coefficient is a change in log odds. A positive sign means the outcome becomes more likely as the predictor increases. A small p-value tests a coefficient of zero. Exponentiate the coefficient (exp(coef)) if you want an odds ratio.",
+    },
+    ranks: {
+      type: "end",
+      title: "A rank test",
+      assumption: "boxplot(outcome ~ group)",
+      assumptionRead:
+        "Ranks throw away the exact spacing, which is the point when the scale is uneven. The boxplot still matters: if groups differ in shape, not only in location, a rank test can be hard to interpret. Say what the boxes show.",
+      analysis: "wilcox.test(outcome ~ group)",
+      analysisRead:
+        "The test compares the typical ranks of the groups. A small p-value means the ranks would be surprising if the groups came from the same distribution. It is not a difference in means.",
+    },
+  };
+
+  function els() {
+    return {
+      promptEl: document.getElementById("flow-prompt")!,
+      choicesEl: document.getElementById("flow-choices")!,
+      resultEl: document.getElementById("flow-result")!,
+      statusEl: document.getElementById("flow-status")!,
+      backEl: document.getElementById("flow-back") as HTMLButtonElement,
+    };
+  }
+
+  function show(id: string) {
+    const { promptEl, choicesEl, resultEl, statusEl, backEl } = els();
+    const step = steps[id];
+    resultEl.classList.add("hidden");
+    resultEl.innerHTML = "";
+    choicesEl.innerHTML = "";
+    if (step.type === "ask") {
+      promptEl.textContent = step.prompt;
+      backEl.classList.toggle("hidden", id === "start");
+      for (const choice of step.choices) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "btn btn-outline";
+        button.textContent = choice.label;
+        button.addEventListener("click", () => show(choice.next));
+        choicesEl.appendChild(button);
+      }
+      return;
+    }
+    promptEl.textContent = step.title;
+    backEl.classList.remove("hidden");
+    resultEl.classList.remove("hidden");
+    resultEl.innerHTML = `
+      <h2 class="text-2xl font-semibold">${step.title}</h2>
+      <h3 class="font-semibold">Check an assumption</h3>
+      <pre class="bg-base-100 rounded-box p-3 overflow-x-auto"><code></code></pre>
+      <p class="assumption-read"></p>
+      <h3 class="font-semibold">Run the test</h3>
+      <pre class="bg-base-100 rounded-box p-3 overflow-x-auto"><code></code></pre>
+      <p class="analysis-read"></p>
+    `;
+    const codes = resultEl.querySelectorAll("code");
+    codes[0].textContent = step.assumption;
+    codes[1].textContent = step.analysis;
+    resultEl.querySelector(".assumption-read")!.textContent = step.assumptionRead;
+    resultEl.querySelector(".analysis-read")!.textContent = step.analysisRead;
+    void saveProgress({
+      slug: "which-test",
+      status: "checked",
+      xp: 40,
+      badges: ["picked-a-test"],
+    }).then((saved) => {
+      statusEl.textContent = saved.remote
+        ? "Saved. You picked a test and earned 40 points."
+        : "Saved on this device. You picked a test and earned 40 points.";
+    });
+  }
+
+  function boot() {
+    const host = document.getElementById("test-flow");
+    if (!host || host.dataset.ready) return;
+    host.dataset.ready = "1";
+    document.getElementById("flow-back")!.addEventListener("click", () => show("start"));
+    show("start");
+  }
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>

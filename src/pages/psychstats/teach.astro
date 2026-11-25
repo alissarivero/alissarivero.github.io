@@ -1,0 +1,220 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CourseNav from "../../components/psychstats/CourseNav.astro";
+import { MODULES } from "../../data/psychstats/modules";
+import { supabaseConfigured } from "../../lib/supabase";
+
+const configured = supabaseConfigured();
+const moduleJson = JSON.stringify(MODULES.map((m) => ({ slug: m.slug, title: m.title })));
+---
+
+<BaseLayout title="Instructor portal" description="Create a class code, assign psych stats modules, and see who finished." sideBarActiveItemID="psychstats">
+  <div class="max-w-4xl mx-auto">
+    <CourseNav current="teach" />
+    <h1 class="text-4xl font-bold mb-4">Instructor portal</h1>
+    {
+      configured ? (
+        <div id="teach-app" class="space-y-6" data-modules={moduleJson}>
+          <form id="sign-in" class="space-y-3">
+            <p>Sign in with the email you will use as the instructor. We send a link. There is no password.</p>
+            <input class="input input-bordered w-full" type="email" name="email" required placeholder="you@school.edu" />
+            <button class="btn btn-primary" type="submit">Email me a link</button>
+            <p id="sign-in-status" class="text-sm" role="status"></p>
+          </form>
+          <div id="signed-in" class="hidden space-y-8">
+            <p id="who"></p>
+            <button type="button" id="sign-out" class="btn btn-ghost btn-sm">Sign out</button>
+            <section id="class-box" class="space-y-3"></section>
+            <section>
+              <h2 class="text-2xl font-semibold mb-3">Who has finished</h2>
+              <div class="overflow-x-auto">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Module</th>
+                      <th>Status</th>
+                      <th>Points</th>
+                    </tr>
+                  </thead>
+                  <tbody id="roster"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : (
+        <div class="alert">
+          <span>
+            Sign-in is not configured on this build. Add PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY, then run
+            supabase/schema.sql in the Supabase project. This page keeps a single class per instructor.
+          </span>
+        </div>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<script>
+  import { getSupabase } from "../../lib/supabase";
+
+  async function boot() {
+  const root = document.getElementById("teach-app");
+  const sb = getSupabase();
+  if (root && sb && !root.dataset.ready) {
+    root.dataset.ready = "1";
+    const modules = JSON.parse(root.dataset.modules || "[]") as { slug: string; title: string }[];
+    const signIn = document.getElementById("sign-in") as HTMLFormElement;
+    const signedIn = document.getElementById("signed-in")!;
+    const who = document.getElementById("who")!;
+    const classBox = document.getElementById("class-box")!;
+    const roster = document.getElementById("roster")!;
+    const signInStatus = document.getElementById("sign-in-status")!;
+
+    async function paint(userId: string, email: string) {
+      signIn.classList.add("hidden");
+      signedIn.classList.remove("hidden");
+      who.textContent = `Signed in as ${email}.`;
+      await sb.from("profiles").upsert({ id: userId, role: "instructor", display_name: email.split("@")[0] });
+
+      const { data: existing } = await sb
+        .from("classes")
+        .select("id,title,join_code")
+        .eq("instructor_id", userId)
+        .limit(1)
+        .maybeSingle();
+
+      classBox.innerHTML = "";
+      let classId = existing?.id as string | undefined;
+
+      if (!existing) {
+        const form = document.createElement("form");
+        form.className = "space-y-3";
+        form.innerHTML = `
+          <h2 class="text-2xl font-semibold">Create your class</h2>
+          <input class="input input-bordered w-full" name="title" placeholder="Class name" value="Psych stats" />
+          <button class="btn btn-primary" type="submit">Create a join code</button>
+          <p class="text-sm create-status" role="status"></p>
+        `;
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const title = String(new FormData(form).get("title") || "Psych stats");
+          const join_code = Math.random().toString(36).slice(2, 8).toUpperCase();
+          const { error } = await sb.from("classes").insert({ instructor_id: userId, join_code, title });
+          const status = form.querySelector(".create-status")!;
+          status.textContent = error ? error.message : "Class created.";
+          if (!error) await paint(userId, email);
+        });
+        classBox.appendChild(form);
+      } else {
+        const wrap = document.createElement("div");
+        wrap.className = "space-y-3";
+        const heading = document.createElement("h2");
+        heading.className = "text-2xl font-semibold";
+        heading.textContent = existing.title as string;
+        const code = document.createElement("p");
+        code.innerHTML = `Join code: <strong class="tracking-widest">${existing.join_code}</strong>`;
+        wrap.appendChild(heading);
+        wrap.appendChild(code);
+
+        const { data: assigned } = await sb.from("assignments").select("module_slug").eq("class_id", classId);
+        const assignedSet = new Set((assigned ?? []).map((row) => row.module_slug as string));
+        const form = document.createElement("form");
+        form.className = "space-y-2";
+        const label = document.createElement("h3");
+        label.className = "font-semibold";
+        label.textContent = "Assign modules";
+        form.appendChild(label);
+        for (const mod of modules) {
+          const row = document.createElement("label");
+          row.className = "flex items-center gap-2";
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.name = mod.slug;
+          input.checked = assignedSet.has(mod.slug);
+          input.className = "checkbox checkbox-sm";
+          row.appendChild(input);
+          row.appendChild(document.createTextNode(mod.title));
+          form.appendChild(row);
+        }
+        const save = document.createElement("button");
+        save.className = "btn btn-primary mt-2";
+        save.type = "submit";
+        save.textContent = "Save assignments";
+        form.appendChild(save);
+        const status = document.createElement("p");
+        status.className = "text-sm";
+        form.appendChild(status);
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const chosen = modules.filter((mod) => form.querySelector<HTMLInputElement>(`input[name="${mod.slug}"]`)?.checked);
+          await sb.from("assignments").delete().eq("class_id", classId);
+          if (chosen.length) {
+            const { error } = await sb.from("assignments").insert(
+              chosen.map((mod) => ({ class_id: classId, module_slug: mod.slug }))
+            );
+            status.textContent = error ? error.message : "Assignments saved.";
+          } else {
+            status.textContent = "Cleared assignments.";
+          }
+          await paint(userId, email);
+        });
+        wrap.appendChild(form);
+        classBox.appendChild(wrap);
+      }
+
+      roster.innerHTML = "";
+      if (!classId) return;
+      const { data: enrolled } = await sb.from("enrollments").select("student_id").eq("class_id", classId);
+      const ids = (enrolled ?? []).map((row) => row.student_id as string);
+      if (ids.length === 0) {
+        roster.innerHTML = `<tr><td colspan="4">No students have joined yet.</td></tr>`;
+        return;
+      }
+      const { data: people } = await sb.from("profiles").select("id,display_name").in("id", ids);
+      const { data: progress } = await sb.from("progress").select("user_id,module_slug,status,xp").in("user_id", ids);
+      const names = new Map((people ?? []).map((person) => [person.id as string, (person.display_name as string) || "Student"]));
+      const titleOf = new Map(modules.map((mod) => [mod.slug, mod.title]));
+      if (!progress?.length) {
+        for (const id of ids) {
+          roster.insertAdjacentHTML("beforeend", `<tr><td>${names.get(id) ?? "Student"}</td><td colspan="3">No checks yet</td></tr>`);
+        }
+        return;
+      }
+      for (const row of progress) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td></td><td></td><td></td><td></td>`;
+        const cells = tr.querySelectorAll("td");
+        cells[0].textContent = names.get(row.user_id as string) ?? "Student";
+        cells[1].textContent = titleOf.get(row.module_slug as string) ?? (row.module_slug as string);
+        cells[2].textContent = row.status as string;
+        cells[3].textContent = String(row.xp);
+        roster.appendChild(tr);
+      }
+    }
+
+    signIn.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = String(new FormData(signIn).get("email"));
+      signInStatus.textContent = "Sending the link…";
+      const { error } = await sb.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: `${location.origin}/psychstats/teach/` },
+      });
+      signInStatus.textContent = error ? error.message : "Check your email for the sign-in link.";
+    });
+
+    document.getElementById("sign-out")!.addEventListener("click", async () => {
+      await sb.auth.signOut();
+      location.reload();
+    });
+
+    const { data } = await sb.auth.getUser();
+    if (data.user?.email) await paint(data.user.id, data.user.email);
+  }
+  }
+  void boot();
+  document.addEventListener("astro:page-load", () => {
+    void boot();
+  });
+</script>

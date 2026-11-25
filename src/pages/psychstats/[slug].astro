@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CourseNav from "../../components/psychstats/CourseNav.astro";
+import RPlayground from "../../components/psychstats/RPlayground.astro";
+import { MODULES } from "../../data/psychstats/modules";
+
+export function getStaticPaths() {
+  return MODULES.filter((m) => m.kind === "lesson").map((m) => ({
+    params: { slug: m.slug },
+    props: { module: m },
+  }));
+}
+
+const { module } = Astro.props;
+---
+
+<BaseLayout title={module.title} description={module.blurb} sideBarActiveItemID="psychstats">
+  <article class="max-w-3xl mx-auto">
+    <CourseNav current={module.slug} />
+    <h1 class="text-4xl font-bold mb-4">{module.title}</h1>
+    <div class="space-y-4 mb-8">
+      {module.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+    {
+      module.datasetNote && (
+        <aside class="alert mb-8">
+          <span>{module.datasetNote}</span>
+        </aside>
+      )
+    }
+    <RPlayground
+      slug={module.slug}
+      starter={module.starter || ""}
+      setup={module.setup || ""}
+      check={module.check || ""}
+      checkHint={module.checkHint || ""}
+      xp={module.xp}
+      badge={module.badge}
+    />
+  </article>
+</BaseLayout>
