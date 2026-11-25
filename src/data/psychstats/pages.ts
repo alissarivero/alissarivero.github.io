@@ -75,6 +75,31 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
+    "introduction-to-course",
+    "why-r",
+    "Introduction to this course",
+    "This course",
+    "What this course is, and what it asks of you.",
+    [
+      "This is a free course about the statistics psychologists use, taught for students and trainees. You do not need a statistics background, and you do not need to have used R before.",
+      "The path is the course. Each circle is a short page or a practice. You can read everything without an account. An account saves your place. A class code, from the join button, is how a student enters a course or an instructor creates one.",
+      "The course comes from the Anti-Racist Community in the Department of Psychology & Neuroscience at Duke University.",
+    ],
+    []
+  ),
+  page(
+    "what-is-r",
+    "why-r",
+    "What is R?",
+    "What is R?",
+    "R is a language for working with data.",
+    [
+      "R is a programming language for statistics and data. You give it instructions, usually in a script, and it works on tables of observations: means, tests, models, and figures. Psychologists use it for the analyses in papers and for the graphs that show those analyses.",
+      "It is not a spreadsheet, and it is not a single test. A spreadsheet stores the rows. R is where you describe what to do with those rows, in a form you can save and run again. You do not need to have programmed before. The later pages introduce the pieces as they come up.",
+    ],
+    []
+  ),
+  page(
     "r-is-free",
     "why-r",
     "It is free",

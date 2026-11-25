@@ -34,6 +34,16 @@ const item = (
 
 const RAW: PsychModule[] = [
   item({
+    slug: "why-r",
+    kind: "lesson",
+    title: "Why do most psychologists use R?",
+    short: "Why R",
+    blurb: "It is free, it handles complex analyses and figures, and the field can share the code.",
+    minutes: 20,
+    xp: 0,
+    levels: { overview: [], detailed: [] },
+  }),
+  item({
     slug: "introduction",
     kind: "lesson",
     title: "Why statistics is more interesting than you think",
@@ -46,23 +56,6 @@ const RAW: PsychModule[] = [
         "Piaget sat with children and wrote down what they actually did. That is a descriptive question: what does the behavior look like? You still need a way to summarize hundreds of observations so a reader can see the pattern. Description is a statistical job.",
         "An experiment asks why. You change one thing, hold the rest as still as you can, and look at what the mind does in response. The inference — this difference is about the process, not about who happened to walk in — is what a test is for. Prediction is a third question. Josh Tenenbaum’s work asks whether a learner’s next judgment can be forecast from a model of how they update beliefs. The success criterion is the future behavior, not a p-value alone.",
         "Yes, statistics is hard. The hardness is mostly that the same word (significant, normal, effect) means something precise and something casual, and psychology uses both. This course teaches the precise meaning from a psychologist’s chair. There is no mathematical track. If you can say what a row is and what you would tell a reader, you are doing statistics.",
-      ],
-      detailed: [],
-    },
-  }),
-  item({
-    slug: "why-r",
-    kind: "lesson",
-    title: "Why do most psychologists use R?",
-    short: "Why R",
-    blurb: "It is free, it handles complex analyses and figures, and the field can share the code.",
-    minutes: 20,
-    xp: 0,
-    levels: {
-      overview: [
-        "Psychologists use R because the analysis can be written down and rerun. A script is a record of what you did to the data, which a point-and-click history is not. It is free, which matters for students and for labs that share code with a paper. The packages are where the field's methods live: a new model often arrives as a package before it arrives in a menu.",
-        "You will meet the same pieces over and over. An object is a name for a value, a column, or a whole dataset. A function does one job to the thing you hand it, and you hand it that thing inside parentheses. A package is a bundle of functions you install once and load when you need it. The console is where a single line runs. A script is the file you save.",
-        "Two habits save more time than any trick. The working directory is the folder R is looking at; your CSV has to be somewhere R can see. When a function is unfamiliar, put a question mark in front of its name and read the help. This site runs base R in the browser so you can practice without installing anything. ggplot, extra packages, and your own files live in RStudio on your computer, which is the assignment under this lesson.",
       ],
       detailed: [],
     },
