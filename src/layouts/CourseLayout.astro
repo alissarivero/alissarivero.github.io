@@ -1,0 +1,33 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import CourseNav from "../components/psychstats/CourseNav.astro";
+import "../styles/psych.css";
+
+const { title, description, current = "hub" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="psych-shell">
+    <header class="psych-top">
+      <a class="psych-mark" href="/psychstats/">Psych Stats</a>
+      <p class="psych-tag">Statistics for psychology, with R in the browser</p>
+      <a class="psych-exit" href="/">Back to the main site</a>
+    </header>
+    <div class="psych-frame">
+      <CourseNav current={current} />
+      <main class="psych-main">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

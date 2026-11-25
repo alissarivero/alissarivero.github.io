@@ -1,0 +1,422 @@
+---
+const { ids = [] } = Astro.props;
+---
+
+{
+  ids.map((id: string) => (
+    <figure class="stat-fig" data-figure={id}>
+      <svg viewBox="0 0 640 360" role="img"></svg>
+      <figcaption></figcaption>
+      <div class="fig-controls"></div>
+    </figure>
+  ))
+}
+
+<script>
+  const W = 640;
+  const H = 360;
+  const PAD = { l: 52, r: 24, t: 28, b: 42 };
+
+  const CLOUD: [number, number][] = [
+    [0.6, 2.2],
+    [1.0, 3.1],
+    [1.3, 2.6],
+    [1.7, 4.0],
+    [2.1, 3.7],
+    [2.4, 5.1],
+    [2.8, 4.6],
+    [3.2, 6.2],
+    [3.5, 5.5],
+    [3.9, 6.8],
+    [4.3, 6.3],
+    [4.7, 7.6],
+  ];
+
+  function ols(pts: [number, number][]) {
+    const n = pts.length;
+    const mx = pts.reduce((s, p) => s + p[0], 0) / n;
+    const my = pts.reduce((s, p) => s + p[1], 0) / n;
+    let num = 0;
+    let den = 0;
+    for (const [x, y] of pts) {
+      num += (x - mx) * (y - my);
+      den += (x - mx) ** 2;
+    }
+    const slope = num / den;
+    return { intercept: my - slope * mx, slope };
+  }
+
+  const FIT = ols(CLOUD);
+
+  function sx(x: number, x0 = 0, x1 = 5) {
+    return PAD.l + ((x - x0) / (x1 - x0)) * (W - PAD.l - PAD.r);
+  }
+  function sy(y: number, y0 = 0, y1 = 9) {
+    return H - PAD.b - ((y - y0) / (y1 - y0)) * (H - PAD.t - PAD.b);
+  }
+
+  function el(name: string, attrs: Record<string, string>) {
+    const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+    for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+    return node;
+  }
+
+  function axes(svg: SVGSVGElement, xlabel: string, ylabel: string) {
+    svg.appendChild(el("line", { x1: String(PAD.l), y1: String(PAD.t), x2: String(PAD.l), y2: String(H - PAD.b), stroke: "#161616", "stroke-width": "1.5" }));
+    svg.appendChild(el("line", { x1: String(PAD.l), y1: String(H - PAD.b), x2: String(W - PAD.r), y2: String(H - PAD.b), stroke: "#161616", "stroke-width": "1.5" }));
+    const xl = el("text", { x: String(W / 2), y: String(H - 8), "text-anchor": "middle", fill: "#5c5852", "font-size": "13" });
+    xl.textContent = xlabel;
+    svg.appendChild(xl);
+    const yl = el("text", { x: "16", y: String(H / 2), "text-anchor": "middle", fill: "#5c5852", "font-size": "13", transform: `rotate(-90 16 ${H / 2})` });
+    yl.textContent = ylabel;
+    svg.appendChild(yl);
+  }
+
+  function dots(svg: SVGSVGElement, pts: [number, number][], color = "#161616") {
+    for (const [x, y] of pts) {
+      svg.appendChild(el("circle", { cx: String(sx(x)), cy: String(sy(y)), r: "5.5", fill: color }));
+    }
+  }
+
+  function sse(intercept: number, slope: number) {
+    return CLOUD.reduce((sum, [x, y]) => sum + (y - (intercept + slope * x)) ** 2, 0);
+  }
+
+  function drawFit(svg: SVGSVGElement, intercept: number, slope: number, showSquares: boolean) {
+    svg.replaceChildren();
+    axes(svg, "predictor", "outcome");
+    for (const [x, y] of CLOUD) {
+      const yhat = intercept + slope * x;
+      svg.appendChild(
+        el("line", {
+          x1: String(sx(x)),
+          y1: String(sy(y)),
+          x2: String(sx(x)),
+          y2: String(sy(yhat)),
+          stroke: "#c4553a",
+          "stroke-width": "2",
+        })
+      );
+      if (showSquares) {
+        const miss = sy(yhat) - sy(y);
+        const size = Math.min(Math.abs(miss), 36);
+        const top = Math.min(sy(y), sy(yhat));
+        svg.appendChild(
+          el("rect", {
+            x: String(sx(x)),
+            y: String(top),
+            width: String(size),
+            height: String(size),
+            fill: "rgba(196,85,58,0.13)",
+            stroke: "rgba(196,85,58,0.45)",
+          })
+        );
+      }
+    }
+    svg.appendChild(
+      el("line", {
+        x1: String(sx(0)),
+        y1: String(sy(intercept)),
+        x2: String(sx(5)),
+        y2: String(sy(intercept + slope * 5)),
+        stroke: "#0f6e6b",
+        "stroke-width": "3",
+      })
+    );
+    dots(svg, CLOUD);
+  }
+
+  function drawRead(svg: SVGSVGElement) {
+    const { intercept, slope } = FIT;
+    svg.replaceChildren();
+    axes(svg, "predictor", "outcome");
+    svg.appendChild(
+      el("line", {
+        x1: String(sx(0)),
+        y1: String(sy(intercept)),
+        x2: String(sx(5)),
+        y2: String(sy(intercept + slope * 5)),
+        stroke: "#0f6e6b",
+        "stroke-width": "3",
+      })
+    );
+    dots(svg, CLOUD);
+    const xStep = 2;
+    const y0 = intercept + slope * xStep;
+    const y1 = y0 + slope;
+    svg.appendChild(el("line", { x1: String(sx(xStep)), y1: String(sy(y0)), x2: String(sx(xStep + 1)), y2: String(sy(y0)), stroke: "#111", "stroke-width": "2" }));
+    svg.appendChild(el("line", { x1: String(sx(xStep + 1)), y1: String(sy(y0)), x2: String(sx(xStep + 1)), y2: String(sy(y1)), stroke: "#111", "stroke-width": "2" }));
+    svg.appendChild(el("circle", { cx: String(sx(0)), cy: String(sy(intercept)), r: "6", fill: "#fff", stroke: "#0f6e6b", "stroke-width": "3" }));
+    const interceptLabel = el("text", { x: String(sx(0) + 10), y: String(sy(intercept) - 10), fill: "#0f6e6b", "font-size": "14", "font-weight": "600" });
+    interceptLabel.textContent = "intercept";
+    svg.appendChild(interceptLabel);
+    const slopeLabel = el("text", { x: String(sx(xStep + 1) + 8), y: String((sy(y0) + sy(y1)) / 2), fill: "#111", "font-size": "14", "font-weight": "600" });
+    slopeLabel.textContent = "slope";
+    svg.appendChild(slopeLabel);
+  }
+
+  function mountFit(root: HTMLElement) {
+    const svg = root.querySelector("svg") as SVGSVGElement;
+    const cap = root.querySelector("figcaption")!;
+    const controls = root.querySelector(".fig-controls")!;
+    let intercept = 6.2;
+    let slope = -0.15;
+    const paint = () => {
+      drawFit(svg, intercept, slope, true);
+      const err = sse(intercept, slope);
+      const best = sse(FIT.intercept, FIT.slope);
+      cap.textContent = `Squared misses: ${err.toFixed(1)}. The best this cloud allows is ${best.toFixed(1)}. Drag the line, or let it settle.`;
+    };
+    paint();
+    const settle = document.createElement("button");
+    settle.type = "button";
+    settle.textContent = "Let the line settle";
+    controls.appendChild(settle);
+    let frame = 0;
+    settle.addEventListener("click", () => {
+      cancelAnimationFrame(frame);
+      const fromI = intercept;
+      const fromS = slope;
+      const start = performance.now();
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / 700);
+        const e = 1 - (1 - t) ** 3;
+        intercept = fromI + (FIT.intercept - fromI) * e;
+        slope = fromS + (FIT.slope - fromS) * e;
+        paint();
+        if (t < 1) frame = requestAnimationFrame(step);
+        else cap.textContent = "Settled. Any other tilt or lift makes the squared vertical misses larger. That is the line of best fit.";
+      };
+      frame = requestAnimationFrame(step);
+    });
+    svg.style.cursor = "grab";
+    let drag: { y: number; x: number; intercept: number; slope: number } | null = null;
+    svg.addEventListener("pointerdown", (event) => {
+      drag = { y: event.clientY, x: event.clientX, intercept, slope };
+      svg.setPointerCapture(event.pointerId);
+    });
+    svg.addEventListener("pointermove", (event) => {
+      if (!drag) return;
+      intercept = drag.intercept - (event.clientY - drag.y) / 42;
+      slope = drag.slope + (event.clientX - drag.x) / 180;
+      paint();
+    });
+    svg.addEventListener("pointerup", () => {
+      drag = null;
+    });
+  }
+
+  function mountRead(root: HTMLElement) {
+    const svg = root.querySelector("svg") as SVGSVGElement;
+    const cap = root.querySelector("figcaption")!;
+    drawRead(svg);
+    cap.textContent = `Same points, same line. Intercept ≈ ${FIT.intercept.toFixed(2)} (height at 0). Slope ≈ ${FIT.slope.toFixed(2)} (rise for one extra unit of the predictor).`;
+  }
+
+  function mountGap(root: HTMLElement) {
+    const svg = root.querySelector("svg") as SVGSVGElement;
+    const cap = root.querySelector("figcaption")!;
+    const controls = root.querySelector(".fig-controls")!;
+    const label = document.createElement("label");
+    label.textContent = "How much people vary ";
+    const slider = document.createElement("input");
+    slider.type = "range";
+    slider.min = "0.15";
+    slider.max = "1.6";
+    slider.step = "0.05";
+    slider.value = "0.35";
+    label.appendChild(slider);
+    controls.appendChild(label);
+    const paint = () => {
+      const spread = Number(slider.value);
+      svg.replaceChildren();
+      axes(svg, "people", "outcome");
+      const a = [1.2, 1.35, 1.5, 1.65, 1.8];
+      const b = [3.3, 3.45, 3.6, 3.75, 3.9];
+      a.forEach((x, i) => {
+        svg.appendChild(el("circle", { cx: String(sx(x, 0, 5)), cy: String(sy(2.2 + (i - 2) * spread, 0, 6)), r: "6", fill: "#161616" }));
+      });
+      b.forEach((x, i) => {
+        svg.appendChild(el("circle", { cx: String(sx(x, 0, 5)), cy: String(sy(3.6 + (i - 2) * spread, 0, 6)), r: "6", fill: "#0f6e6b" }));
+      });
+      svg.appendChild(el("line", { x1: String(sx(1.2, 0, 5)), y1: String(sy(2.2, 0, 6)), x2: String(sx(1.8, 0, 5)), y2: String(sy(2.2, 0, 6)), stroke: "#161616", "stroke-width": "2" }));
+      svg.appendChild(el("line", { x1: String(sx(3.3, 0, 5)), y1: String(sy(3.6, 0, 6)), x2: String(sx(3.9, 0, 5)), y2: String(sy(3.6, 0, 6)), stroke: "#0f6e6b", "stroke-width": "2" }));
+      cap.textContent =
+        spread < 0.7
+          ? "The mean gap is easy to see because people in a group sit close together. That gap is the estimate."
+          : "The mean gap did not change. The groups now overlap, so the same gap is harder to trust. A t-test compares the gap with this spread.";
+    };
+    slider.addEventListener("input", paint);
+    paint();
+  }
+
+  function mountHug(root: HTMLElement) {
+    const svg = root.querySelector("svg") as SVGSVGElement;
+    const cap = root.querySelector("figcaption")!;
+    const controls = root.querySelector(".fig-controls")!;
+    const label = document.createElement("label");
+    label.textContent = "How tightly the points hug the line ";
+    const slider = document.createElement("input");
+    slider.type = "range";
+    slider.min = "0";
+    slider.max = "1.4";
+    slider.step = "0.02";
+    slider.value = "0.2";
+    label.appendChild(slider);
+    controls.appendChild(label);
+    const base = [0.4, 1, 1.6, 2.2, 2.8, 3.4, 4, 4.6];
+    const noise = [0.2, -0.5, 0.4, -0.2, 0.6, -0.4, 0.3, -0.6];
+    const paint = () => {
+      const hug = Number(slider.value);
+      const pts = base.map((x, i) => [x, 1.2 + 1.15 * x + noise[i] * hug] as [number, number]);
+      const { intercept, slope } = ols(pts);
+      const n = pts.length;
+      const mx = pts.reduce((s, p) => s + p[0], 0) / n;
+      const my = pts.reduce((s, p) => s + p[1], 0) / n;
+      let num = 0;
+      let dx = 0;
+      let dy = 0;
+      for (const [x, y] of pts) {
+        num += (x - mx) * (y - my);
+        dx += (x - mx) ** 2;
+        dy += (y - my) ** 2;
+      }
+      const r = num / Math.sqrt(dx * dy);
+      svg.replaceChildren();
+      axes(svg, "one measure", "another measure");
+      svg.appendChild(el("line", { x1: String(sx(0)), y1: String(sy(intercept)), x2: String(sx(5)), y2: String(sy(intercept + slope * 5)), stroke: "#0f6e6b", "stroke-width": "3" }));
+      dots(svg, pts);
+      cap.textContent = `r ≈ ${r.toFixed(2)}. The slope barely moved. What changed is how close the points sit to the line. r is that closeness, not the steepness.`;
+    };
+    slider.addEventListener("input", paint);
+    paint();
+  }
+
+  function mountSigmoid(root: HTMLElement) {
+    const svg = root.querySelector("svg") as SVGSVGElement;
+    const cap = root.querySelector("figcaption")!;
+    const controls = root.querySelector(".fig-controls")!;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Bend it into a probability";
+    controls.appendChild(button);
+    let bent = false;
+    const paint = () => {
+      svg.replaceChildren();
+      axes(svg, "predictor", "chance of a yes");
+      svg.appendChild(el("line", { x1: String(sx(0)), y1: String(sy(0, -0.2, 1.2)), x2: String(sx(5)), y2: String(sy(0, -0.2, 1.2)), stroke: "#d9d3c8", "stroke-width": "1" }));
+      svg.appendChild(el("line", { x1: String(sx(0)), y1: String(sy(1, -0.2, 1.2)), x2: String(sx(5)), y2: String(sy(1, -0.2, 1.2)), stroke: "#d9d3c8", "stroke-width": "1" }));
+      const yes: [number, number][] = [
+        [0.4, 0],
+        [0.9, 0],
+        [1.3, 1],
+        [1.8, 0],
+        [3.2, 1],
+        [3.6, 1],
+        [4.1, 0],
+        [4.6, 1],
+      ];
+      if (!bent) {
+        svg.appendChild(el("line", { x1: String(sx(0)), y1: String(sy(-0.15, -0.2, 1.2)), x2: String(sx(5)), y2: String(sy(1.15, -0.2, 1.2)), stroke: "#c4553a", "stroke-width": "3" }));
+        cap.textContent = "A straight line through yes/no data leaves the page. Below 0 and above 1 are not chances.";
+      } else {
+        let d = "";
+        for (let i = 0; i <= 50; i++) {
+          const x = (i / 50) * 5;
+          const p = 1 / (1 + Math.exp(-(x - 2.5) * 1.6));
+          d += `${i === 0 ? "M" : "L"} ${sx(x)} ${sy(p, -0.2, 1.2)} `;
+        }
+        svg.appendChild(el("path", { d, fill: "none", stroke: "#0f6e6b", "stroke-width": "3" }));
+        cap.textContent = "A logistic curve stays between 0 and 1. A positive coefficient makes the climb steeper toward yes. The sign is still the direction.";
+      }
+      for (const [x, y] of yes) {
+        svg.appendChild(el("circle", { cx: String(sx(x)), cy: String(sy(y, -0.2, 1.2)), r: "5.5", fill: y ? "#0f6e6b" : "#161616" }));
+      }
+    };
+    button.addEventListener("click", () => {
+      bent = !bent;
+      button.textContent = bent ? "Show the straight line again" : "Bend it into a probability";
+      paint();
+    });
+    paint();
+  }
+
+  function mountGallery(root: HTMLElement) {
+    const svg = root.querySelector("svg") as SVGSVGElement;
+    const cap = root.querySelector("figcaption")!;
+    svg.replaceChildren();
+    const panels = [
+      { title: "One continuous measure", hint: "histogram" },
+      { title: "Groups", hint: "boxes" },
+      { title: "Two numbers", hint: "scatter" },
+      { title: "Categories", hint: "counts" },
+    ];
+    panels.forEach((panel, i) => {
+      const x0 = 20 + (i % 4) * 155;
+      svg.appendChild(el("text", { x: String(x0), y: "28", fill: "#5c5852", "font-size": "13" }));
+      svg.lastChild!.textContent = panel.title;
+      svg.appendChild(el("rect", { x: String(x0), y: "48", width: "140", height: "250", rx: "10", fill: "#fbfaf8", stroke: "#e4e0d8" }));
+      if (panel.hint === "histogram") {
+        [40, 90, 140, 100, 50].forEach((h, b) => {
+          svg.appendChild(el("rect", { x: String(x0 + 18 + b * 22), y: String(260 - h), width: "18", height: String(h), fill: "#0f6e6b" }));
+        });
+      } else if (panel.hint === "boxes") {
+        [70, 110].forEach((cx, b) => {
+          svg.appendChild(el("line", { x1: String(x0 + cx - 18), y1: String(150 + b * 10), x2: String(x0 + cx + 18), y2: String(150 + b * 10), stroke: "#161616" }));
+          svg.appendChild(el("rect", { x: String(x0 + cx - 16), y: String(120 + b * 40), width: "32", height: "70", fill: "none", stroke: "#0f6e6b", "stroke-width": "2" }));
+        });
+      } else if (panel.hint === "scatter") {
+        [[30, 180], [50, 150], [70, 140], [90, 100], [110, 80]].forEach(([x, y]) => {
+          svg.appendChild(el("circle", { cx: String(x0 + x), cy: String(y), r: "4", fill: "#161616" }));
+        });
+      } else {
+        [80, 140, 60].forEach((h, b) => {
+          svg.appendChild(el("rect", { x: String(x0 + 25 + b * 36), y: String(260 - h), width: "28", height: String(h), fill: b === 1 ? "#0f6e6b" : "#161616" }));
+        });
+      }
+    });
+    cap.textContent = "Continuous scores get a distribution. Groups get a comparison. Two numbers get a scatter. Categories get counts. A bar of means is the last resort.";
+  }
+
+  function mountSentence(root: HTMLElement) {
+    const svg = root.querySelector("svg") as SVGSVGElement;
+    const cap = root.querySelector("figcaption")!;
+    svg.replaceChildren();
+    axes(svg, "Drug", "Extra sleep (hours)");
+    const means = [1.2, 2.8];
+    const errs = [0.35, 0.4];
+    means.forEach((m, i) => {
+      const x = sx(1.4 + i * 2);
+      svg.appendChild(el("rect", { x: String(x - 28), y: String(sy(m, 0, 4)), width: "56", height: String(sy(0, 0, 4) - sy(m, 0, 4)), fill: i ? "#0f6e6b" : "#161616" }));
+      svg.appendChild(el("line", { x1: String(x), y1: String(sy(m - errs[i], 0, 4)), x2: String(x), y2: String(sy(m + errs[i], 0, 4)), stroke: "#c4553a", "stroke-width": "2" }));
+    });
+    const y = sy(3.5, 0, 4);
+    svg.appendChild(el("line", { x1: String(sx(1.4)), y1: String(y), x2: String(sx(3.4)), y2: String(y), stroke: "#161616", "stroke-width": "1.5" }));
+    svg.appendChild(el("text", { x: String(sx(2.4)), y: String(y - 8), "text-anchor": "middle", fill: "#161616", "font-size": "13" }));
+    svg.lastChild!.textContent = "difference";
+    cap.textContent = "Patients slept longer on the second drug than on the first (about 1.6 extra hours). The bracket points at the comparison. It does not replace the sentence, and the caption still has to say the bars are 95% confidence intervals.";
+  }
+
+  const mounts: Record<string, (root: HTMLElement) => void> = {
+    "fit-line": mountFit,
+    "read-line": mountRead,
+    "mean-gap": mountGap,
+    hug: mountHug,
+    sigmoid: mountSigmoid,
+    "plot-gallery": mountGallery,
+    "write-sentence": mountSentence,
+  };
+
+  function boot() {
+    document.querySelectorAll<HTMLElement>("[data-figure]").forEach((root) => {
+      if (root.dataset.ready) return;
+      const id = root.dataset.figure || "";
+      const mount = mounts[id];
+      if (!mount) return;
+      root.dataset.ready = "1";
+      mount(root);
+    });
+  }
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>

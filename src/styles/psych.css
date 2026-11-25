@@ -1,0 +1,467 @@
+.psych-shell {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 420px at 100% -10%, rgba(15, 110, 107, 0.08), transparent 60%),
+    #f6f5f2;
+  color: #161616;
+  font-family: Outfit, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.psych-shell h1,
+.psych-shell h2,
+.psych-shell h3 {
+  font-family: Fraunces, Georgia, serif;
+  font-weight: 560;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: #111;
+}
+
+.psych-top {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid #e4e0d8;
+  background: rgba(246, 245, 242, 0.92);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.psych-mark {
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.35rem;
+  color: #111;
+  text-decoration: none;
+}
+
+.psych-tag {
+  margin: 0;
+  color: #5c5852;
+  font-size: 0.92rem;
+}
+
+.psych-exit {
+  margin-left: auto;
+  color: #0f6e6b;
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+
+.psych-exit:hover {
+  text-decoration: underline;
+}
+
+.psych-frame {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem 4rem;
+}
+
+.nav-label {
+  margin: 0.85rem 0 0.15rem;
+  padding: 0 0.55rem;
+  color: #8a847a;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.course-group {
+  margin-top: 1.6rem;
+}
+
+.course-group > h2 {
+  font-size: 1.6rem;
+  margin-bottom: 0.2rem;
+}
+
+.self-check {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.psych-nav {
+  position: sticky;
+  top: 4.5rem;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.psych-nav a {
+  display: flex;
+  gap: 0.65rem;
+  align-items: baseline;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  color: #3a3834;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.psych-nav a:hover {
+  background: #fff;
+}
+
+.psych-nav a[aria-current="page"] {
+  background: #111;
+  color: #fff;
+}
+
+.psych-nav .num {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+  opacity: 0.7;
+  min-width: 1.2rem;
+}
+
+.psych-main {
+  max-width: 740px;
+}
+
+.psych-kicker {
+  margin: 0 0 0.4rem;
+  color: #0f6e6b;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.psych-lead {
+  font-size: 1.15rem;
+  color: #2a2826;
+}
+
+.psych-note {
+  margin: 0 0 1.5rem;
+  color: #5c5852;
+}
+
+.path {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.path a {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.9rem 1rem;
+  align-items: start;
+  padding: 1rem 1.1rem;
+  background: #fff;
+  border: 1px solid #e4e0d8;
+  border-radius: 14px;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 1px 0 rgba(17, 17, 17, 0.03);
+}
+
+.path a:hover {
+  border-color: #0f6e6b;
+}
+
+.path .idx {
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.4rem;
+  color: #0f6e6b;
+  line-height: 1;
+  padding-top: 0.15rem;
+}
+
+.path h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.path p {
+  margin: 0;
+  color: #3f3c38;
+}
+
+.path .meta {
+  margin-top: 0.45rem;
+  color: #6d6860;
+  font-size: 0.88rem;
+}
+
+.chip {
+  justify-self: end;
+  border: 1px solid #d9d3c8;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.75rem;
+  color: #5c5852;
+  white-space: nowrap;
+}
+
+.chip.badge-success {
+  background: #e7f4f1;
+  border-color: #0f6e6b;
+  color: #0c4f4d;
+}
+
+.chip.badge-warning {
+  background: #fff4df;
+  border-color: #e2b15a;
+  color: #6a4b10;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.badges .badge {
+  background: #111;
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.78rem;
+}
+
+.prose-block p,
+.level-panel p {
+  margin: 0 0 0.9rem;
+}
+
+.level-tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin: 0.4rem 0 1rem;
+  flex-wrap: wrap;
+}
+
+.level-tabs button {
+  background: #fff;
+  color: #161616;
+  border: 1px solid #d5d0c7;
+}
+
+.level-tabs button[aria-selected="true"] {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.stat-fig {
+  margin: 0 0 1.25rem;
+  background: #fff;
+  border: 1px solid #e4e0d8;
+  border-radius: 16px;
+  padding: 0.4rem 0.4rem 0.9rem;
+}
+
+.stat-fig svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none;
+}
+
+.stat-fig figcaption {
+  margin: 0.2rem 0.7rem 0.55rem;
+  color: #3f3c38;
+  font-size: 0.95rem;
+}
+
+.fig-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 0 0.7rem;
+}
+
+.fig-controls label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  color: #3f3c38;
+  font-size: 0.92rem;
+}
+
+.fig-controls input[type="range"] {
+  flex: 1;
+  accent-color: #0f6e6b;
+}
+
+.dataset-note {
+  margin: 0 0 1.5rem;
+  padding: 0.9rem 1rem;
+  background: #fff;
+  border-left: 3px solid #0f6e6b;
+  border-radius: 0 10px 10px 0;
+  color: #2c2a27;
+}
+
+.r-playground {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.r-playground,
+#test-flow,
+.panel {
+  background: #fff;
+  border: 1px solid #e4e0d8;
+  border-radius: 16px;
+  padding: 1.1rem 1.15rem 1.2rem;
+}
+
+.r-playground textarea,
+.psych-shell .input,
+.psych-shell input[type="email"],
+.psych-shell input[type="text"],
+.psych-shell input.input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d5d0c7;
+  border-radius: 10px;
+  background: #fbfaf8;
+  color: #161616;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.86rem;
+  padding: 0.75rem;
+}
+
+.psych-shell input[type="email"],
+.psych-shell form input.input {
+  font-family: Outfit, sans-serif;
+  font-size: 1rem;
+}
+
+.r-playground .output,
+#test-flow pre,
+.psych-shell pre {
+  background: #111;
+  color: #f4f1ea;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+  font-size: 0.84rem;
+}
+
+.psych-shell .btn,
+.psych-shell button {
+  font-family: Outfit, sans-serif;
+  border-radius: 999px;
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  padding: 0.45rem 0.95rem;
+  cursor: pointer;
+}
+
+.psych-shell .btn-outline,
+.psych-shell .check-btn,
+.psych-shell .btn-ghost {
+  background: #fff;
+  color: #111;
+}
+
+.psych-shell .level-tabs button {
+  background: #fff;
+  color: #161616;
+  border-color: #d5d0c7;
+}
+
+.psych-shell .level-tabs button[aria-selected="true"] {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.psych-shell button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.psych-shell .link {
+  color: #0f6e6b;
+}
+
+.psych-shell table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.psych-shell th,
+.psych-shell td {
+  text-align: left;
+  padding: 0.55rem 0.4rem;
+  border-bottom: 1px solid #ece7de;
+  font-size: 0.95rem;
+}
+
+.psych-shell .alert,
+.psych-shell .panel-note {
+  padding: 0.9rem 1rem;
+  background: #fff8e8;
+  border: 1px solid #ead7a4;
+  border-radius: 12px;
+}
+
+#flow-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+#flow-choices button {
+  background: #fff;
+  color: #111;
+}
+
+#flow-prompt {
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.7rem;
+}
+
+@media (max-width: 800px) {
+  .psych-top {
+    flex-wrap: wrap;
+  }
+
+  .psych-tag {
+    order: 3;
+    width: 100%;
+  }
+
+  .psych-frame {
+    grid-template-columns: 1fr;
+    padding: 1rem 1rem 3rem;
+  }
+
+  .psych-nav {
+    position: static;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0.35rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .psych-nav a {
+    white-space: nowrap;
+    background: #fff;
+    border: 1px solid #e4e0d8;
+  }
+}

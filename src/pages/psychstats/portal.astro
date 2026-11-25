@@ -1,6 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import CourseNav from "../../components/psychstats/CourseNav.astro";
+import CourseLayout from "../../layouts/CourseLayout.astro";
 import { MODULES } from "../../data/psychstats/modules";
 import { supabaseConfigured } from "../../lib/supabase";
 
@@ -10,10 +9,10 @@ const moduleJson = JSON.stringify(
 );
 ---
 
-<BaseLayout title="Student portal" description="Sign in, join a class, and see which psych stats modules are assigned." sideBarActiveItemID="psychstats">
-  <div class="max-w-3xl mx-auto">
-    <CourseNav current="portal" />
-    <h1 class="text-4xl font-bold mb-4">Student portal</h1>
+<CourseLayout title="Student portal" description="Sign in, join a class, and see which psych stats modules are assigned." current="portal">
+  <div class="panel">
+    <p class="psych-kicker">Class</p>
+    <h1>Student portal</h1>
     {
       configured ? (
         <div id="portal-app" class="space-y-6" data-modules={moduleJson}>
@@ -48,7 +47,7 @@ const moduleJson = JSON.stringify(
       )
     }
   </div>
-</BaseLayout>
+</CourseLayout>
 
 <script>
   import { getSupabase } from "../../lib/supabase";

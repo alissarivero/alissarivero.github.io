@@ -12,18 +12,18 @@ interface Props {
 const { slug, starter, setup = "", check, checkHint, xp, badge = "" } = Astro.props;
 ---
 
-<section class="r-playground space-y-3" data-slug={slug} data-xp={xp} data-badge={badge} data-check={check}>
-  <h2 class="text-2xl font-semibold">Try it</h2>
+<section class="r-playground" data-slug={slug} data-xp={xp} data-badge={badge} data-check={check}>
+  <h2>Try it in R</h2>
   <p class="text-sm opacity-80">
     R runs in your browser. The first run downloads the engine and can take a little while.
   </p>
-  <textarea class="textarea textarea-bordered w-full font-mono text-sm min-h-[12rem]" spellcheck="false">{starter}</textarea>
+  <textarea rows="12" spellcheck="false">{starter}</textarea>
   <div class="flex flex-wrap gap-2">
-    <button type="button" class="btn btn-primary run-btn">Run</button>
-    <button type="button" class="btn btn-outline check-btn">Check my work</button>
+    <button type="button" class="run-btn">Run</button>
+    <button type="button" class="check-btn">Check my work</button>
   </div>
   <p class="status text-sm" role="status"></p>
-  <pre class="output bg-base-200 rounded-box p-4 overflow-x-auto text-sm min-h-[4rem] whitespace-pre-wrap"></pre>
+  <pre class="output"></pre>
   <img class="plot max-w-full hidden rounded-box" alt="Plot from the code you ran" />
   <p class="hint text-sm opacity-70">{checkHint}</p>
   <script type="application/json" class="setup-json" set:html={JSON.stringify(setup)} />

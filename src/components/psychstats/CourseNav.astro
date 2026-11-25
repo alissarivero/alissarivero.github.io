@@ -2,20 +2,38 @@
 import { MODULES } from "../../data/psychstats/modules";
 
 const { current } = Astro.props;
+const groups = [
+  { id: "lesson", label: "Lessons" },
+  { id: "assignment", label: "Assignments" },
+  { id: "project", label: "Projects" },
+] as const;
 ---
 
-<nav class="flex flex-wrap gap-2 mb-8" aria-label="Course modules">
-  <a class:list={["btn btn-sm", current === "hub" ? "btn-primary" : "btn-ghost"]} href="/psychstats/">Course</a>
+<nav class="psych-nav" aria-label="Course">
+  <a href="/psychstats/" aria-current={current === "hub" ? "page" : undefined}>
+    <span class="num">00</span>
+    <span>Home</span>
+  </a>
   {
-    MODULES.map((m) => (
-      <a
-        class:list={["btn btn-sm", current === m.slug ? "btn-primary" : "btn-ghost"]}
-        href={m.href}
-      >
-        {m.short}
-      </a>
+    groups.map((group) => (
+      <>
+        <p class="nav-label">{group.label}</p>
+        {MODULES.filter((m) => m.kind === group.id).map((m, i) => (
+          <a href={m.href} aria-current={current === m.slug ? "page" : undefined}>
+            <span class="num">{String(i + 1).padStart(2, "0")}</span>
+            <span>{m.short}</span>
+          </a>
+        ))}
+      </>
     ))
   }
-  <a class:list={["btn btn-sm", current === "portal" ? "btn-primary" : "btn-ghost"]} href="/psychstats/portal/">Portal</a>
-  <a class:list={["btn btn-sm", current === "teach" ? "btn-primary" : "btn-ghost"]} href="/psychstats/teach/">Teach</a>
+  <p class="nav-label">Class</p>
+  <a href="/psychstats/portal/" aria-current={current === "portal" ? "page" : undefined}>
+    <span class="num">·</span>
+    <span>Portal</span>
+  </a>
+  <a href="/psychstats/teach/" aria-current={current === "teach" ? "page" : undefined}>
+    <span class="num">·</span>
+    <span>Teach</span>
+  </a>
 </nav>

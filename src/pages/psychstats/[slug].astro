@@ -1,41 +1,100 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import CourseNav from "../../components/psychstats/CourseNav.astro";
+import CourseLayout from "../../layouts/CourseLayout.astro";
 import RPlayground from "../../components/psychstats/RPlayground.astro";
-import { MODULES } from "../../data/psychstats/modules";
+import Levels from "../../components/psychstats/Levels.astro";
+import TestFlow from "../../components/psychstats/TestFlow.astro";
+import { MODULES, REDIRECTS } from "../../data/psychstats/modules";
 
 export function getStaticPaths() {
-  return MODULES.filter((m) => m.kind === "lesson").map((m) => ({
-    params: { slug: m.slug },
-    props: { module: m },
-  }));
+  return [
+    ...MODULES.map((module) => ({
+      params: { slug: module.slug },
+      props: { module, redirect: "" },
+    })),
+    ...REDIRECTS.map((redirect) => ({
+      params: { slug: redirect.slug },
+      props: { module: undefined, redirect: redirect.to },
+    })),
+  ];
 }
 
-const { module } = Astro.props;
+const { module, redirect } = Astro.props;
+const kicker = module?.kind === "assignment" ? "Assignment" : module?.kind === "project" ? "Project" : "Lesson";
 ---
 
-<BaseLayout title={module.title} description={module.blurb} sideBarActiveItemID="psychstats">
-  <article class="max-w-3xl mx-auto">
-    <CourseNav current={module.slug} />
-    <h1 class="text-4xl font-bold mb-4">{module.title}</h1>
-    <div class="space-y-4 mb-8">
-      {module.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}
-    </div>
-    {
-      module.datasetNote && (
-        <aside class="alert mb-8">
-          <span>{module.datasetNote}</span>
-        </aside>
-      )
-    }
-    <RPlayground
-      slug={module.slug}
-      starter={module.starter || ""}
-      setup={module.setup || ""}
-      check={module.check || ""}
-      checkHint={module.checkHint || ""}
-      xp={module.xp}
-      badge={module.badge}
-    />
-  </article>
-</BaseLayout>
+{
+  redirect ? (
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="refresh" content={`0;url=${redirect}`} />
+        <title>Moved</title>
+        <link rel="canonical" href={redirect} />
+      </head>
+      <body>
+        <p>
+          This page has moved. <a href={redirect}>Continue</a>.
+        </p>
+      </body>
+    </html>
+  ) : (
+    <CourseLayout title={module.title} description={module.blurb} current={module.slug}>
+      <article>
+        <p class="psych-kicker">{kicker}</p>
+        <h1>{module.title}</h1>
+        <Levels overview={module.levels.overview} detailed={module.levels.detailed} figures={module.figures} />
+        {module.datasetNote && (
+          <aside class="dataset-note">
+            <span>{module.datasetNote}</span>
+          </aside>
+        )}
+        {module.showFlow && <TestFlow />}
+        {module.starter && (
+          <RPlayground
+            slug={module.slug}
+            starter={module.starter}
+            setup={module.setup || ""}
+            check={module.check || ""}
+            checkHint={module.checkHint || ""}
+            xp={module.xp}
+            badge={module.badge}
+          />
+        )}
+        {module.selfCheck && (
+          <p class="self-check">
+            <button type="button" id="self-check" data-slug={module.slug} data-xp={module.xp} data-badge={module.badge || ""}>
+              Mark this project complete
+            </button>
+            <span id="self-check-status" role="status"></span>
+          </p>
+        )}
+      </article>
+    </CourseLayout>
+  )
+}
+
+<script>
+  import { saveProgress } from "../../lib/progress";
+
+  function boot() {
+    const button = document.getElementById("self-check");
+    if (!button || button.dataset.ready) return;
+    button.dataset.ready = "1";
+    button.addEventListener("click", async () => {
+      const saved = await saveProgress({
+        slug: button.dataset.slug || "",
+        status: "checked",
+        xp: Number(button.dataset.xp || 0),
+        badges: button.dataset.badge ? [button.dataset.badge] : [],
+      });
+      const status = document.getElementById("self-check-status");
+      if (status) {
+        status.textContent = saved.remote
+          ? "Marked complete and saved to your account."
+          : "Marked complete on this device.";
+      }
+    });
+  }
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>

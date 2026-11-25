@@ -1,0 +1,53 @@
+---
+import Figures from "./Figures.astro";
+
+interface Props {
+  overview: string[];
+  detailed: string[];
+  figures?: { after: number; id: string }[];
+}
+
+const { overview, detailed, figures = [] } = Astro.props;
+---
+
+<div class="levels">
+  <div class="level-tabs" role="tablist" aria-label="Depth of explanation">
+    <button type="button" role="tab" aria-selected="true" data-tab="overview">Overview</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="detailed">Detailed description</button>
+  </div>
+  <div class="level-panel" data-panel="overview">
+    {
+      overview.map((paragraph, index) => (
+        <>
+          <p>{paragraph}</p>
+          {figures.filter((figure) => figure.after === index).map((figure) => <Figures ids={[figure.id]} />)}
+        </>
+      ))
+    }
+  </div>
+  <div class="level-panel" data-panel="detailed" hidden>
+    {detailed.map((paragraph) => <p>{paragraph}</p>)}
+  </div>
+</div>
+
+<script>
+  function boot() {
+    document.querySelectorAll<HTMLElement>(".levels").forEach((root) => {
+      if (root.dataset.ready) return;
+      root.dataset.ready = "1";
+      const tabs = root.querySelectorAll<HTMLButtonElement>("[data-tab]");
+      const panels = root.querySelectorAll<HTMLElement>("[data-panel]");
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const id = tab.dataset.tab;
+          tabs.forEach((other) => other.setAttribute("aria-selected", String(other === tab)));
+          panels.forEach((panel) => {
+            panel.hidden = panel.dataset.panel !== id;
+          });
+        });
+      });
+    });
+  }
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>
