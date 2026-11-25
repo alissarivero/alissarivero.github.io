@@ -1,10 +1,7 @@
 .psych-shell {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(820px 380px at 100% -12%, rgba(247, 184, 204, 0.55), transparent 62%),
-    radial-gradient(640px 320px at -8% 8%, rgba(47, 140, 92, 0.14), transparent 58%),
-    #fff;
+  background: #fff;
   color: #243028;
   font-family: Nunito, "Segoe UI", sans-serif;
   font-size: 17px;
@@ -60,7 +57,7 @@
 
 .psych-frame {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: 270px minmax(0, 1fr);
   gap: 2rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -72,7 +69,7 @@
   margin: 0 0 1.4rem;
   border-radius: 18px;
   overflow: hidden;
-  border: 1px solid #f3d0dc;
+  border: 1px solid #ececec;
   background: #fff;
 }
 
@@ -116,13 +113,146 @@
 }
 
 .nav-label {
-  margin: 0.85rem 0 0.15rem;
-  padding: 0 0.55rem;
-  color: #8a847a;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  margin: 1.15rem 0 0.35rem;
+  padding: 0 0.2rem;
+  color: #1f7a4d;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  text-transform: none;
+}
+
+.psych-nav {
+  position: sticky;
+  top: 4.5rem;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 6rem);
+  overflow: auto;
+  padding: 0.85rem 0.85rem 1rem;
+  border: 1px solid #f3d0dc;
+  border-radius: 22px;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    #fff7fa;
+}
+
+.nav-home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.15rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #f3d0dc;
+  color: #243028;
+  text-decoration: none;
+  font-weight: 750;
+}
+
+.nav-home[aria-current="page"] {
+  background: #1f7a4d;
+  border-color: #1f7a4d;
+  color: #fff;
+}
+
+.nav-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-left: 0.45rem;
+  padding-left: 0.95rem;
+  border-left: 2px solid #f4c3d2;
+}
+
+.nav-stop {
+  display: flex;
+  flex-direction: column;
+}
+
+.psych-nav a {
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.32rem 0.45rem;
+  border-radius: 10px;
+  color: #243028;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.nav-rail > a::before,
+.nav-stop > a::before {
+  content: "";
+  position: absolute;
+  left: -1.22rem;
+  top: 0.72rem;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #1f7a4d;
+}
+
+.psych-nav a.nested {
+  margin-left: 1.15rem;
+  padding: 0.12rem 0.45rem;
+  font-size: 0.84rem;
+  color: #5d675f;
+}
+
+.psych-nav a.nested::before {
+  content: "";
+  position: absolute;
+  left: -1.55rem;
+  top: 0.62rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #e7a0b8;
+}
+
+.psych-nav a:hover {
+  background: #fff7fa;
+}
+
+.nav-rail a[aria-current="page"],
+.nav-class a[aria-current="page"] {
+  background: #f3faf5;
+  color: #145c38;
+  font-weight: 750;
+}
+
+.nav-stop > a[aria-current="page"]::before,
+.nav-rail > a[aria-current="page"]::before {
+  background: #1f7a4d;
+  box-shadow: 0 0 0 4px #e5f5ec;
+}
+
+.psych-nav .num {
+  font-family: Fraunces, Georgia, serif;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+  color: #1f7a4d;
+  min-width: 1.15rem;
+}
+
+.nav-class {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.nav-class a {
+  border: 1px solid #f3d0dc;
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+  font-size: 0.86rem;
+  font-weight: 700;
 }
 
 .scorebar {
@@ -272,50 +402,9 @@
   align-items: center;
 }
 
-.psych-nav {
-  position: sticky;
-  top: 4.5rem;
-  align-self: start;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.psych-nav a {
-  display: flex;
-  gap: 0.65rem;
-  align-items: baseline;
-  padding: 0.45rem 0.55rem;
-  border-radius: 8px;
-  color: #3a3834;
-  text-decoration: none;
-  font-size: 0.95rem;
-}
-
-.psych-nav a.nested {
-  padding-left: 1.4rem;
-  font-size: 0.88rem;
-}
-
 .path a.nested-card {
   margin-left: 1.4rem;
   background: #fbfaf8;
-}
-
-.psych-nav a:hover {
-  background: #fff;
-}
-
-.psych-nav a[aria-current="page"] {
-  background: #1f7a4d;
-  color: #fff;
-}
-
-.psych-nav .num {
-  font-variant-numeric: tabular-nums;
-  font-size: 0.78rem;
-  opacity: 0.7;
-  min-width: 1.2rem;
 }
 
 .psych-main {
@@ -644,15 +733,35 @@
 
   .psych-nav {
     position: static;
+    max-height: none;
     flex-direction: row;
+    align-items: center;
     overflow-x: auto;
+    gap: 0.45rem;
+  }
+
+  .nav-label,
+  .nav-rail,
+  .nav-stop,
+  .nav-class {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     gap: 0.35rem;
-    padding-bottom: 0.4rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .nav-rail > a::before,
+  .nav-stop > a::before,
+  .psych-nav a.nested::before {
+    display: none;
   }
 
   .psych-nav a {
     white-space: nowrap;
     background: #fff;
-    border: 1px solid #e4e0d8;
+    border: 1px solid #f3d0dc;
   }
 }

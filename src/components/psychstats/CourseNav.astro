@@ -8,43 +8,39 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
 ---
 
 <nav class="psych-nav" aria-label="Course">
-  <a href="/psychstats/" aria-current={current === "hub" ? "page" : undefined}>
-    <span class="num">00</span>
-    <span>Home</span>
-  </a>
+  <a class="nav-home" href="/psychstats/" aria-current={current === "hub" ? "page" : undefined}>Home</a>
   <p class="nav-label">Lessons</p>
-  {
-    lessons.map((lesson, i) => (
-      <>
-        <a href={lesson.href} aria-current={current === lesson.slug ? "page" : undefined}>
-          <span class="num">{String(i + 1).padStart(2, "0")}</span>
-          <span>{lesson.short}</span>
-        </a>
-        {under(lesson.slug).map((task) => (
-          <a class="nested" href={task.href} aria-current={current === task.slug ? "page" : undefined}>
-            <span class="num">·</span>
-            <span>{task.short}</span>
+  <div class="nav-rail">
+    {
+      lessons.map((lesson, i) => (
+        <div class="nav-stop">
+          <a href={lesson.href} aria-current={current === lesson.slug ? "page" : undefined}>
+            <span class="num">{String(i + 1).padStart(2, "0")}</span>
+            <span>{lesson.short}</span>
           </a>
-        ))}
-      </>
-    ))
-  }
+          {under(lesson.slug).map((task) => (
+            <a class="nested" href={task.href} aria-current={current === task.slug ? "page" : undefined}>
+              <span>{task.short}</span>
+            </a>
+          ))}
+        </div>
+      ))
+    }
+  </div>
   <p class="nav-label">Projects</p>
-  {
-    projects.map((project, i) => (
-      <a href={project.href} aria-current={current === project.slug ? "page" : undefined}>
-        <span class="num">{String(i + 1).padStart(2, "0")}</span>
-        <span>{project.short}</span>
-      </a>
-    ))
-  }
+  <div class="nav-rail nav-rail-quests">
+    {
+      projects.map((project, i) => (
+        <a href={project.href} aria-current={current === project.slug ? "page" : undefined}>
+          <span class="num">{String(i + 1).padStart(2, "0")}</span>
+          <span>{project.short}</span>
+        </a>
+      ))
+    }
+  </div>
   <p class="nav-label">Class</p>
-  <a href="/psychstats/portal/" aria-current={current === "portal" ? "page" : undefined}>
-    <span class="num">·</span>
-    <span>Portal</span>
-  </a>
-  <a href="/psychstats/teach/" aria-current={current === "teach" ? "page" : undefined}>
-    <span class="num">·</span>
-    <span>Teach</span>
-  </a>
+  <div class="nav-class">
+    <a href="/psychstats/portal/" aria-current={current === "portal" ? "page" : undefined}>Portal</a>
+    <a href="/psychstats/teach/" aria-current={current === "teach" ? "page" : undefined}>Teach</a>
+  </div>
 </nav>
