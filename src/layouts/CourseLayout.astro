@@ -21,7 +21,10 @@ const { title, description, current = "hub" } = Astro.props;
     <header class="psych-top">
       <a class="psych-mark" href="/psychstats/">Psych Stats</a>
       <p class="psych-tag">Statistics, from a psychologist's perspective</p>
-      <a class="psych-exit" id="psych-account" href="/psychstats/portal/">Login</a>
+      <div class="psych-actions">
+        <a class="psych-join" href="/psychstats/portal/">Join / create a course</a>
+        <a class="psych-exit" id="psych-account" href="/psychstats/portal/">Login</a>
+      </div>
     </header>
     <div class:list={["psych-frame", { "psych-home": current === "hub" }]}>
       {current !== "hub" && <CourseNav current={current} />}

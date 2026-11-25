@@ -8,18 +8,20 @@ const firstLesson = MODULES.find((m) => m.kind === "lesson");
 
 <CourseLayout title="Psych Stats" description="Statistics for psychology, taught without a mathematical track." current="hub">
   <section class="welcome">
-    <p class="psych-kicker">Intro Psych Stats</p>
     <h1>Welcome to Intro Psych Stats!</h1>
     <p>
       We have created this free online resource to help make the statistics that psychologists use every day more
       accessible to students and trainees. No statistical knowledge or experience in R required!
     </p>
+    <a class="start-course" href={firstLesson?.href ?? "/psychstats/introduction/"}>Start the course</a>
+  </section>
+  <Hero />
+  <section class="welcome welcome-after">
     <p>
       You can <a href="/psychstats/portal/">sign up</a> to save your progress, or
       <a href="/psychstats/portal/">join</a> / <a href="/psychstats/teach/">create</a> a course if you are a student or
       instructor. If you do not want to sign up, all materials are freely accessible.
     </p>
-    <a class="start-course" href={firstLesson?.href ?? "/psychstats/introduction/"}>Start the course</a>
     <p class="welcome-sign">
       Anti-Racist Community, Department of Psychology &amp; Neuroscience at Duke University
     </p>
@@ -27,7 +29,6 @@ const firstLesson = MODULES.find((m) => m.kind === "lesson");
       For questions or feedback, please reach out to <a href="mailto:pnarc@duke.edu">pnarc@duke.edu</a>
     </p>
   </section>
-  <Hero />
   <ul class="home-points">
     <li>
       <h2>Free to use</h2>

@@ -43,8 +43,28 @@
   font-size: 0.92rem;
 }
 
-.psych-exit {
+.psych-actions {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.psych-join {
+  color: #1f7a4d;
+  border: 1px solid #1f7a4d;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.92rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.psych-join:hover {
+  background: #f3faf5;
+}
+
+.psych-exit {
   color: #1f7a4d;
   font-size: 0.92rem;
   font-weight: 750;
@@ -181,6 +201,10 @@
 
 .welcome a.start-course {
   color: #fff;
+}
+
+.welcome-after {
+  margin-top: 1.25rem;
 }
 
 .welcome-sign {
