@@ -49,18 +49,18 @@ const first = lessons[0];
           <div class="nodes">
             <a class="node guide" href={lesson.href} data-module={lesson.slug} data-kind="guide">
               <span class="bubble">Read</span>
-              <span class="node-label">{lesson.short}</span>
+              <span class="node-label">{lesson.title}</span>
             </a>
             {under(lesson.slug).map((task) =>
               task.kind === "page" ? (
                 <a class="node guide" href={task.href} data-module={task.slug} data-kind="guide">
                   <span class="bubble">Read</span>
-                  <span class="node-label">{task.short}</span>
+                  <span class="node-label">{task.title}</span>
                 </a>
               ) : (
                 <a class="node" href={task.href} data-module={task.slug} data-xp={task.xp} data-kind="check">
                   <span class="bubble">{task.xp}</span>
-                  <span class="node-label">{task.short}</span>
+                  <span class="node-label">{task.title}</span>
                 </a>
               )
             )}
@@ -78,7 +78,7 @@ const first = lessons[0];
         {projects.map((project) => (
           <a class="node quest" href={project.href} data-module={project.slug} data-xp={project.xp} data-kind="check">
             <span class="bubble">{project.xp}</span>
-            <span class="node-label">{project.short}</span>
+            <span class="node-label">{project.title}</span>
           </a>
         ))}
       </div>
