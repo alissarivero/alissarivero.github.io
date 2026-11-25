@@ -76,24 +76,25 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
         </li>
       ))
     }
-    <li class="unit">
+    <li class="unit project-board">
       <header class="unit-head">
-        <span>Quests</span>
-        <h2>Projects</h2>
-        <p>Longer work that uses the lessons together.</p>
+        <span>Projects</span>
+        <h2>Longer work</h2>
+        <p>These use the lessons together. They sit beside the path, not on it.</p>
       </header>
-      <div class="nodes">
+      <div class="project-cards">
         {projects.map((project) => (
           <a
-            class:list={["node", "quest", { here: current === project.slug }]}
+            class:list={["project-card", { here: current === project.slug }]}
             href={project.href}
             data-module={project.slug}
             data-xp={project.xp}
             data-kind="check"
             aria-current={current === project.slug ? "page" : undefined}
           >
-            <span class="bubble">{project.xp}</span>
-            <span class="node-label">{project.title}</span>
+            <span class="project-xp">{project.xp} XP</span>
+            <h3 class="project-title">{project.title}</h3>
+            <p>{project.blurb}</p>
           </a>
         ))}
       </div>
@@ -122,7 +123,7 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
   }
 
   async function markProgress() {
-    const nodes = [...document.querySelectorAll<HTMLElement>(".course-path .node")];
+    const nodes = [...document.querySelectorAll<HTMLElement>(".course-path .node, .course-path .project-card")];
     if (nodes.length === 0 || nodes[0].dataset.marked) return;
     nodes[0].dataset.marked = "1";
     const rows = await loadProgress();
@@ -146,16 +147,11 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
       const row = done.get(node.dataset.module || "");
       if (row?.status === "checked") node.classList.add("done");
       else if (row) node.classList.add("started");
-      if (!next && node.dataset.kind === "check" && row?.status !== "checked") next = node;
+      if (!next && row?.status !== "checked") next = node;
     }
-    const guide = nodes.find((node) => node.dataset.kind === "guide" && !done.get(node.dataset.module || ""));
-    const current = next || guide || null;
-    current?.classList.add("up-next");
+    next?.classList.add("up-next");
     const cont = document.getElementById("continue");
-    if (cont && current) {
-      cont.setAttribute("href", current.getAttribute("href") || "/psychstats/");
-      cont.textContent = current.classList.contains("done") ? "Review" : "Continue";
-    }
+    if (cont && next) cont.setAttribute("href", next.getAttribute("href") || "/psychstats/");
   }
 
   bootPath();

@@ -520,8 +520,70 @@
 }
 
 .course-path.is-collapsed .unit-head,
-.course-path.is-collapsed .node-label {
+.course-path.is-collapsed .node-label,
+.course-path.is-collapsed .project-board {
   display: none;
+}
+
+.project-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1.15rem 1.2rem;
+  background: #fff;
+  border: 1.5px solid #E89923;
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 6px 0 #c47d12;
+}
+
+.project-card:hover {
+  border-color: #00539B;
+  box-shadow: 0 6px 0 #003f7a;
+}
+
+.project-xp {
+  color: #00539B;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-title {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.project-card p {
+  margin: 0;
+  color: #3d463f;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.project-card.done {
+  background: #00539B;
+  border-color: #00539B;
+  box-shadow: 0 6px 0 #003f7a;
+  color: #fff;
+}
+
+.project-card.done .project-xp,
+.project-card.done p {
+  color: #fff;
+}
+
+.welcome-actions .continue {
+  display: inline-flex;
+  align-items: center;
 }
 
 .course-path.is-collapsed .nodes {

@@ -18,6 +18,7 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
     </p>
     <div class="welcome-actions">
       <a class="start-course" href="#sign-up">Start the course</a>
+      <a id="continue" class="continue" href={firstStep?.href ?? "#course-path"}>Continue where you left off</a>
       <button type="button" class="topic-search" id="topic-search-btn">Search for a specific topic</button>
     </div>
     <form id="topic-search" class="topic-search-form" hidden>
@@ -41,7 +42,6 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
     </div>
     <div class="scorebar-side">
       <p id="xp-line" class="xp-total">0 XP</p>
-      <a id="continue" class="continue" href={firstStep?.href ?? "#course-path"}>Continue</a>
     </div>
   </div>
   <div class="badges" id="badge-row"></div>
@@ -60,8 +60,8 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
     if (!results) return;
 
     const topics = () =>
-      [...document.querySelectorAll<HTMLElement>("#course-path .node")].map((node) => ({
-        title: node.querySelector(".node-label")?.textContent?.trim() || "",
+      [...document.querySelectorAll<HTMLElement>("#course-path .node, #course-path .project-card")].map((node) => ({
+        title: node.querySelector(".node-label, .project-title")?.textContent?.trim() || "",
         href: node.getAttribute("href") || "#course-path",
         node,
       }));
