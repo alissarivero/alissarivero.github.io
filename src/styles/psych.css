@@ -1,6 +1,8 @@
 .psych-shell {
   margin: 0;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #fff;
   color: #243028;
   font-family: Nunito, "Segoe UI", sans-serif;
@@ -71,6 +73,28 @@
   text-decoration: none;
 }
 
+.psych-footer {
+  background: #145c38;
+  color: #fff;
+  padding: 1.4rem 1.5rem 1.6rem;
+}
+
+.psych-footer p {
+  margin: 0 auto 0.35rem;
+  max-width: 1100px;
+  font-family: Fraunces, Georgia, serif;
+}
+
+.psych-footer p + p {
+  font-family: Nunito, "Segoe UI", sans-serif;
+  margin-bottom: 0;
+}
+
+.psych-footer a {
+  color: #fff;
+  font-weight: 750;
+}
+
 .psych-exit:hover {
   text-decoration: underline;
 }
@@ -82,6 +106,9 @@
   max-width: 1100px;
   margin: 0 auto;
   padding: 1.75rem 1.5rem 4rem;
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .hero {

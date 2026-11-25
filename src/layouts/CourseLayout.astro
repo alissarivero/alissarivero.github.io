@@ -32,6 +32,12 @@ const { title, description, current = "hub" } = Astro.props;
         <slot />
       </main>
     </div>
+    <footer class="psych-footer">
+      <p>Anti-Racist Community, Department of Psychology &amp; Neuroscience at Duke University</p>
+      <p>
+        For questions or feedback, please reach out to <a href="mailto:pnarc@duke.edu">pnarc@duke.edu</a>
+      </p>
+    </footer>
     <script>
       import { getSupabase } from "../lib/supabase";
 
