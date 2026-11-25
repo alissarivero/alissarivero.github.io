@@ -21,7 +21,7 @@ const { title, description, current = "hub" } = Astro.props;
     <header class="psych-top">
       <a class="psych-mark" href="/psychstats/">Psych Stats</a>
       <p class="psych-tag">Statistics for psychology, with R in the browser</p>
-      <a class="psych-exit" href="/">Back to the main site</a>
+      <a class="psych-exit" id="psych-account" href="/psychstats/portal/">Login</a>
     </header>
     <div class="psych-frame">
       <CourseNav current={current} />
@@ -29,5 +29,40 @@ const { title, description, current = "hub" } = Astro.props;
         <slot />
       </main>
     </div>
+    <script>
+      import { getSupabase } from "../lib/supabase";
+
+      function bootAccount() {
+        const link = document.getElementById("psych-account");
+        if (!link || link.dataset.ready) return;
+        link.dataset.ready = "1";
+
+        async function paint() {
+          const sb = getSupabase();
+          if (!sb) {
+            link.textContent = "Login";
+            link.setAttribute("href", "/psychstats/portal/");
+            return;
+          }
+          const { data } = await sb.auth.getUser();
+          const user = data.user;
+          if (!user) {
+            link.textContent = "Login";
+            link.setAttribute("href", "/psychstats/portal/");
+            return;
+          }
+          const { data: profile } = await sb.from("profiles").select("role").eq("id", user.id).maybeSingle();
+          const instructor = profile?.role === "instructor";
+          link.textContent = instructor ? "Instructor" : "Student";
+          link.setAttribute("href", instructor ? "/psychstats/teach/" : "/psychstats/portal/");
+        }
+
+        void paint();
+        window.addEventListener("psychstats-auth", () => void paint());
+      }
+
+      bootAccount();
+      document.addEventListener("astro:page-load", bootAccount);
+    </script>
   </body>
 </html>

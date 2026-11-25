@@ -75,6 +75,7 @@ const moduleJson = JSON.stringify(MODULES.map((m) => ({ slug: m.slug, title: m.t
       signedIn.classList.remove("hidden");
       who.textContent = `Signed in as ${email}.`;
       await sb.from("profiles").upsert({ id: userId, role: "instructor", display_name: email.split("@")[0] });
+      window.dispatchEvent(new Event("psychstats-auth"));
 
       const { data: existing } = await sb
         .from("classes")
