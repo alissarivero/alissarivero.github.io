@@ -397,6 +397,56 @@ const { ids = [] } = Astro.props;
     cap.textContent = "Patients slept longer on the second drug than on the first (about 1.6 extra hours). The bracket points at the comparison. It does not replace the sentence, and the caption still has to say the bars are 95% confidence intervals.";
   }
 
+  function mountGgplot(root: HTMLElement) {
+    const svg = root.querySelector("svg") as SVGSVGElement;
+    const cap = root.querySelector("figcaption")!;
+    svg.replaceChildren();
+    svg.setAttribute("viewBox", "0 0 640 220");
+    const panels = [
+      { x: 16, title: "Smooth" },
+      { x: 222, title: "Groups" },
+      { x: 428, title: "Small multiples" },
+    ];
+    panels.forEach((panel) => {
+      svg.appendChild(el("rect", { x: String(panel.x), y: "8", width: "196", height: "200", rx: "12", fill: "#fff", stroke: "#f3d0dc" }));
+      svg.appendChild(el("text", { x: String(panel.x + 98), y: "28", "text-anchor": "middle", fill: "#1f7a4d", "font-size": "13", "font-weight": "700" }));
+      svg.lastChild!.textContent = panel.title;
+    });
+    const pts: [number, number][] = [[30, 150], [48, 132], [62, 140], [80, 118], [96, 124], [112, 100], [128, 92], [146, 78], [160, 70]];
+    pts.forEach(([x, y]) => {
+      svg.appendChild(el("circle", { cx: String(16 + x), cy: String(y), r: "3.5", fill: "#1f7a4d" }));
+    });
+    svg.appendChild(el("path", { d: "M46 148 C 80 130, 120 110, 176 68", fill: "none", stroke: "#145c38", "stroke-width": "2.5" }));
+    svg.appendChild(el("path", { d: "M46 158 C 80 142, 120 122, 176 78 L 176 58 C 120 98, 80 118, 46 138 Z", fill: "#1f7a4d", opacity: "0.15" }));
+    [0, 1, 2].forEach((g) => {
+      const color = ["#1f7a4d", "#d46b8c", "#c68642"][g];
+      const base = 250 + g * 28;
+      svg.appendChild(el("path", {
+        d: `M${base} 160 C ${base + 10} ${120 - g * 8}, ${base + 22} ${120 - g * 8}, ${base + 32} 160`,
+        fill: color,
+        opacity: "0.35",
+      }));
+    });
+    [0, 1, 2].forEach((col) => {
+      const x0 = 444 + col * 56;
+      [40, 70, 96, 120].forEach((h, i) => {
+        svg.appendChild(el("circle", {
+          cx: String(x0 + 16),
+          cy: String(168 - h * (0.45 + col * 0.12) + i * 4),
+          r: "3",
+          fill: col === 1 ? "#d46b8c" : "#1f7a4d",
+        }));
+      });
+      svg.appendChild(el("path", {
+        d: `M${x0 + 8} 150 C ${x0 + 16} ${110 - col * 12}, ${x0 + 24} ${100 - col * 8}, ${x0 + 28} 70`,
+        fill: "none",
+        stroke: "#145c38",
+        "stroke-width": "1.6",
+      }));
+    });
+    cap.textContent = "Three ggplot-style figures drawn for this course: a smooth with a band, overlapping groups, and the same comparison repeated in small multiples.";
+  }
+
   const mounts: Record<string, (root: HTMLElement) => void> = {
     "fit-line": mountFit,
     "read-line": mountRead,
@@ -404,6 +454,7 @@ const { ids = [] } = Astro.props;
     hug: mountHug,
     sigmoid: mountSigmoid,
     "plot-gallery": mountGallery,
+    "ggplot-gallery": mountGgplot,
     "write-sentence": mountSentence,
   };
 

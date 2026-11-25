@@ -53,9 +53,9 @@ const RAW: PsychModule[] = [
   item({
     slug: "why-r",
     kind: "lesson",
-    title: "Why psychologists use R",
+    title: "Why do most psychologists use R?",
     short: "Why R",
-    blurb: "The program the field writes papers in, and the handful of ideas every script is built from.",
+    blurb: "It is free, it handles complex analyses and figures, and the field can share the code.",
     minutes: 20,
     xp: 0,
     levels: {
@@ -642,6 +642,7 @@ export const MODULES: PsychModule[] = RAW.flatMap((module) => {
       minutes: 8,
       xp: 0,
       levels: { overview: page.overview, detailed: page.detailed },
+      figures: page.slug === "ggplot-in-r" ? [{ after: 0, id: "ggplot-gallery" }] : undefined,
     })
   );
   return [module, ...pages];
@@ -653,7 +654,11 @@ export const REDIRECTS: { slug: string; to: string }[] = [
   { slug: "correlation", to: "/psychstats/analyzing-data/" },
   { slug: "regression", to: "/psychstats/regression-models/" },
   { slug: "glm", to: "/psychstats/regression-models/" },
-  { slug: "frequentist-bayesian", to: "/psychstats/frontiers/" },
+  { slug: "why-a-script", to: "/psychstats/r-is-free/" },
+  { slug: "objects-and-functions", to: "/psychstats/r-packages/" },
+  { slug: "console-and-script", to: "/psychstats/reproducibility/" },
+  { slug: "working-directory", to: "/psychstats/r-setup/" },
+  { slug: "packages", to: "/psychstats/r-packages/" },
 ];
 
 export function getModule(slug: string) {

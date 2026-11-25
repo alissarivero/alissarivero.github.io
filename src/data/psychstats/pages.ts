@@ -75,57 +75,74 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
-    "why-a-script",
+    "r-is-free",
     "why-r",
-    "Why a script, not a menu",
-    "A script",
-    "The analysis should be something you can rerun and hand to someone else.",
+    "It is free",
+    "Free",
+    "R costs nothing to download, teach, or share.",
     [
-      "A script is the analysis written down. A point-and-click history is not. When a reviewer, a classmate, or you in six months asks what happened to the outliers, the script is the answer. Psychologists use R because that record is free, and because new methods often arrive as a package before they arrive in a menu.",
+      "Most psychologists use R first because it is free. A student, a lab, and a collaborator at another university can all install the same program without a license. That matters for teaching, and it matters when a paper’s code has to run on someone else’s computer.",
+      "Free here means the program and the packages. CRAN is where you download R. RStudio Desktop, the window most people work in, is also free. SPSS and some other menus are not.",
     ],
     []
   ),
   page(
-    "objects-and-functions",
+    "complex-analyses",
     "why-r",
-    "Objects and functions",
-    "Objects",
-    "A name holds a value. A function does one job to what you hand it.",
+    "Complex analyses and visualizations",
+    "Complex work",
+    "The hard models and the figures live in the same language.",
     [
-      "An object is a name for a number, a column, or a whole table. You store it with <- . A function does one job, and you hand it the thing inside parentheses: mean(rt). c() gathers numbers. A data frame is the table. dataset$column picks one column out. A factor is a column of categories.",
+      "R is built for the analyses psychology actually runs: comparisons, regression, models with many levels, and figures that show the data rather than a bar of means. A new method often arrives as an R package before it arrives in a point-and-click menu.",
+      "The next two pages are the two pieces of that claim. Packages are how a complex analysis shows up. ggplot is how a complex figure is built, in layers, from the same table.",
     ],
     []
   ),
   page(
-    "packages",
+    "r-packages",
     "why-r",
+    "R packages",
     "Packages",
-    "Packages",
-    "A package is a bundle of functions you install once and load when you need it.",
+    "A package is a bundle of functions for one job.",
     [
-      "install.packages() downloads the bundle. You do that once, in the console, not at the top of every script. library() loads it for the session. ggplot2 is the one you will want for figures on your own computer. This site’s browser runs base R, so those exercises do not need a package.",
+      "A package adds tools R did not ship with. lme4 fits models that remember which trials belong to which person. psych and lavaan cover a lot of measurement work. ggplot2 draws the figures. You install a package once, with install.packages(), and load it in a script with library().",
+      "Because packages are shared, a lab does not have to write a mixed model from scratch. You load the package the field already uses, and the paper can name it. That is also why the code is easier to hand to the next person: they install the same package.",
     ],
     []
   ),
   page(
-    "console-and-script",
+    "ggplot-in-r",
     "why-r",
-    "The console and the script",
-    "Console",
-    "The console runs one line. The script is the file you save.",
+    "ggplot",
+    "ggplot",
+    "Figures are built in layers from the data table.",
     [
-      "The console is the conversation: you type a line, R answers, the line is gone. A script is the document. In RStudio the script sits above the console. You run a line from the script and the answer still appears below. Save the script. The console’s history is not the analysis.",
+      "ggplot2 is the package psychologists use when the figure has to carry the result. You name the table, map columns onto x, y, and color, then add a mark: points, a smooth line, a ribbon for uncertainty, a box. The pictures below are original examples in that style: a scatter with a smooth, group densities, and a design drawn as small multiples. They were drawn for this course. They are not copied from a published paper.",
+      "The call looks like ggplot(data, aes(x, y, color = group)) + geom_point() + geom_smooth(). This site’s browser runs base R, so the practice assignments draw with plot() and boxplot(). The same layered figure is what you make in RStudio after the setup assignment, once library(ggplot2) runs.",
     ],
     []
   ),
   page(
-    "working-directory",
+    "reproducibility",
     "why-r",
-    "The working directory",
-    "Your files",
-    "R looks in one folder. Your CSV has to be in that folder.",
+    "Reproducibility and open science",
+    "Open science",
+    "The analysis can be saved, rerun, and posted with the paper.",
     [
-      "The working directory is the folder R is looking at. In RStudio, once the script is saved, use Session, then Set Working Directory, then To Source File Location. Put the data file in that same folder. getwd() tells you where R thinks it is. setwd() moves it, and is the line most likely to break on someone else’s computer, so prefer the menu once per project.",
+      "A script is the analysis written down. A point-and-click history is not. When you save the script, someone else can run the same lines on the same file and see if they get your figure. That is the practical meaning of reproducibility, and it is why R sits in the middle of open science in psychology: the code can travel with the paper.",
+      "Open science here is not a slogan. It is a folder: the data, the script, and a note that says which packages to load. A reader who was not in the room can still see what you did.",
+    ],
+    []
+  ),
+  page(
+    "cohort-effects",
+    "why-r",
+    "A shared cohort",
+    "Cohort",
+    "Because so many psychologists use R, sharing code is easier.",
+    [
+      "There is a cohort effect. People trained in the last several years learned R, so the code in a paper, a course, or a lab meeting is often already in R. That shared habit makes collaboration easier. You can send a script to a classmate or a coauthor and expect them to be able to run it, or at least to read it.",
+      "The same cohort is why a new package spreads. If the people you work with already use R, the useful tool is the one written for R. You are not only choosing a program. You are choosing the language the people around you already share.",
     ],
     []
   ),
