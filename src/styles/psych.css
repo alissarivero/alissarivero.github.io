@@ -595,11 +595,19 @@
   align-items: center;
 }
 
+.course-path.is-collapsed .trail {
+  gap: 0.85rem;
+}
+
+.course-path.is-collapsed .unit {
+  margin: 0;
+}
+
 .course-path.is-collapsed .nodes {
   position: relative;
   width: auto;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.7rem;
 }
 
 .course-path.is-collapsed .nodes::before {
@@ -614,17 +622,28 @@
 }
 
 .course-path.is-collapsed .node,
-.course-path.is-collapsed .node:nth-child(odd) {
+.course-path.is-collapsed .node:nth-child(odd),
+.course-path.is-collapsed .node:nth-child(even) {
   flex-direction: column;
-  width: auto;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0;
+  transform: none;
   justify-content: center;
 }
 
-.course-path.is-collapsed .bubble {
-  width: 1.35rem;
-  height: 1.35rem;
+.course-path.is-collapsed .bubble,
+.course-path.is-collapsed .node.assignment .bubble,
+.course-path.is-collapsed .node.guide .bubble,
+.course-path.is-collapsed .node.done .bubble,
+.course-path.is-collapsed .node.up-next .bubble,
+.course-path.is-collapsed .node.here .bubble {
+  width: 1.15rem;
+  height: 1.15rem;
   font-size: 0;
+  border-width: 2px;
   box-shadow: none;
+  animation: none;
   position: relative;
   z-index: 1;
 }
