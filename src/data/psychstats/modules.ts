@@ -10,6 +10,8 @@ export type PsychModule = {
   badge?: string;
   href: string;
   kind: Kind;
+  /** Assignment pages sit under this lesson slug. */
+  parent?: string;
   datasetNote?: string;
   levels: { overview: string[]; detailed: string[] };
   figures?: { after: number; id: string }[];
@@ -48,6 +50,52 @@ export const MODULES: PsychModule[] = [
         "The three questions license different products. A description owes the reader a faithful summary and a picture. An inference owes a design: what was manipulated, what was held constant, and what would count against the claim. A prediction owes a check against data that were not used to build the story. Mixing them up is how a lab writes 'we showed that children are Bayesian' after plotting a mean.",
         "Difficulty is not a reason to outsource the sentence to the software. The software will happily give you a number for a question you did not ask. Your job, from the first dataset on, is to know which question you are in.",
         "Nothing in this lesson is a test. The rest of the course is the practice: data, then tests psychologists actually report, then the assumptions those tests quietly require, then the sentence and the figure a paper needs.",
+      ],
+    },
+  }),
+  item({
+    slug: "why-r",
+    kind: "lesson",
+    title: "Why psychologists use R",
+    short: "Why R",
+    blurb: "The program the field writes papers in, and the handful of ideas every script is built from.",
+    minutes: 20,
+    xp: 0,
+    levels: {
+      overview: [
+        "Goal: know why this course uses R, and recognize the few ideas that every later script is made of.",
+        "Psychologists use R because the analysis can be written down and rerun. A script is a record of what you did to the data, which a point-and-click history is not. It is free, which matters for students and for labs that share code with a paper. The packages are where the field's methods live: a new model often arrives as a package before it arrives in a menu.",
+        "You will meet the same pieces over and over. An object is a name for a value, a column, or a whole dataset. A function does one job to the thing you hand it, and you hand it that thing inside parentheses. A package is a bundle of functions you install once and load when you need it. The console is where a single line runs. A script is the file you save.",
+        "Two habits save more time than any trick. The working directory is the folder R is looking at; your CSV has to be somewhere R can see. When a function is unfamiliar, put a question mark in front of its name and read the help. This site runs base R in the browser so you can practice without installing anything. ggplot, extra packages, and your own files live in RStudio on your computer, which is the assignment under this lesson.",
+      ],
+      detailed: [
+        "R is not the only serious choice. SPSS is still in many departments. Python is common when the work is closer to machine learning. R stays the default in psychology because the papers you will read, the packages for mixed models and psychometrics, and the tidyverse style of plotting were built by people answering psychological questions. Learning it is learning the dialect the field argues in.",
+        "The concepts are small and they stack. c() gathers numbers. <- stores them under a name. A data frame is a table: rows are observations, columns are variables, and dataset$column picks one column out. A factor is a column of categories. Comments, the lines that start with #, are how you tell your future self what a row means. None of this is statistics yet. It is the grammar the statistics will be written in.",
+        "The browser exercises later in the course are the same grammar with the installation taken out. If something works here and fails on your computer, the usual cause is the working directory or a package you have not loaded, not a different language. The setup assignment is there so that gap is a checklist rather than a surprise the night before a problem set.",
+      ],
+    },
+  }),
+  item({
+    slug: "r-setup",
+    kind: "assignment",
+    parent: "why-r",
+    title: "Getting R set up on your computer",
+    short: "Install R",
+    blurb: "Install R and RStudio, open a script, and run one line on your own machine.",
+    minutes: 30,
+    xp: 20,
+    badge: "r-setup",
+    selfCheck: true,
+    levels: {
+      overview: [
+        "Goal: have R and RStudio on your computer, a folder for this course, and one script that runs.",
+        "Install R first, from the CRAN site, and then install RStudio Desktop, which is the window you will actually work in. R is the engine. RStudio is the desk: a script on the top left, the console below it, and your files to the side. Make a folder called psych-stats. In RStudio, use Session, then Set Working Directory, then To Source File Location, once your script is saved inside that folder. That is the step that makes read.csv find your file.",
+        "In a new script, type print(2 + 2), save the file, and run the line. You should see 4 in the console. Then install one package you will want later, with install.packages('ggplot2'), and load it with library(ggplot2). If library() runs without an error, you are set up. Mark this complete when that is true on your machine. The browser cannot see your computer, so the check is yours.",
+      ],
+      detailed: [
+        "Install R before RStudio. RStudio will open without it and then fail in a way that looks like a mysterious console error. On a lab computer you may already have both; still set the working directory, because that is the piece that breaks other people's scripts.",
+        "Do not install packages inside a script you rerun every time. Install once, in the console. Load with library() at the top of any script that uses the package. If install.packages asks you to choose a mirror, pick one geographically close to you. A failed download is almost always a network pause. Run the line again.",
+        "The browser assignments on this site will keep working if your install is unfinished. They are not a substitute for it. The plots and models you will eventually want, ggplot2 and mixed models included, run in the RStudio you just set up.",
       ],
     },
   }),
@@ -223,6 +271,7 @@ export const MODULES: PsychModule[] = [
   item({
     slug: "r-1",
     kind: "assignment",
+    parent: "why-r",
     title: "Introduction to R, part 1",
     short: "R, part 1",
     blurb: "Make an object, put numbers in it, and look at the mean.",
@@ -246,6 +295,7 @@ mean(ages)`,
   item({
     slug: "describe",
     kind: "assignment",
+    parent: "understanding-data",
     title: "Descriptive statistics",
     short: "Descriptives",
     blurb: "Mean, median, and spread for reaction time, by condition.",
@@ -273,6 +323,7 @@ tapply(stroop$rt_ms, stroop$condition, sd)`,
   item({
     slug: "r-2",
     kind: "assignment",
+    parent: "understanding-data",
     title: "Introduction to R, part 2",
     short: "R, part 2",
     blurb: "Load a file, name the columns, and look at the first rows.",
@@ -299,6 +350,7 @@ head(stroop)`,
   item({
     slug: "visualize",
     kind: "assignment",
+    parent: "understanding-data",
     title: "Data visualizations",
     short: "Plots",
     blurb: "Draw the comparison in base R, and read the ggplot version you will use in RStudio.",
@@ -325,6 +377,7 @@ boxplot(rt_ms ~ condition, data = stroop,
   item({
     slug: "r-3",
     kind: "assignment",
+    parent: "understanding-data",
     title: "Introduction to R, part 3",
     short: "R, part 3",
     blurb: "Treat condition as a category, keep one group, and summarize it.",
@@ -352,6 +405,7 @@ table(stroop$condition)`,
   item({
     slug: "t-tests-lab",
     kind: "assignment",
+    parent: "analyzing-data",
     title: "T-tests",
     short: "T-tests",
     blurb: "A paired test on Student’s sleep data.",
@@ -376,6 +430,7 @@ table(stroop$condition)`,
   item({
     slug: "correlations-lab",
     kind: "assignment",
+    parent: "analyzing-data",
     title: "Correlations",
     short: "Correlations",
     blurb: "A correlation on Anscombe’s first pair, which is not a reason to skip the plot.",
@@ -401,6 +456,7 @@ plot(anscombe$x1, anscombe$y1)`,
   item({
     slug: "regression-lab",
     kind: "assignment",
+    parent: "regression-models",
     title: "Linear regression",
     short: "Regression lab",
     blurb: "Reaction time on the incongruent indicator. Read the slope in milliseconds.",
@@ -427,6 +483,7 @@ summary(fit)`,
   item({
     slug: "glm-lab",
     kind: "assignment",
+    parent: "regression-models",
     title: "GLMs: logistic regression",
     short: "Logistic",
     blurb: "A yes-or-no mistake, modeled with a binomial GLM.",
@@ -454,6 +511,7 @@ summary(fit)`,
   item({
     slug: "anova-lab",
     kind: "assignment",
+    parent: "analyzing-data",
     title: "ANOVA and ANCOVA",
     short: "ANOVA",
     blurb: "Tooth growth by dose, then dose holding supplement steady.",
@@ -479,6 +537,7 @@ summary(aov(len ~ dose + supp, data = ToothGrowth))`,
   item({
     slug: "multilevel-lab",
     kind: "assignment",
+    parent: "regression-models",
     title: "Multi-level modeling",
     short: "Multi-level",
     blurb: "Name the trial, the person, and the condition, then average to the person.",
@@ -505,6 +564,7 @@ head(person)`,
   item({
     slug: "bayes-lab",
     kind: "assignment",
+    parent: "frontiers",
     title: "Bayesian statistics",
     short: "Bayesian lab",
     blurb: "Update a prior after 8 heads in 10 flips. This is a toy, and it is supposed to be.",

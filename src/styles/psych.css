@@ -65,6 +65,36 @@
   padding: 1.75rem 1.5rem 4rem;
 }
 
+.hero {
+  position: relative;
+  margin: 0 0 1.4rem;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #e4e0d8;
+  background: #f7f4ef;
+}
+
+.hero canvas {
+  display: block;
+  width: 100%;
+  height: 320px;
+}
+
+.hero-caption {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.75rem;
+  margin: 0;
+  color: #3f3c38;
+  font-size: 0.92rem;
+  background: rgba(247, 244, 239, 0.82);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  width: fit-content;
+  max-width: calc(100% - 2rem);
+}
+
 .nav-label {
   margin: 0.85rem 0 0.15rem;
   padding: 0 0.55rem;
@@ -109,6 +139,16 @@
   color: #3a3834;
   text-decoration: none;
   font-size: 0.95rem;
+}
+
+.psych-nav a.nested {
+  padding-left: 1.4rem;
+  font-size: 0.88rem;
+}
+
+.path a.nested-card {
+  margin-left: 1.4rem;
+  background: #fbfaf8;
 }
 
 .psych-nav a:hover {

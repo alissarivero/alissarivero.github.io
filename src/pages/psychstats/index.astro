@@ -1,46 +1,77 @@
 ---
 import CourseLayout from "../../layouts/CourseLayout.astro";
+import Hero from "../../components/psychstats/Hero.astro";
 import { MODULES } from "../../data/psychstats/modules";
 
-const groups = [
-  { id: "lesson", kicker: "Lessons", lead: "Read these in order. They carry no points." },
-  { id: "assignment", kicker: "Assignments", lead: "Short R tasks. Points land here." },
-  { id: "project", kicker: "Projects", lead: "Longer work that uses the lessons together." },
-] as const;
+const lessons = MODULES.filter((m) => m.kind === "lesson");
+const projects = MODULES.filter((m) => m.kind === "project");
+const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
 ---
 
 <CourseLayout title="Psych Stats" description="Statistics for psychology, taught without a mathematical track." current="hub">
+  <Hero />
   <p class="psych-kicker">Psych Stats</p>
   <h1>Statistics, from a psychologist’s chair</h1>
   <p class="psych-lead">
-    Eight lessons, twelve R assignments, and four projects. No math track. The sentence is about the behavior.
+    Nine lessons. Each assignment sits under the lesson it practices. Four projects at the end. No math track.
   </p>
   <p class="psych-note" id="xp-line">Points save on this device. A class can also keep them in the portal.</p>
   <div class="badges" id="badge-row"></div>
-  {
-    groups.map((group) => (
-      <section class="course-group">
-        <h2>{group.kicker}</h2>
-        <p class="psych-note">{group.lead}</p>
-        <div class="path">
-          {MODULES.filter((m) => m.kind === group.id).map((m, i) => (
-            <a href={m.href} data-module={m.slug}>
+  <section class="course-group">
+    <h2>Lessons</h2>
+    <p class="psych-note">Read in order. The tasks underneath are the practice, and the points.</p>
+    <div class="path">
+      {
+        lessons.map((lesson, i) => (
+          <>
+            <a href={lesson.href}>
               <span class="idx">{String(i + 1).padStart(2, "0")}</span>
               <span>
-                <h2>{m.title}</h2>
-                <p>{m.blurb}</p>
-                <p class="meta">
-                  About {m.minutes} minutes
-                  {m.xp > 0 ? ` · ${m.xp} points` : ""}
-                </p>
+                <h2>{lesson.title}</h2>
+                <p>{lesson.blurb}</p>
+                <p class="meta">About {lesson.minutes} minutes</p>
               </span>
-              {m.xp > 0 ? <span class="chip progress-chip">Not started</span> : <span class="chip">Read</span>}
+              <span class="chip">Read</span>
             </a>
-          ))}
-        </div>
-      </section>
-    ))
-  }
+            {under(lesson.slug).map((task) => (
+              <a class="nested-card" href={task.href} data-module={task.slug}>
+                <span class="idx">·</span>
+                <span>
+                  <h2>{task.title}</h2>
+                  <p>{task.blurb}</p>
+                  <p class="meta">
+                    About {task.minutes} minutes · {task.xp} points
+                  </p>
+                </span>
+                <span class="chip progress-chip">Not started</span>
+              </a>
+            ))}
+          </>
+        ))
+      }
+    </div>
+  </section>
+  <section class="course-group">
+    <h2>Projects</h2>
+    <p class="psych-note">Longer work that uses the lessons together.</p>
+    <div class="path">
+      {
+        projects.map((project, i) => (
+          <a href={project.href} data-module={project.slug}>
+            <span class="idx">{String(i + 1).padStart(2, "0")}</span>
+            <span>
+              <h2>{project.title}</h2>
+              <p>{project.blurb}</p>
+              <p class="meta">
+                About {project.minutes} minutes · {project.xp} points
+              </p>
+            </span>
+            <span class="chip progress-chip">Not started</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
 </CourseLayout>
 
 <script>
