@@ -69,8 +69,9 @@
 
       ctx.clearRect(0, 0, width, height);
       const grd = ctx.createLinearGradient(0, 0, width, height);
-      grd.addColorStop(0, "#f6f4f0");
-      grd.addColorStop(1, "#e8f2f0");
+      grd.addColorStop(0, "#fff");
+      grd.addColorStop(0.55, "#fff7fa");
+      grd.addColorStop(1, "#e7f6ee");
       ctx.fillStyle = grd;
       ctx.fillRect(0, 0, width, height);
 
@@ -92,7 +93,7 @@
           p.px += (tx - p.px) * (reduced ? 1 : 0.12);
           p.py += (ty - p.py) * (reduced ? 1 : 0.12);
         }
-        const color = p.group === 1 ? "#0f6e6b" : "#1c1c1c";
+        const color = p.group === 1 ? "#d46b8c" : "#1f7a4d";
         drawPerson(ctx, p.px, p.py, color, morph, p.lean, onto, hold);
       });
 
@@ -128,7 +129,7 @@
     ctx.lineTo(box.r, box.b);
     ctx.stroke();
     ctx.fillStyle = "rgba(22,22,22,0.45)";
-    ctx.font = "500 11px Outfit, ui-sans-serif, sans-serif";
+    ctx.font = "700 12px Nunito, ui-sans-serif, sans-serif";
     ctx.fillText("outcome", 8, box.t + 12);
     ctx.textAlign = "right";
     ctx.fillText("predictor", box.r, box.b + 22);
@@ -143,7 +144,7 @@
     const p1 = toPlot(box, x1, intercept + slope * x1);
     ctx.save();
     ctx.globalAlpha = 0.35 + lineIn * 0.65;
-    ctx.strokeStyle = "#0f6e6b";
+    ctx.strokeStyle = "#1f7a4d";
     ctx.lineWidth = 2.4;
     ctx.lineCap = "round";
     ctx.beginPath();
@@ -165,7 +166,7 @@
     const intercept = fit.a * Math.max(lineIn, 0.35) + (1 - Math.max(lineIn, 0.35)) * 0.5;
     ctx.save();
     ctx.globalAlpha = 0.55 * amount;
-    ctx.strokeStyle = "rgba(15,110,107,0.85)";
+    ctx.strokeStyle = "rgba(212,107,140,0.85)";
     ctx.lineWidth = 1;
     ctx.setLineDash([2.5, 3]);
     people.forEach((p, i) => {
