@@ -105,6 +105,137 @@
   text-transform: uppercase;
 }
 
+.scorebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.scorebar h1 {
+  margin: 0;
+  font-size: 2.1rem;
+}
+
+.scorebar-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.45rem;
+}
+
+.xp-total {
+  margin: 0;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.8rem;
+}
+
+.continue {
+  background: #111;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 0.55rem 1.1rem;
+  font-weight: 600;
+}
+
+.trail {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.unit-head span {
+  color: #0f6e6b;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.unit-head h2 {
+  margin: 0.15rem 0;
+  font-size: 1.45rem;
+}
+
+.unit-head p {
+  margin: 0 0 0.8rem;
+  color: #5c5852;
+}
+
+.nodes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  text-decoration: none;
+  color: inherit;
+  width: 9.5rem;
+}
+
+.node:nth-child(odd) {
+  transform: translateX(-28px);
+}
+
+.node:nth-child(even) {
+  transform: translateX(28px);
+}
+
+.bubble {
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 3px solid #d9d3c8;
+  font-weight: 600;
+  box-shadow: 0 6px 0 #e4e0d8;
+}
+
+.node.guide .bubble {
+  border-color: #111;
+}
+
+.node.done .bubble {
+  background: #0f6e6b;
+  border-color: #0c4f4d;
+  color: #fff;
+  box-shadow: 0 6px 0 #b7ddd8;
+}
+
+.node.started .bubble {
+  border-color: #e2b15a;
+  box-shadow: 0 6px 0 #f0e0bf;
+}
+
+.node.up-next .bubble {
+  border-color: #111;
+  box-shadow: 0 6px 0 #111;
+  animation: bob 1.4s ease-in-out infinite;
+}
+
+.node-label {
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.25;
+}
+
+@keyframes bob {
+  50% { transform: translateY(-4px); }
+}
+
 .course-group {
   margin-top: 1.6rem;
 }
