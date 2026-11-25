@@ -12,7 +12,7 @@ const projects = MODULES.filter((m) => m.kind === "project");
 const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
 ---
 
-<nav class:list={["course-path", { "is-collapsed": collapsed }]} aria-label="Course path">
+<nav id="course-path" class:list={["course-path", { "is-collapsed": collapsed }]} aria-label="Course path">
   <button type="button" class="path-toggle" aria-expanded={collapsed ? "false" : "true"}>
     {collapsed ? "Expand path" : "Collapse path"}
   </button>
@@ -26,16 +26,6 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
             <p>{lesson.blurb}</p>
           </header>
           <div class="nodes">
-            <a
-              class:list={["node", "guide", { here: current === lesson.slug }]}
-              href={lesson.href}
-              data-module={lesson.slug}
-              data-kind="guide"
-              aria-current={current === lesson.slug ? "page" : undefined}
-            >
-              <span class="bubble">Read</span>
-              <span class="node-label">{lesson.title}</span>
-            </a>
             {under(lesson.slug).map((task) =>
               task.kind === "page" ? (
                 <a

@@ -19,6 +19,7 @@ export function getStaticPaths() {
 }
 
 const { module, redirect } = Astro.props;
+const away = redirect || (module?.kind === "lesson" ? "/psychstats/#course-path" : "");
 const kicker =
   module?.kind === "assignment"
     ? "Assignment"
@@ -30,17 +31,17 @@ const kicker =
 ---
 
 {
-  redirect ? (
+  away ? (
     <html lang="en">
       <head>
         <meta charset="utf-8" />
-        <meta http-equiv="refresh" content={`0;url=${redirect}`} />
+        <meta http-equiv="refresh" content={`0;url=${away}`} />
         <title>Moved</title>
-        <link rel="canonical" href={redirect} />
+        <link rel="canonical" href={away} />
       </head>
       <body>
         <p>
-          This page has moved. <a href={redirect}>Continue</a>.
+          This page has moved. <a href={away}>Continue</a>.
         </p>
       </body>
     </html>

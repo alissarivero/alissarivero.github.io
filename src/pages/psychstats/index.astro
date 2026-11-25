@@ -4,7 +4,8 @@ import Hero from "../../components/psychstats/Hero.astro";
 import CoursePath from "../../components/psychstats/CoursePath.astro";
 import { MODULES } from "../../data/psychstats/modules";
 
-const first = MODULES.find((m) => m.kind === "lesson");
+const firstLesson = MODULES.find((m) => m.kind === "lesson");
+const firstStep = MODULES.find((m) => m.parent === firstLesson?.slug);
 ---
 
 <CourseLayout title="Psych Stats" description="Statistics for psychology, taught without a mathematical track." current="hub">
@@ -14,7 +15,7 @@ const first = MODULES.find((m) => m.kind === "lesson");
       We have created this free online resource to help make the statistics that psychologists use every day more
       accessible to students and trainees. No statistical knowledge or experience in R required!
     </p>
-    <a class="start-course" href={first?.href ?? "/psychstats/introduction/"}>Start the course</a>
+    <a class="start-course" href="#course-path">Start the course</a>
   </section>
   <Hero />
   <section class="welcome welcome-after">
@@ -31,7 +32,7 @@ const first = MODULES.find((m) => m.kind === "lesson");
     </div>
     <div class="scorebar-side">
       <p id="xp-line" class="xp-total">0 XP</p>
-      <a id="continue" class="continue" href={first?.href ?? "/psychstats/"}>Continue</a>
+      <a id="continue" class="continue" href={firstStep?.href ?? "#course-path"}>Continue</a>
     </div>
   </div>
   <div class="badges" id="badge-row"></div>
