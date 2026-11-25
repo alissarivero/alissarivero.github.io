@@ -128,6 +128,12 @@
   font-size: 1rem;
 }
 
+.welcome-contact {
+  margin: 0.2rem 0 0;
+  color: #5d675f;
+  font-size: 0.98rem;
+}
+
 .nav-label {
   margin: 1.15rem 0 0.35rem;
   padding: 0 0.2rem;
