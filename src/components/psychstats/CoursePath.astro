@@ -4,9 +4,10 @@ import { MODULES } from "../../data/psychstats/modules";
 interface Props {
   current?: string;
   collapsed?: boolean;
+  toggle?: boolean;
 }
 
-const { current = "", collapsed = false } = Astro.props;
+const { current = "", collapsed = false, toggle = true } = Astro.props;
 const lessons = MODULES.filter((m) => m.kind === "lesson");
 const projects = MODULES.filter((m) => m.kind === "project");
 const opener = MODULES.filter((m) => m.parent === "course");
@@ -14,9 +15,11 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
 ---
 
 <nav id="course-path" class:list={["course-path", { "is-collapsed": collapsed }]} aria-label="Course path">
-  <button type="button" class="path-toggle" aria-expanded={collapsed ? "false" : "true"}>
-    {collapsed ? "Expand path" : "Collapse path"}
-  </button>
+  {toggle && (
+    <button type="button" class="path-toggle" aria-expanded={collapsed ? "false" : "true"}>
+      {collapsed ? "Expand path" : "Collapse path"}
+    </button>
+  )}
   <ol class="trail">
     <li class="unit unit-opener">
       <div class="nodes">

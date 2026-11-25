@@ -25,8 +25,8 @@
   align-items: baseline;
   gap: 1rem;
   padding: 1.1rem 1.5rem;
-  border-bottom: 1px solid #f3d5e0;
-  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid #f6e3c4;
+  background: #fff;
   position: sticky;
   top: 0;
   z-index: 5;
@@ -63,7 +63,7 @@
 }
 
 .psych-join:hover {
-  background: #f3faf5;
+  background: #eef4fb;
 }
 
 .psych-exit {
@@ -362,7 +362,7 @@
   height: 6px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid #e7a0b8;
+  border: 2px solid #E89923;
 }
 
 .psych-nav a:hover {
@@ -436,6 +436,10 @@
   border-radius: 999px;
   padding: 0.55rem 1.1rem;
   font-weight: 600;
+}
+
+#course-path {
+  scroll-margin-top: 5.5rem;
 }
 
 .trail {
@@ -587,9 +591,9 @@
   display: grid;
   place-items: center;
   background: #fff;
-  border: 3px solid #f3c6d4;
+  border: 3px solid #E89923;
   font-weight: 700;
-  box-shadow: 0 6px 0 #f7d5e1;
+  box-shadow: 0 6px 0 #c47d12;
 }
 
 .node.guide .bubble {
@@ -600,12 +604,12 @@
   background: #00539B;
   border-color: #003f7a;
   color: #fff;
-  box-shadow: 0 6px 0 #b7dfc8;
+  box-shadow: 0 6px 0 #003f7a;
 }
 
 .node.started .bubble {
-  border-color: #e7a0b8;
-  box-shadow: 0 6px 0 #f7d0de;
+  border-color: #E89923;
+  box-shadow: 0 6px 0 #c47d12;
 }
 
 .node.up-next .bubble {
