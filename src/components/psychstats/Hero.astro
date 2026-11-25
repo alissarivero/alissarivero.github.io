@@ -226,17 +226,14 @@
       ctx.lineTo(9 * s, 2 * s);
       ctx.stroke();
 
-      ctx.fillStyle = person.skin;
-      ctx.beginPath();
-      ctx.arc(0, -14.5 * s, 6.1 * s, 0, Math.PI * 2);
-      ctx.fill();
-
       ctx.fillStyle = person.hair;
       ctx.beginPath();
-      ctx.arc(0, -16.2 * s, 6.3 * s, Math.PI * 1.05, Math.PI * 1.95);
-      ctx.quadraticCurveTo(-4 * s, -15 * s, -5.2 * s, -11 * s);
-      ctx.quadraticCurveTo(0, -14.5 * s, 5.2 * s, -11 * s);
-      ctx.quadraticCurveTo(4 * s, -15 * s, 0, -16.2 * s);
+      ctx.arc(0, -16.4 * s, 6.4 * s, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = person.skin;
+      ctx.beginPath();
+      ctx.arc(0, -13.6 * s, 5.7 * s, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
