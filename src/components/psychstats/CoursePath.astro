@@ -67,7 +67,7 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
                   data-kind="check"
                   aria-current={current === task.slug ? "page" : undefined}
                 >
-                  <span class="bubble">{task.xp}</span>
+                  <span class="bubble" aria-hidden="true">✓</span>
                   <span class="node-label">{task.title}</span>
                 </a>
               )

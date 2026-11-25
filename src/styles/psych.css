@@ -756,7 +756,8 @@
 .node.assignment.here .bubble {
   background: #fff;
   border-color: #E89923;
-  color: #111;
+  color: #E89923;
+  font-size: 1.7rem;
   box-shadow: 0 6px 0 #c47d12;
 }
 
