@@ -19,7 +19,14 @@ export function getStaticPaths() {
 }
 
 const { module, redirect } = Astro.props;
-const kicker = module?.kind === "assignment" ? "Assignment" : module?.kind === "project" ? "Project" : "Lesson";
+const kicker =
+  module?.kind === "assignment"
+    ? "Assignment"
+    : module?.kind === "project"
+      ? "Project"
+      : module?.kind === "page"
+        ? "In this lesson"
+        : "Lesson";
 ---
 
 {

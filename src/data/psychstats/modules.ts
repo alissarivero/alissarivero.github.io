@@ -1,4 +1,6 @@
-export type Kind = "lesson" | "assignment" | "project";
+import { LESSON_PAGES } from "./pages";
+
+export type Kind = "lesson" | "page" | "assignment" | "project";
 
 export type PsychModule = {
   slug: string;
@@ -30,7 +32,7 @@ const item = (
   href: partial.href ?? `/psychstats/${partial.slug}/`,
 });
 
-export const MODULES: PsychModule[] = [
+const RAW: PsychModule[] = [
   item({
     slug: "introduction",
     kind: "lesson",
@@ -701,6 +703,24 @@ boxplot(rt_ms ~ condition, data = stroop,
     },
   }),
 ];
+
+export const MODULES: PsychModule[] = RAW.flatMap((module) => {
+  if (module.kind !== "lesson") return [module];
+  const pages = LESSON_PAGES.filter((page) => page.parent === module.slug).map((page) =>
+    item({
+      slug: page.slug,
+      kind: "page",
+      parent: page.parent,
+      title: page.title,
+      short: page.short,
+      blurb: page.blurb,
+      minutes: 8,
+      xp: 0,
+      levels: { overview: page.overview, detailed: page.detailed },
+    })
+  );
+  return [module, ...pages];
+});
 
 export const REDIRECTS: { slug: string; to: string }[] = [
   { slug: "which-test", to: "/psychstats/analyzing-data/" },

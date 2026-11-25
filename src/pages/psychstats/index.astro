@@ -3,7 +3,10 @@ import CourseLayout from "../../layouts/CourseLayout.astro";
 import Hero from "../../components/psychstats/Hero.astro";
 import { MODULES } from "../../data/psychstats/modules";
 
-const firstLesson = MODULES.find((m) => m.kind === "lesson");
+const lessons = MODULES.filter((m) => m.kind === "lesson");
+const projects = MODULES.filter((m) => m.kind === "project");
+const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
+const first = lessons[0];
 ---
 
 <CourseLayout title="Psych Stats" description="Statistics for psychology, taught without a mathematical track." current="hub">
@@ -13,7 +16,7 @@ const firstLesson = MODULES.find((m) => m.kind === "lesson");
       We have created this free online resource to help make the statistics that psychologists use every day more
       accessible to students and trainees. No statistical knowledge or experience in R required!
     </p>
-    <a class="start-course" href={firstLesson?.href ?? "/psychstats/introduction/"}>Start the course</a>
+    <a class="start-course" href={first?.href ?? "/psychstats/introduction/"}>Start the course</a>
   </section>
   <Hero />
   <section class="welcome welcome-after">
@@ -29,4 +32,104 @@ const firstLesson = MODULES.find((m) => m.kind === "lesson");
       For questions or feedback, please reach out to <a href="mailto:pnarc@duke.edu">pnarc@duke.edu</a>
     </p>
   </section>
+  <div class="scorebar">
+    <div>
+      <p class="psych-kicker">Your path</p>
+      <h2>Statistics, one step at a time</h2>
+    </div>
+    <div class="scorebar-side">
+      <p id="xp-line" class="xp-total">0 XP</p>
+      <a id="continue" class="continue" href={first?.href ?? "/psychstats/"}>Continue</a>
+    </div>
+  </div>
+  <div class="badges" id="badge-row"></div>
+  <ol class="trail">
+    {
+      lessons.map((lesson, i) => (
+        <li class="unit">
+          <header class="unit-head">
+            <span>Unit {i + 1}</span>
+            <h2>{lesson.title}</h2>
+            <p>{lesson.blurb}</p>
+          </header>
+          <div class="nodes">
+            <a class="node guide" href={lesson.href} data-module={lesson.slug} data-kind="guide">
+              <span class="bubble">Read</span>
+              <span class="node-label">{lesson.short}</span>
+            </a>
+            {under(lesson.slug).map((task) =>
+              task.kind === "page" ? (
+                <a class="node guide" href={task.href} data-module={task.slug} data-kind="guide">
+                  <span class="bubble">Read</span>
+                  <span class="node-label">{task.short}</span>
+                </a>
+              ) : (
+                <a class="node" href={task.href} data-module={task.slug} data-xp={task.xp} data-kind="check">
+                  <span class="bubble">{task.xp}</span>
+                  <span class="node-label">{task.short}</span>
+                </a>
+              )
+            )}
+          </div>
+        </li>
+      ))
+    }
+    <li class="unit">
+      <header class="unit-head">
+        <span>Quests</span>
+        <h2>Projects</h2>
+        <p>Longer work that uses the lessons together.</p>
+      </header>
+      <div class="nodes">
+        {projects.map((project) => (
+          <a class="node quest" href={project.href} data-module={project.slug} data-xp={project.xp} data-kind="check">
+            <span class="bubble">{project.xp}</span>
+            <span class="node-label">{project.short}</span>
+          </a>
+        ))}
+      </div>
+    </li>
+  </ol>
 </CourseLayout>
+
+<script>
+  import { loadProgress } from "../../lib/progress";
+
+  async function boot() {
+    const line = document.getElementById("xp-line");
+    if (!line || line.dataset.ready) return;
+    line.dataset.ready = "1";
+    const rows = await loadProgress();
+    const done = new Map(rows.map((row) => [row.slug, row]));
+    line.textContent = `${rows.reduce((sum, row) => sum + (row.status === "checked" ? row.xp : 0), 0)} XP`;
+    const badgeRow = document.getElementById("badge-row");
+    if (badgeRow) {
+      for (const badge of new Set(rows.flatMap((row) => row.badges))) {
+        const chip = document.createElement("span");
+        chip.className = "badge";
+        chip.textContent = badge;
+        badgeRow.appendChild(chip);
+      }
+    }
+    const nodes = [...document.querySelectorAll<HTMLElement>(".node")];
+    let next: HTMLElement | null = null;
+    for (const node of nodes) {
+      const row = done.get(node.dataset.module || "");
+      if (row?.status === "checked") node.classList.add("done");
+      else if (row) node.classList.add("started");
+      if (!next && node.dataset.kind === "check" && row?.status !== "checked") next = node;
+    }
+    const guide = nodes.find((node) => node.dataset.kind === "guide" && !done.get(node.dataset.module || ""));
+    const current = next || guide || null;
+    current?.classList.add("up-next");
+    const cont = document.getElementById("continue");
+    if (cont && current) {
+      cont.setAttribute("href", current.getAttribute("href") || "/psychstats/");
+      cont.textContent = current.classList.contains("done") ? "Review" : "Continue";
+    }
+  }
+  void boot();
+  document.addEventListener("astro:page-load", () => {
+    void boot();
+  });
+</script>
