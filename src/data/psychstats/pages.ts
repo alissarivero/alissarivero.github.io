@@ -33,7 +33,6 @@ export const LESSON_PAGES: LessonPage[] = [
       "Statistics can be challenging. We think you can learn it.",
       "We created this course to make the quantitative tools psychologists use every day accessible, approachable, and practical.",
       "Learn the foundations of psychological statistics at your own pace, with hands-on experience using R along the way. No prior statistics or programming experience required.",
-      "The path uses two kinds of circles. Lessons are the blue circles: short pages you read. Assignments are the orange circles: practice you do, often in R.",
     ],
     [],
     [
