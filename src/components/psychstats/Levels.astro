@@ -4,10 +4,11 @@ import Figures from "./Figures.astro";
 interface Props {
   overview: string[];
   detailed: string[];
+  points?: string[];
   figures?: { after: number; id: string }[];
 }
 
-const { overview, detailed, figures = [] } = Astro.props;
+const { overview, detailed, points = [], figures = [] } = Astro.props;
 const hasDetail = detailed.length > 0;
 ---
 
@@ -32,6 +33,15 @@ const hasDetail = detailed.length > 0;
           {figures.filter((figure) => figure.after === index).map((figure) => <Figures ids={[figure.id]} />)}
         </>
       ))
+    }
+    {
+      points.length > 0 && (
+        <ul class="course-points">
+          {points.map((point) => (
+            <li>{point}</li>
+          ))}
+        </ul>
+      )
     }
   </div>
   <div class="level-panel" data-panel="detailed" hidden>

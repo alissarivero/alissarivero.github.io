@@ -778,6 +778,29 @@
 }
 
 .prose-block p,
+.course-points {
+  margin: 0.4rem 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.course-points li {
+  margin: 0.35rem 0;
+  padding-left: 1.35rem;
+  position: relative;
+}
+
+.course-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: #E89923;
+}
+
 .level-panel p {
   margin: 0 0 0.9rem;
 }

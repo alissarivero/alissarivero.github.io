@@ -6,6 +6,7 @@ export type LessonPage = {
   blurb: string;
   overview: string[];
   detailed: string[];
+  points?: string[];
 };
 
 const page = (
@@ -15,8 +16,9 @@ const page = (
   short: string,
   blurb: string,
   overview: string[],
-  detailed: string[]
-): LessonPage => ({ slug, parent, title, short, blurb, overview, detailed });
+  detailed: string[],
+  points?: string[]
+): LessonPage => ({ slug, parent, title, short, blurb, overview, detailed, points });
 
 export const LESSON_PAGES: LessonPage[] = [
   page(
@@ -24,13 +26,21 @@ export const LESSON_PAGES: LessonPage[] = [
     "course",
     "Introduction to this course",
     "This course",
-    "What this course is, and what it asks of you.",
+    "Statistics can be challenging. We think you can learn it.",
     [
-      "This is a free course about the statistics psychologists use, taught for students and trainees. You do not need a statistics background, and you do not need to have used R before.",
-      "The path is the course. Each circle is a short page or a practice. You can read everything without an account. An account saves your place. A class code, from the join button, is how a student enters a course or an instructor creates one.",
-      "The course comes from the Anti-Racist Community in the Department of Psychology & Neuroscience at Duke University.",
+      "Statistics can be challenging. We think you can learn it.",
+      "We created this course to make the quantitative tools psychologists use every day accessible, approachable, and practical.",
+      "Learn the foundations of psychological statistics at your own pace, with hands-on experience using R along the way. No prior statistics or programming experience required.",
     ],
-    []
+    [],
+    [
+      "Completely free",
+      "Fully online and self-paced",
+      "No statistical background required",
+      "No experience with R required",
+      "Optional sign-in to save your progress and pick up where you left off",
+      "Created by the Anti-Racism Community in the Department of Psychology & Neuroscience at Duke University.",
+    ]
   ),
   page(
     "methodology-discovery",
