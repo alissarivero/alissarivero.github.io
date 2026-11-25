@@ -20,6 +20,9 @@ export function getStaticPaths() {
 }
 
 const { module, redirect } = Astro.props;
+const steps = MODULES.filter((item) => item.kind === "page" || item.kind === "assignment" || item.kind === "project");
+const stepIndex = steps.findIndex((item) => item.slug === module?.slug);
+const nextStep = stepIndex >= 0 ? steps[stepIndex + 1] : undefined;
 const away = redirect || (module?.kind === "lesson" ? "/psychstats/#course-path" : "");
 const kicker =
   module?.kind === "assignment"
@@ -52,6 +55,18 @@ const kicker =
         <p class="psych-kicker">{kicker}</p>
         <h1>{module.title}</h1>
         <Levels overview={module.levels.overview} detailed={module.levels.detailed} points={module.levels.points} figures={module.figures} />
+        {module.slug === "introduction-to-course" && (
+          <div class="path-key" aria-label="How to read the path">
+            <div class="key-item">
+              <span class="key-dot lesson">Read</span>
+              <span>Lessons</span>
+            </div>
+            <div class="key-item">
+              <span class="key-dot task">20</span>
+              <span>Assignments</span>
+            </div>
+          </div>
+        )}
         {module.datasetNote && (
           <aside class="dataset-note">
             <span>{module.datasetNote}</span>
@@ -81,6 +96,11 @@ const kicker =
             Mark as completed
           </button>
           <span id="mark-status" role="status"></span>
+          {nextStep && (
+            <a id="next-step" class="next-step" href={nextStep.href} hidden>
+              Next
+            </a>
+          )}
         </p>
       </article>
     </CourseLayout>
@@ -94,6 +114,8 @@ const kicker =
     button.dataset.done = done ? "1" : "0";
     button.textContent = done ? "Mark as not completed" : "Mark as completed";
     button.classList.toggle("is-done", done);
+    const next = document.getElementById("next-step");
+    if (next) next.hidden = !done;
     const node = document.querySelector<HTMLElement>(`#course-path [data-module="${button.dataset.slug}"]`);
     node?.classList.toggle("done", done);
   }

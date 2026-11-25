@@ -61,6 +61,8 @@
               mark.textContent = "Mark as not completed";
             }
             document.querySelector<HTMLElement>('#course-path [data-module="r-setup"]')?.classList.add("done");
+            const next = document.getElementById("next-step");
+            if (next) next.hidden = false;
           });
         };
         image.src = String(reader.result);
