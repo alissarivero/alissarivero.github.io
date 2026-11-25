@@ -4,8 +4,9 @@ import Hero from "../../components/psychstats/Hero.astro";
 import CoursePath from "../../components/psychstats/CoursePath.astro";
 import { MODULES } from "../../data/psychstats/modules";
 
+const opener = MODULES.find((m) => m.parent === "course");
 const firstLesson = MODULES.find((m) => m.kind === "lesson");
-const firstStep = MODULES.find((m) => m.parent === firstLesson?.slug);
+const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
 ---
 
 <CourseLayout title="Psych Stats" description="Statistics for psychology, taught without a mathematical track." current="hub">

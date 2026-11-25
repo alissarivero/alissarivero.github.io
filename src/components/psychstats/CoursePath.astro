@@ -9,6 +9,7 @@ interface Props {
 const { current = "", collapsed = false } = Astro.props;
 const lessons = MODULES.filter((m) => m.kind === "lesson");
 const projects = MODULES.filter((m) => m.kind === "project");
+const opener = MODULES.filter((m) => m.parent === "course");
 const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
 ---
 
@@ -17,6 +18,22 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
     {collapsed ? "Expand path" : "Collapse path"}
   </button>
   <ol class="trail">
+    <li class="unit unit-opener">
+      <div class="nodes">
+        {opener.map((task) => (
+          <a
+            class:list={["node", "guide", { here: current === task.slug }]}
+            href={task.href}
+            data-module={task.slug}
+            data-kind="guide"
+            aria-current={current === task.slug ? "page" : undefined}
+          >
+            <span class="bubble">Read</span>
+            <span class="node-label">{task.title}</span>
+          </a>
+        ))}
+      </div>
+    </li>
     {
       lessons.map((lesson, i) => (
         <li class="unit">

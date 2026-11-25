@@ -34,16 +34,6 @@ const item = (
 
 const RAW: PsychModule[] = [
   item({
-    slug: "why-r",
-    kind: "lesson",
-    title: "Why do most psychologists use R?",
-    short: "Why R",
-    blurb: "It is free, it handles complex analyses and figures, and the field can share the code.",
-    minutes: 20,
-    xp: 0,
-    levels: { overview: [], detailed: [] },
-  }),
-  item({
     slug: "introduction",
     kind: "lesson",
     title: "Why statistics is more interesting than you think",
@@ -59,6 +49,16 @@ const RAW: PsychModule[] = [
       ],
       detailed: [],
     },
+  }),
+  item({
+    slug: "why-r",
+    kind: "lesson",
+    title: "Introduction to R",
+    short: "R",
+    blurb: "What R is, and why most psychology researchers use it.",
+    minutes: 20,
+    xp: 0,
+    levels: { overview: [], detailed: [] },
   }),
   item({
     slug: "r-setup",
@@ -622,24 +622,28 @@ boxplot(rt_ms ~ condition, data = stroop,
   }),
 ];
 
-export const MODULES: PsychModule[] = RAW.flatMap((module) => {
-  if (module.kind !== "lesson") return [module];
-  const pages = LESSON_PAGES.filter((page) => page.parent === module.slug).map((page) =>
-    item({
-      slug: page.slug,
-      kind: "page",
-      parent: page.parent,
-      title: page.title,
-      short: page.short,
-      blurb: page.blurb,
-      minutes: 8,
-      xp: 0,
-      levels: { overview: page.overview, detailed: page.detailed },
-      figures: page.slug === "ggplot-in-r" ? [{ after: 0, id: "ggplot-gallery" }] : undefined,
-    })
-  );
-  return [module, ...pages];
-});
+const toPage = (page: (typeof LESSON_PAGES)[number]): PsychModule =>
+  item({
+    slug: page.slug,
+    kind: "page",
+    parent: page.parent,
+    title: page.title,
+    short: page.short,
+    blurb: page.blurb,
+    minutes: 8,
+    xp: 0,
+    levels: { overview: page.overview, detailed: page.detailed },
+    figures: page.slug === "why-researchers-use-r" ? [{ after: 2, id: "ggplot-gallery" }] : undefined,
+  });
+
+export const MODULES: PsychModule[] = [
+  ...LESSON_PAGES.filter((page) => page.parent === "course").map(toPage),
+  ...RAW.flatMap((module) => {
+    if (module.kind !== "lesson") return [module];
+    const pages = LESSON_PAGES.filter((page) => page.parent === module.slug).map(toPage);
+    return [module, ...pages];
+  }),
+];
 
 export const REDIRECTS: { slug: string; to: string }[] = [
   { slug: "which-test", to: "/psychstats/analyzing-data/" },
@@ -647,11 +651,22 @@ export const REDIRECTS: { slug: string; to: string }[] = [
   { slug: "correlation", to: "/psychstats/analyzing-data/" },
   { slug: "regression", to: "/psychstats/regression-models/" },
   { slug: "glm", to: "/psychstats/regression-models/" },
-  { slug: "why-a-script", to: "/psychstats/r-is-free/" },
-  { slug: "objects-and-functions", to: "/psychstats/r-packages/" },
-  { slug: "console-and-script", to: "/psychstats/reproducibility/" },
+  { slug: "why-a-script", to: "/psychstats/why-researchers-use-r/" },
+  { slug: "objects-and-functions", to: "/psychstats/why-researchers-use-r/" },
+  { slug: "console-and-script", to: "/psychstats/why-researchers-use-r/" },
   { slug: "working-directory", to: "/psychstats/r-setup/" },
-  { slug: "packages", to: "/psychstats/r-packages/" },
+  { slug: "packages", to: "/psychstats/why-researchers-use-r/" },
+  { slug: "what-psychologists-ask", to: "/psychstats/methodology-discovery/" },
+  { slug: "description", to: "/psychstats/methodology-discovery/" },
+  { slug: "experiments", to: "/psychstats/stats-answer-questions/" },
+  { slug: "prediction", to: "/psychstats/stats-answer-questions/" },
+  { slug: "no-math", to: "/psychstats/stats-answer-questions/" },
+  { slug: "r-is-free", to: "/psychstats/why-researchers-use-r/" },
+  { slug: "complex-analyses", to: "/psychstats/why-researchers-use-r/" },
+  { slug: "r-packages", to: "/psychstats/why-researchers-use-r/" },
+  { slug: "ggplot-in-r", to: "/psychstats/why-researchers-use-r/" },
+  { slug: "reproducibility", to: "/psychstats/why-researchers-use-r/" },
+  { slug: "cohort-effects", to: "/psychstats/why-researchers-use-r/" },
 ];
 
 export function getModule(slug: string) {

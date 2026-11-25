@@ -20,63 +20,8 @@ const page = (
 
 export const LESSON_PAGES: LessonPage[] = [
   page(
-    "what-psychologists-ask",
-    "introduction",
-    "What psychologists are actually asking",
-    "The question",
-    "Description, explanation, and prediction are different jobs.",
-    [
-      "A paper can be doing one of three things. It can describe what people did. It can explain why, usually by changing one thing and watching what else changes. Or it can predict what someone will do next. The statistics are different because the questions are different. A mean answers a descriptive question. A test answers whether a difference is about the thing you changed. A model that forecasts a new person answers a prediction question.",
-    ],
-    []
-  ),
-  page(
-    "description",
-    "introduction",
-    "Description is already statistics",
-    "Description",
-    "Summarizing what people did is a statistical job.",
-    [
-      "Piaget sat with children and wrote what they actually did. A modern study does the same thing with hundreds of trials. Nobody can hold that list in their head. A mean, a spread, and a picture are how you show the pattern without pretending every child was the average child. Description owes the reader a faithful summary.",
-    ],
-    []
-  ),
-  page(
-    "experiments",
-    "introduction",
-    "What an experiment is for",
-    "Experiments",
-    "You change one thing so the difference has somewhere to come from.",
-    [
-      "You change one thing, hold the rest as still as you can, and look at what the person does. The statistical question is whether that difference is about the change, or about who happened to walk in. The design is the argument. The test is how you keep yourself from being fooled by a noisy sample.",
-    ],
-    []
-  ),
-  page(
-    "prediction",
-    "introduction",
-    "Prediction is a third question",
-    "Prediction",
-    "A model earns its keep on behavior it has not seen yet.",
-    [
-      "Josh Tenenbaum’s work asks whether a learner’s next judgment can be forecast from a model of how they update beliefs. The success criterion is the future behavior. A line that passes through yesterday’s points has not yet predicted anything. Prediction is the question you are in when the sentence is about a new child, a new trial, or a new patient.",
-    ],
-    []
-  ),
-  page(
-    "no-math",
-    "introduction",
-    "Yes, it is hard, and there is no math track",
-    "No math",
-    "The hard part is the words, and this course stays with the words.",
-    [
-      "Statistics feels hard because the same word means something casual and something precise. Significant, normal, and effect are the usual traps. This course teaches the precise meaning from a psychologist’s chair. There is no mathematical track. If you can say what a row is and what you would tell a reader, you are doing statistics.",
-    ],
-    []
-  ),
-  page(
     "introduction-to-course",
-    "why-r",
+    "course",
     "Introduction to this course",
     "This course",
     "What this course is, and what it asks of you.",
@@ -84,6 +29,30 @@ export const LESSON_PAGES: LessonPage[] = [
       "This is a free course about the statistics psychologists use, taught for students and trainees. You do not need a statistics background, and you do not need to have used R before.",
       "The path is the course. Each circle is a short page or a practice. You can read everything without an account. An account saves your place. A class code, from the join button, is how a student enters a course or an instructor creates one.",
       "The course comes from the Anti-Racist Community in the Department of Psychology & Neuroscience at Duke University.",
+    ],
+    []
+  ),
+  page(
+    "methodology-discovery",
+    "introduction",
+    "Methodology as a tool for discovery",
+    "Methodology",
+    "A method is how a question becomes something you can see.",
+    [
+      "Methodology is the set of choices that lets a psychological question be answered with observations. Who is in the study, what you change, what you hold still, and what you write down are the method. Those choices decide which discovery is even possible.",
+      "Piaget sat with children and wrote what they did. An experiment changes one thing and watches the rest. A model asks whether the next judgment could have been forecast. In each case the method is the tool: it turns a hunch into a pattern someone else can look at. Statistics is the part of that tool that summarizes the pattern and asks whether it would show up again.",
+    ],
+    []
+  ),
+  page(
+    "stats-answer-questions",
+    "introduction",
+    "Statistics allow you to answer your questions",
+    "Your questions",
+    "The test, the mean, and the model are answers to different questions.",
+    [
+      "A question about what people did needs a summary: a mean, a spread, a picture. A question about why, after you changed one thing, needs a comparison that separates the change from the noise of who walked in. A question about what someone will do next needs a model that is checked on behavior it has not seen yet.",
+      "Statistics is how those answers get made. The same spreadsheet can support all three, and the wrong summary answers a question you did not ask. This course stays with that match: name the question, then use the statistic that answers it.",
     ],
     []
   ),
@@ -100,74 +69,16 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
-    "r-is-free",
+    "why-researchers-use-r",
     "why-r",
-    "It is free",
-    "Free",
-    "R costs nothing to download, teach, or share.",
+    "Why do most psychology researchers use R?",
+    "Why R",
+    "It is free, it handles the analyses and the figures, and the field already shares the code.",
     [
-      "Most psychologists use R first because it is free. A student, a lab, and a collaborator at another university can all install the same program without a license. That matters for teaching, and it matters when a paper’s code has to run on someone else’s computer.",
-      "Free here means the program and the packages. CRAN is where you download R. RStudio Desktop, the window most people work in, is also free. SPSS and some other menus are not.",
-    ],
-    []
-  ),
-  page(
-    "complex-analyses",
-    "why-r",
-    "Complex analyses and visualizations",
-    "Complex work",
-    "The hard models and the figures live in the same language.",
-    [
-      "R is built for the analyses psychology actually runs: comparisons, regression, models with many levels, and figures that show the data rather than a bar of means. A new method often arrives as an R package before it arrives in a point-and-click menu.",
-      "The next two pages are the two pieces of that claim. Packages are how a complex analysis shows up. ggplot is how a complex figure is built, in layers, from the same table.",
-    ],
-    []
-  ),
-  page(
-    "r-packages",
-    "why-r",
-    "R packages",
-    "Packages",
-    "A package is a bundle of functions for one job.",
-    [
-      "A package adds tools R did not ship with. lme4 fits models that remember which trials belong to which person. psych and lavaan cover a lot of measurement work. ggplot2 draws the figures. You install a package once, with install.packages(), and load it in a script with library().",
-      "Because packages are shared, a lab does not have to write a mixed model from scratch. You load the package the field already uses, and the paper can name it. That is also why the code is easier to hand to the next person: they install the same package.",
-    ],
-    []
-  ),
-  page(
-    "ggplot-in-r",
-    "why-r",
-    "ggplot",
-    "ggplot",
-    "Figures are built in layers from the data table.",
-    [
-      "ggplot2 is the package psychologists use when the figure has to carry the result. You name the table, map columns onto x, y, and color, then add a mark: points, a smooth line, a ribbon for uncertainty, a box. The pictures below are original examples in that style: a scatter with a smooth, group densities, and a design drawn as small multiples. They were drawn for this course. They are not copied from a published paper.",
-      "The call looks like ggplot(data, aes(x, y, color = group)) + geom_point() + geom_smooth(). This site’s browser runs base R, so the practice assignments draw with plot() and boxplot(). The same layered figure is what you make in RStudio after the setup assignment, once library(ggplot2) runs.",
-    ],
-    []
-  ),
-  page(
-    "reproducibility",
-    "why-r",
-    "Reproducibility and open science",
-    "Open science",
-    "The analysis can be saved, rerun, and posted with the paper.",
-    [
-      "A script is the analysis written down. A point-and-click history is not. When you save the script, someone else can run the same lines on the same file and see if they get your figure. That is the practical meaning of reproducibility, and it is why R sits in the middle of open science in psychology: the code can travel with the paper.",
-      "Open science here is not a slogan. It is a folder: the data, the script, and a note that says which packages to load. A reader who was not in the room can still see what you did.",
-    ],
-    []
-  ),
-  page(
-    "cohort-effects",
-    "why-r",
-    "A shared cohort",
-    "Cohort",
-    "Because so many psychologists use R, sharing code is easier.",
-    [
-      "There is a cohort effect. People trained in the last several years learned R, so the code in a paper, a course, or a lab meeting is often already in R. That shared habit makes collaboration easier. You can send a script to a classmate or a coauthor and expect them to be able to run it, or at least to read it.",
-      "The same cohort is why a new package spreads. If the people you work with already use R, the useful tool is the one written for R. You are not only choosing a program. You are choosing the language the people around you already share.",
+      "Most psychology researchers use R first because it is free. A student, a lab, and a collaborator at another university can install the same program without a license. CRAN is where you download R. RStudio Desktop, the window most people work in, is also free.",
+      "R is also where the complex work lives. Comparisons, regression, models that remember which trials belong to one person, and figures built in layers all sit in the same language. A package is a bundle of functions for one of those jobs. lme4, psych, lavaan, and ggplot2 are packages the field already shares. You install one with install.packages() and load it with library(). A new method often arrives as a package before it arrives in a point-and-click menu.",
+      "ggplot2 is the package people use when the figure has to carry the result. You name the table, map columns onto x, y, and color, and add a mark: points, a smooth line, a ribbon, a box. The pictures below were drawn for this course in that style. In RStudio the call looks like ggplot(data, aes(x, y, color = group)) + geom_point() + geom_smooth().",
+      "A script can be saved and run again, so the analysis can travel with the paper. That is the practical side of reproducibility. There is also a cohort effect: so many psychologists already use R that sending a script to a classmate or a coauthor is ordinary. You are choosing the language the people around you already share.",
     ],
     []
   ),
