@@ -43,10 +43,9 @@ const RAW: PsychModule[] = [
     xp: 0,
     levels: {
       overview: [
-        "Goal: see statistics as a way of opening questions, not as a tax you pay after the interesting part of psychology is over.",
         "Piaget sat with children and wrote down what they actually did. That is a descriptive question: what does the behavior look like? You still need a way to summarize hundreds of observations so a reader can see the pattern. Description is a statistical job.",
         "An experiment asks why. You change one thing, hold the rest as still as you can, and look at what the mind does in response. The inference — this difference is about the process, not about who happened to walk in — is what a test is for. Prediction is a third question. Josh Tenenbaum’s work asks whether a learner’s next judgment can be forecast from a model of how they update beliefs. The success criterion is the future behavior, not a p-value alone.",
-        "Yes, statistics is hard. The hardness is mostly that the same word (significant, normal, effect) means something precise and something casual, and psychology uses both. This course teaches the precise meaning from a psychologist’s chair. There is no mathematical track. If you can say what a row is and what you would tell a reader, you are doing the thing.",
+        "Yes, statistics is hard. The hardness is mostly that the same word (significant, normal, effect) means something precise and something casual, and psychology uses both. This course teaches the precise meaning from a psychologist’s chair. There is no mathematical track. If you can say what a row is and what you would tell a reader, you are doing statistics.",
       ],
       detailed: [
         "The three questions license different products. A description owes the reader a faithful summary and a picture. An inference owes a design: what was manipulated, what was held constant, and what would count against the claim. A prediction owes a check against data that were not used to build the story. Mixing them up is how a lab writes 'we showed that children are Bayesian' after plotting a mean.",
@@ -65,15 +64,14 @@ const RAW: PsychModule[] = [
     xp: 0,
     levels: {
       overview: [
-        "Goal: know why this course uses R, and recognize the few ideas that every later script is made of.",
         "Psychologists use R because the analysis can be written down and rerun. A script is a record of what you did to the data, which a point-and-click history is not. It is free, which matters for students and for labs that share code with a paper. The packages are where the field's methods live: a new model often arrives as a package before it arrives in a menu.",
         "You will meet the same pieces over and over. An object is a name for a value, a column, or a whole dataset. A function does one job to the thing you hand it, and you hand it that thing inside parentheses. A package is a bundle of functions you install once and load when you need it. The console is where a single line runs. A script is the file you save.",
         "Two habits save more time than any trick. The working directory is the folder R is looking at; your CSV has to be somewhere R can see. When a function is unfamiliar, put a question mark in front of its name and read the help. This site runs base R in the browser so you can practice without installing anything. ggplot, extra packages, and your own files live in RStudio on your computer, which is the assignment under this lesson.",
       ],
       detailed: [
         "R is not the only serious choice. SPSS is still in many departments. Python is common when the work is closer to machine learning. R stays the default in psychology because the papers you will read, the packages for mixed models and psychometrics, and the tidyverse style of plotting were built by people answering psychological questions. Learning it is learning the dialect the field argues in.",
-        "The concepts are small and they stack. c() gathers numbers. <- stores them under a name. A data frame is a table: rows are observations, columns are variables, and dataset$column picks one column out. A factor is a column of categories. Comments, the lines that start with #, are how you tell your future self what a row means. None of this is statistics yet. It is the grammar the statistics will be written in.",
-        "The browser exercises later in the course are the same grammar with the installation taken out. If something works here and fails on your computer, the usual cause is the working directory or a package you have not loaded, not a different language. The setup assignment is there so that gap is a checklist rather than a surprise the night before a problem set.",
+        "The concepts are small and they stack. c() gathers numbers. <- stores them under a name. A data frame is a table: rows are observations, columns are variables, and dataset$column picks one column out. A factor is a column of categories. Comments, the lines that start with #, are how you record what a row means. None of this is statistics yet. It is the grammar the statistics will be written in.",
+        "The browser exercises later in the course are the same grammar with the installation taken out. If something works here and fails on your computer, the usual cause is the working directory or a package you have not loaded, not a different language. The setup assignment is there so that gap is a checklist rather than a surprise later.",
       ],
     },
   }),
@@ -90,7 +88,7 @@ const RAW: PsychModule[] = [
     selfCheck: true,
     levels: {
       overview: [
-        "Goal: have R and RStudio on your computer, a folder for this course, and one script that runs.",
+        "Have R and RStudio on your computer, a folder for this course, and one script that runs.",
         "Install R first, from the CRAN site, and then install RStudio Desktop, which is the window you will actually work in. R is the engine. RStudio is the desk: a script on the top left, the console below it, and your files to the side. Make a folder called psych-stats. In RStudio, use Session, then Set Working Directory, then To Source File Location, once your script is saved inside that folder. That is the step that makes read.csv find your file.",
         "In a new script, type print(2 + 2), save the file, and run the line. You should see 4 in the console. Then install one package you will want later, with install.packages('ggplot2'), and load it with library(ggplot2). If library() runs without an error, you are set up. Mark this complete when that is true on your machine. The browser cannot see your computer, so the check is yours.",
       ],
@@ -114,8 +112,7 @@ const RAW: PsychModule[] = [
       "The Stroop file used in the assignments is simulated. It follows the idea of Stroop (1935) and does not copy anyone’s raw data.",
     levels: {
       overview: [
-        "Goal: before any test, say what one row is, what each column means, and which picture is legal for that column.",
-        "Imagine a study of ink-color naming. If each person does many trials, one row might be one trial, not one person. Those are different datasets even when the spreadsheet looks similar. Ask it out loud: one row is one what?",
+        "Imagine a study of ink-color naming. If each person does many trials, one row might be one trial, not one person. Those are different datasets even when the spreadsheet looks similar. The first question is what one row represents.",
         "Then the columns. condition is a name (congruent or incongruent). rt_ms is a duration. errors is a count. age is a number you did not assign. You may average a duration. You may not average a label. The gallery under this paragraph is the same rule as a picture: a distribution for one continuous column, a comparison for groups, a scatter for two numbers, counts for categories.",
         "ggplot builds a plot in layers. The data is the table. aes() maps columns onto x, y, and color. geom_point(), geom_boxplot(), or geom_col() is the mark. Best practice is dull and worth it: label the units, let the reader see the pattern of the raw data, and do not use a bar of means when a box or the points would show the shape. In RStudio the call looks like ggplot(stroop, aes(condition, rt_ms)) + geom_boxplot(). The browser on this site runs base R, so the assignment draws with plot() and boxplot() and shows the ggplot version beside it.",
       ],
@@ -141,7 +138,6 @@ const RAW: PsychModule[] = [
     ],
     levels: {
       overview: [
-        "Goal: match a common psychological question to a procedure, and say what the p-value is doing in the sentence.",
         "A p-value is the probability of a result at least this extreme if nothing were going on — if the true difference or the true correlation were zero and the study were repeated the way you designed it. It is not the probability that your hypothesis is true, and it is not the size of the effect. Read the estimate first. The picture shows why: the gap between means can stay the same while the spread changes, and the test is that comparison.",
         "A one-sample t-test compares a mean to a fixed number (t.test(y, mu = 0)). A paired t-test is for the same people twice; on the sleep data, ten patients and two drugs, you test the differences (t.test(extra ~ group, data = sleep, paired = TRUE)). Correlation describes a straight-line association between two numbers. Move the slider: the hug of the points changes r, even when the tilt of the line does not. cor.test() prints r. Plot first. Anscombe’s four datasets share a correlation and do not share a shape.",
         "ANOVA is the t-test’s relative for more than two means: did the groups differ, somewhere? It does not say which pair. ANCOVA is that comparison while holding another measured variable steady, such as age. The walker below is the same choice as a conversation: outcome, then design, then the check you should actually look at.",
@@ -168,7 +164,6 @@ const RAW: PsychModule[] = [
     ],
     levels: {
       overview: [
-        "Goal: read a coefficient as a place on a picture — a height, a climb, or a change in the chance of a yes.",
         "Linear regression draws a straight line through an outcome. The line in the first picture is not decoration. Drag it: the vertical misses change, and settling finds the line that makes the squared misses as small as they can be. The second picture is that same line. The intercept is the height where the predictor is 0. The slope is how much the line climbs when the predictor goes up by 1. On the Stroop file, incongruent is 0 or 1, so the intercept is the congruent mean time and the slope is the extra time on incongruent trials. Say it in milliseconds.",
         "A yes-or-no outcome is a proportion. A straight line walks off into predictions below 0 and above 1, which are not chances. A link function is the translator: the model stays linear in the coefficients, but those coefficients live on a scale that maps back into probabilities. For logistic regression the scale is log odds. A positive coefficient means 'more likely.' exp(coefficient) is how the odds multiply. Bend the picture to see the curve stay inside 0 and 1.",
         "Multi-level models are what you use when one row is a trial and many rows belong to one person. The person has their own baseline. The condition effect is estimated with that clustering acknowledged. Ignoring it makes the study look more precise than it was. You will not fit lme4 in the browser. You should be able to point at the formula and name which term is the trial, which is the person, and which is the experimental factor.",
@@ -190,7 +185,6 @@ const RAW: PsychModule[] = [
     xp: 0,
     levels: {
       overview: [
-        "Goal: notice the assumption a test is making before you quote it, starting with the one psychologists violate by design.",
         "Independence means one row does not carry information about another, once the predictors are in the model. In a typical study that is rarely true. The same person contributes many trials. The same person does several tasks. People sit in groups, classrooms, or dyads. Those rows share a person or a room. A test that ignores the share treats 200 trials as 200 people.",
         "Normality, in the tests you have met, is about the residuals or the differences, not a moral claim that humans are normal. A lopsided cloud (skew) pulls the mean toward the tail. A very peaked or very heavy-tailed cloud (kurtosis) changes how surprising an extreme difference is. Look at a histogram of the thing you are actually testing — the paired differences, or the residuals — and say what you see in a clause of the paper.",
         "When independence fails because of repeated trials, the honest moves are to summarize to the person or to use the multi-level model from lesson 4. When the shape is ugly and the sample is small, a rank comparison is often the sentence you can defend. A large sample makes the mean’s sampling behavior kinder than the raw scores look. That is not permission to skip the picture.",
@@ -212,7 +206,6 @@ const RAW: PsychModule[] = [
     xp: 0,
     levels: {
       overview: [
-        "Goal: put a magnitude and a range next to every p-value before you call a result important.",
         "A confidence interval is the range of values your procedure does not rule out. For a paired difference, t.test() already prints it. If the interval for extra hours of sleep runs from 0.2 to 2.0, you have evidence of a positive difference and you have not pinned it to a single number. If it runs from −0.1 to 0.1 on a reaction-time effect you care about in tens of milliseconds, 'not significant' and 'we measured it fairly precisely, and it is tiny' are different claims. Say which one you have.",
         "Effect size is the magnitude in a unit a reader can compare. Cohen’s d is a mean difference divided by a spread. A correlation is already an effect size. An odds ratio is the logistic version: how the odds multiply. None of these replace the raw unit. 'Incongruent trials were about 200 ms slower, d = 1.4' is a better sentence than 'd = 1.4' alone.",
         "A 2 ms effect with a tiny p-value is still a 2 ms effect. Large samples make trivial differences 'significant.' Small samples make real differences silent. The interval tells you which problem you have.",
@@ -235,7 +228,6 @@ const RAW: PsychModule[] = [
     figures: [{ after: 1, id: "write-sentence" }],
     levels: {
       overview: [
-        "Goal: write a result a psychologist can read without translating it back into the variables.",
         "Your job is to report on the data, not to report on the statistics. The subject of the sentence is the behavior. Weak: 'A paired t-test was significant, t(9) = 3.1, p = .013.' Strong: 'Patients slept about 1.6 hours longer on the second drug than on the first (mean difference = 1.58 hours, 95% CI [0.70, 2.46], t(9) = 4.06, p = .003).' The test is evidence in parentheses. The hours are the result.",
         "The figure has the same job. Axes say the units, not 'value' and 'group.' Error bars say what they are: usually a confidence interval or a standard error, and the caption says which. A significance bracket is a pointer, not a substitute for the difference. The picture under this paragraph is the shape of a finished comparison: means, intervals, and a bracket that does not replace the sentence.",
         "Match the picture to the analysis. A paired or two-group t-test wants the two distributions or the differences, not only two bars. A correlation wants the scatter, with the line only if you also mean the line. ANOVA wants the group distributions and, if you compared pairs, those pairs marked. A logistic result wants predicted probabilities at the conditions you care about, not a bar of log odds.",
@@ -257,7 +249,6 @@ const RAW: PsychModule[] = [
     xp: 0,
     levels: {
       overview: [
-        "Goal: see what else is possible, without pretending a tour is the same as being able to do it. Graduate students spend years on single items in this list.",
         "Bayesian statistics treats probability as a degree of belief that you update. That is the same move as Bayesian learning theory in cognitive science: a learner has a prior, sees data, and has a posterior. The coin exercise in the Bayesian assignment is a toy of that update. A real model puts a prior on a psychological parameter (a sensitivity, a learning rate) and checks whether the posterior predicts new judgments.",
         "Computational modeling writes the theory as something that can generate behavior. Equation-based models write a few formulas for how a decision or a memory trace changes. Agent-based models put many simple individuals in a shared setting and watch a group pattern appear. Both are judged by whether they produce the behavior, not by whether a coefficient was significant.",
         "Vision and text encoders turn images or language into numbers a model can use, so a study can ask about the scene a child saw or the words a parent used without hand-coding every frame. Machine learning, in the sense of lesson 1, is a predictive question: can we forecast a future behavior? It is the wrong tool when the question was 'what did this manipulation do to a mean we care about for its own sake.'",
@@ -282,7 +273,7 @@ const RAW: PsychModule[] = [
     badge: "r-1",
     levels: {
       overview: [
-        "Goal: leave with one object that holds a handful of numbers, and the mean of those numbers printed.",
+        "Leave with one object that holds a handful of numbers, and the mean of those numbers printed.",
         "Four friends are 19, 20, 23, and 23. An object is a name for that list. c() gathers the numbers. <- stores them. mean() averages them. You should see 21.25.",
       ],
       detailed: [
@@ -307,7 +298,7 @@ mean(ages)`,
     datasetNote: "stroop.csv is simulated teaching data, inspired by the Stroop design, not copied from a study.",
     levels: {
       overview: [
-        "Goal: summarize reaction time without pretending the summary is a test.",
+        "Summarize reaction time without pretending the summary is a test.",
         "mean(), median(), and sd() describe a column. tapply() does it inside each condition. Run the starter. You should see two means, and the incongruent mean should be the larger one.",
       ],
       detailed: [
@@ -334,7 +325,7 @@ tapply(stroop$rt_ms, stroop$condition, sd)`,
     badge: "r-2",
     levels: {
       overview: [
-        "Goal: get a CSV into an object and say what the columns are.",
+        "Get a CSV into an object and say what the columns are.",
         "The file is already loaded for you as stroop. names(), str(), and head() are the three looks. You should see condition and rt_ms in the output.",
       ],
       detailed: [
@@ -361,7 +352,7 @@ head(stroop)`,
     badge: "visualize",
     levels: {
       overview: [
-        "Goal: produce a boxplot of reaction time by condition, with the axis labeled in milliseconds.",
+        "Produce a boxplot of reaction time by condition, with the axis labeled in milliseconds.",
         "boxplot() is the browser-friendly version. In RStudio the same picture is ggplot(stroop, aes(x = condition, y = rt_ms)) + geom_boxplot() + labs(y = 'Reaction time (ms)', x = 'Condition'). Layers: data, then aes, then geom, then labels. This page checks the base R call.",
       ],
       detailed: [
@@ -388,7 +379,7 @@ boxplot(rt_ms ~ condition, data = stroop,
     badge: "r-3",
     levels: {
       overview: [
-        "Goal: take a subset and a grouped summary without leaving base R.",
+        "Take a subset and a grouped summary without leaving base R.",
         "factor() makes the labels a category. The subset keeps incongruent trials. mean() on that subset should land well above the congruent times, around the high 700s.",
       ],
       detailed: [
@@ -417,7 +408,7 @@ table(stroop$condition)`,
     datasetNote: "sleep ships with base R. Extra hours of sleep for 10 patients on two drugs, Student (1908). The same person appears twice.",
     levels: {
       overview: [
-        "Goal: run the paired test and read the mean difference before the p-value.",
+        "Run the paired test and read the mean difference before the p-value.",
         "t.test(extra ~ group, data = sleep, paired = TRUE) is the whole assignment. The mean of the differences is the result, in hours. The p-value asks whether that difference would be surprising if it were really zero.",
       ],
       detailed: [
@@ -442,7 +433,7 @@ table(stroop$condition)`,
     datasetNote: "anscombe ships with base R (Anscombe, 1973). Four pairs share a correlation. The shapes do not.",
     levels: {
       overview: [
-        "Goal: print a Pearson correlation and remember that r is not the picture.",
+        "Print a Pearson correlation and remember that r is not the picture.",
         "cor.test(anscombe$x1, anscombe$y1) reports r. Then plot(anscombe$x1, anscombe$y1) so you see the cloud this r belongs to. The check looks for the correlation output.",
       ],
       detailed: [
@@ -467,7 +458,7 @@ plot(anscombe$x1, anscombe$y1)`,
     badge: "regression",
     levels: {
       overview: [
-        "Goal: fit lm(rt_ms ~ incongruent) and find the slope in the coefficients table.",
+        "Fit lm(rt_ms ~ incongruent) and find the slope in the coefficients table.",
         "incongruent is 1 or 0. The intercept is the congruent mean. The slope is the extra milliseconds on incongruent trials. summary(fit) is what the check looks for.",
       ],
       detailed: [
@@ -494,7 +485,7 @@ summary(fit)`,
     badge: "glm",
     levels: {
       overview: [
-        "Goal: fit a logistic regression and see a coefficient on the log-odds scale.",
+        "Fit a logistic regression and see a coefficient on the log-odds scale.",
         "mistakes is 1 when the trial had any error. family = binomial is the logistic model. The incongruent coefficient’s sign is the direction. summary(fit) prints deviance.",
       ],
       detailed: [
@@ -523,7 +514,7 @@ summary(fit)`,
     datasetNote: "ToothGrowth ships with base R. Length of odontoblasts in guinea pigs by vitamin C dose and delivery method.",
     levels: {
       overview: [
-        "Goal: see an ANOVA table, then the same comparison with supplement included.",
+        "See an ANOVA table, then the same comparison with supplement included.",
         "aov(len ~ dose) asks whether mean length differs by dose, treating dose as a number. aov(len ~ dose + supp) holds the delivery method steady. summary() of either object prints Df. That is the check.",
       ],
       detailed: [
@@ -549,7 +540,7 @@ summary(aov(len ~ dose + supp, data = ToothGrowth))`,
     datasetNote: "looking.csv is simulated. It is not data from a published infant study.",
     levels: {
       overview: [
-        "Goal: respect the person as the cluster. The browser cannot fit lme4. You can still do the honest summary.",
+        "Respect the person as the cluster. The browser cannot fit lme4. You can still do the honest summary.",
         "Each row of looking.csv is one trial. infant is the person. condition is familiar or novel. A multi-level formula you would fit in RStudio is looking_ms ~ condition + (1 | infant). Here, average to one number per infant and condition, then print the first rows of that person-level table. The check looks for infant.",
       ],
       detailed: [
@@ -575,7 +566,7 @@ head(person)`,
     badge: "two-schools",
     levels: {
       overview: [
-        "Goal: see a prior become a posterior, in numbers you can change.",
+        "See a prior become a posterior, in numbers you can change.",
         "Two coins are possible. One is fair. One lands heads 80% of the time. You start even. You see 8 heads in 10 flips. The snippet prints the posterior probability the coin is fair. Then edit prior_fair and run it again. The data did not change. The belief did.",
       ],
       detailed: [
@@ -605,7 +596,7 @@ cat("Posterior probability the coin is fair:", round(posterior_fair, 3), "\\n")`
     datasetNote: "stroop.csv is simulated teaching data.",
     levels: {
       overview: [
-        "Goal: do the lesson 2 questions on a real file, in order, before you test anything.",
+        "Do the lesson 2 questions on a real file, in order, before you test anything.",
         "Write the answers in comments at the top of the script: what one row is, what each column means, and which columns are categories, counts, or measurements. Then prove the file matches your answers with names(), str(), and head(). The check looks for condition and rt_ms.",
       ],
       detailed: [
@@ -634,7 +625,7 @@ head(stroop)`,
     badge: "five-datasets",
     levels: {
       overview: [
-        "Goal: for each dataset, name the question in a comment, run one appropriate summary or test, and print it.",
+        "For each dataset, name the question in a comment, run one appropriate summary or test, and print it.",
         "1. Stroop (simulated): are incongruent trials slower? A regression or a t-test on rt_ms. 2. sleep: do the two drugs differ within person? Paired t-test. 3. ToothGrowth: does dose relate to tooth length? ANOVA or regression. 4. anscombe, pair 1 and pair 4: compute both correlations and plot pair 4. 5. looking.csv (simulated infant looking): average to the infant first, then compare familiar and novel. The check looks for Paired t-test, so the sleep test must be in the script.",
       ],
       detailed: [
@@ -666,7 +657,7 @@ t.test(extra ~ group, data = sleep, paired = TRUE)
     badge: "paper-figure",
     levels: {
       overview: [
-        "Goal: a boxplot of Stroop reaction time by condition with both axes named in words a reader understands.",
+        "A boxplot of Stroop reaction time by condition with both axes named in words a reader understands.",
         "Title it as a claim or a description, not 'Figure 1.' The y-axis is reaction time in milliseconds. In RStudio you would add a confidence interval or the raw points with ggplot. Here, boxplot is the mark, and the axis labels are the check.",
       ],
       detailed: [
@@ -694,7 +685,7 @@ boxplot(rt_ms ~ condition, data = stroop,
     selfCheck: true,
     levels: {
       overview: [
-        "Goal: write four sentences you would let a reviewer see, one each for a t-test, a correlation, a regression, and a logistic result.",
+        "Write four sentences you would let a reviewer see, one each for a t-test, a correlation, a regression, and a logistic result.",
         "Weak: 'The t-test was significant (p < .05).' Strong: 'Patients slept 1.6 hours longer on the second drug than on the first (mean difference = 1.58 hours, 95% CI [0.70, 2.46]).' Use numbers from the assignments you already ran, in the units of those datasets. When the four sentences exist in your notes, mark the project complete. This page cannot read your prose.",
       ],
       detailed: [
