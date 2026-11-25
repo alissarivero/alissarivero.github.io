@@ -1,124 +1,297 @@
 <section class="hero">
   <canvas id="psych-hero" aria-hidden="true"></canvas>
-  <p class="hero-caption">Each dot is a person. They gather, the means separate, and a line settles through the noise.</p>
+  <p class="hero-caption">People become points. The line is the one that shrinks the vertical gaps.</p>
 </section>
 
 <script>
   function boot() {
     const canvas = document.getElementById("psych-hero") as HTMLCanvasElement | null;
     if (!canvas || canvas.dataset.ready) return;
-    canvas.dataset.ready = "1";
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    canvas.dataset.ready = "1";
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const N = 64;
-    const dots = Array.from({ length: N }, (_, i) => {
-      const group = i < N / 2 ? 0 : 1;
+    const rand = mulberry32(19);
+    const N = 34;
+    const people = Array.from({ length: N }, (_, i) => {
+      const x = 0.08 + rand() * 0.84;
+      const noise = (rand() - 0.5) * 0.34 + (rand() - 0.5) * 0.12;
+      const y = clamp(0.16 + 0.62 * x + noise, 0.08, 0.92);
       return {
-        group,
-        x: Math.random(),
-        y: Math.random(),
-        tx: 0,
-        ty: 0,
-        phase: Math.random() * Math.PI * 2,
+        group: i % 5 === 0 ? 1 : 0,
+        x,
+        y,
+        homeX: 0.06 + rand() * 0.88,
+        homeY: 0.18 + rand() * 0.62,
+        phase: rand() * Math.PI * 2,
+        lean: rand() * 0.6 - 0.3,
+        px: 0,
+        py: 0,
+        placed: false,
       };
     });
+
+    const fit = ols(people.map((p) => p.x), people.map((p) => p.y));
 
     function resize() {
       const rect = canvas.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.max(1, Math.floor(rect.width * dpr));
-      canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+      const w = Math.max(rect.width, canvas.clientWidth, 320);
+      const h = Math.max(rect.height, canvas.clientHeight, 280);
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resize();
-    window.addEventListener("resize", resize);
+    const observer = new ResizeObserver(resize);
+    observer.observe(canvas);
 
-    function targets(t: number) {
-      const cycle = reduced ? 0.72 : (t % 14000) / 14000;
-      const gather = cycle < 0.18 ? cycle / 0.18 : cycle > 0.82 ? (1 - cycle) / 0.18 : 1;
-      dots.forEach((dot, i) => {
-        const col = dot.group === 0 ? 0.3 : 0.7;
-        const mean = dot.group === 0 ? 0.62 : 0.38;
-        const scatterX = (i * 0.173) % 1;
-        const scatterY = (i * 0.291) % 1;
-        const jitter = (((i * 17) % 11) - 5) / 28;
-        dot.tx = scatterX * (1 - gather) + (col + jitter * 0.35) * gather;
-        dot.ty = scatterY * (1 - gather) + (mean + jitter * 0.55) * gather;
-      });
-      return gather;
+    function plotBox(width: number, height: number) {
+      return { l: 54, r: width - 28, t: 28, b: height - 78 };
     }
 
     function frame(now: number) {
-      const width = canvas.clientWidth;
-      const height = canvas.clientHeight;
-      const gather = targets(now);
-      ctx.clearRect(0, 0, width, height);
+      const width = canvas.clientWidth || canvas.getBoundingClientRect().width;
+      const height = canvas.clientHeight || canvas.getBoundingClientRect().height;
+      if (width < 8 || height < 8) {
+        if (!reduced) requestAnimationFrame(frame);
+        return;
+      }
+      const box = plotBox(width, height);
+      const cycle = reduced ? 0.86 : (now % 18000) / 18000;
+      const morph = smooth(segment(cycle, 0.16, 0.38));
+      const onto = smooth(segment(cycle, 0.34, 0.56));
+      const axes = smooth(segment(cycle, 0.4, 0.55));
+      const residuals = smooth(segment(cycle, 0.56, 0.74));
+      const lineIn = smooth(segment(cycle, 0.62, 0.82));
+      const hold = cycle > 0.9 ? 1 : 0;
 
+      ctx.clearRect(0, 0, width, height);
       const grd = ctx.createLinearGradient(0, 0, width, height);
-      grd.addColorStop(0, "#f7f4ef");
-      grd.addColorStop(1, "#e7f3f1");
+      grd.addColorStop(0, "#f6f4f0");
+      grd.addColorStop(1, "#e8f2f0");
       ctx.fillStyle = grd;
       ctx.fillRect(0, 0, width, height);
 
-      ctx.strokeStyle = "rgba(22,22,22,0.08)";
-      ctx.lineWidth = 1;
-      for (let g = 1; g < 4; g++) {
-        ctx.beginPath();
-        ctx.moveTo(28, (height * g) / 4);
-        ctx.lineTo(width - 28, (height * g) / 4);
-        ctx.stroke();
-      }
+      drawPlot(ctx, box, axes, lineIn, fit);
+      if (residuals > 0.02) drawResiduals(ctx, box, people, fit, residuals, lineIn);
 
-      if (gather > 0.55) {
-        const a = 0.16 + gather * 0.5;
-        ctx.strokeStyle = `rgba(15,110,107,${a})`;
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        ctx.moveTo(width * 0.12, height * 0.7);
-        ctx.lineTo(width * 0.88, height * 0.3);
-        ctx.stroke();
-        ctx.fillStyle = `rgba(15,110,107,${0.08 * gather})`;
-        ctx.beginPath();
-        ctx.moveTo(width * 0.12, height * 0.78);
-        ctx.lineTo(width * 0.88, height * 0.38);
-        ctx.lineTo(width * 0.88, height * 0.22);
-        ctx.lineTo(width * 0.12, height * 0.62);
-        ctx.closePath();
-        ctx.fill();
-      }
-
-      dots.forEach((dot) => {
-        dot.x += (dot.tx - dot.x) * (reduced ? 1 : 0.06);
-        dot.y += (dot.ty - dot.y) * (reduced ? 1 : 0.06);
-        const wobble = reduced ? 0 : Math.sin(now / 700 + dot.phase) * (1 - gather) * 4;
-        const x = 36 + dot.x * (width - 72);
-        const y = 24 + dot.y * (height - 48) + wobble;
-        ctx.beginPath();
-        ctx.fillStyle = dot.group === 0 ? "#161616" : "#0f6e6b";
-        ctx.arc(x, y, gather > 0.8 ? 4.5 : 3.4, 0, Math.PI * 2);
-        ctx.fill();
+      people.forEach((p) => {
+        const plot = toPlot(box, p.x, p.y);
+        const crowdX = 20 + p.homeX * (width - 40);
+        const crowdY = 16 + p.homeY * (box.b - 24);
+        const bob = reduced ? 0 : Math.sin(now / 620 + p.phase) * (1 - onto) * 3.2;
+        const tx = crowdX + (plot.x - crowdX) * onto;
+        const ty = crowdY + bob + (plot.y - crowdY) * onto;
+        if (!p.placed) {
+          p.px = tx;
+          p.py = ty;
+          p.placed = true;
+        } else {
+          p.px += (tx - p.px) * (reduced ? 1 : 0.12);
+          p.py += (ty - p.py) * (reduced ? 1 : 0.12);
+        }
+        const color = p.group === 1 ? "#0f6e6b" : "#1c1c1c";
+        drawPerson(ctx, p.px, p.py, color, morph, p.lean, onto, hold);
       });
-
-      if (gather > 0.75) {
-        [0.3, 0.7].forEach((col, group) => {
-          const mean = group === 0 ? 0.62 : 0.38;
-          const x = 36 + col * (width - 72);
-          const y = 24 + mean * (height - 48);
-          ctx.strokeStyle = group === 0 ? "#161616" : "#0f6e6b";
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(x - 36, y);
-          ctx.lineTo(x + 36, y);
-          ctx.stroke();
-        });
-      }
 
       if (!reduced) requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
   }
+
+  function drawPlot(
+    ctx: CanvasRenderingContext2D,
+    box: { l: number; r: number; t: number; b: number },
+    axes: number,
+    lineIn: number,
+    fit: { a: number; b: number }
+  ) {
+    if (axes < 0.02) return;
+    ctx.save();
+    ctx.globalAlpha = axes;
+    ctx.strokeStyle = "rgba(22,22,22,0.08)";
+    ctx.lineWidth = 1;
+    for (let i = 1; i <= 4; i++) {
+      const y = box.t + ((box.b - box.t) * i) / 5;
+      ctx.beginPath();
+      ctx.moveTo(box.l, y);
+      ctx.lineTo(box.r, y);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = "rgba(22,22,22,0.55)";
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(box.l, box.t);
+    ctx.lineTo(box.l, box.b);
+    ctx.lineTo(box.r, box.b);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(22,22,22,0.45)";
+    ctx.font = "500 11px Outfit, ui-sans-serif, sans-serif";
+    ctx.fillText("outcome", 8, box.t + 12);
+    ctx.textAlign = "right";
+    ctx.fillText("predictor", box.r, box.b + 22);
+    ctx.restore();
+
+    if (lineIn < 0.02) return;
+    const slope = fit.b * lineIn;
+    const intercept = fit.a * lineIn + (1 - lineIn) * 0.5;
+    const x0 = 0.06;
+    const x1 = 0.94;
+    const p0 = toPlot(box, x0, intercept + slope * x0);
+    const p1 = toPlot(box, x1, intercept + slope * x1);
+    ctx.save();
+    ctx.globalAlpha = 0.35 + lineIn * 0.65;
+    ctx.strokeStyle = "#0f6e6b";
+    ctx.lineWidth = 2.4;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(p0.x, p0.y);
+    ctx.lineTo(p1.x, p1.y);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawResiduals(
+    ctx: CanvasRenderingContext2D,
+    box: { l: number; r: number; t: number; b: number },
+    people: { x: number; y: number }[],
+    fit: { a: number; b: number },
+    amount: number,
+    lineIn: number
+  ) {
+    const slope = fit.b * Math.max(lineIn, 0.35);
+    const intercept = fit.a * Math.max(lineIn, 0.35) + (1 - Math.max(lineIn, 0.35)) * 0.5;
+    ctx.save();
+    ctx.globalAlpha = 0.55 * amount;
+    ctx.strokeStyle = "rgba(15,110,107,0.85)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2.5, 3]);
+    people.forEach((p, i) => {
+      const reveal = clamp((amount * people.length - i) / 6, 0, 1);
+      if (reveal <= 0) return;
+      const pred = intercept + slope * p.x;
+      const a = toPlot(box, p.x, p.y);
+      const b = toPlot(box, p.x, pred);
+      ctx.globalAlpha = 0.7 * reveal;
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.stroke();
+    });
+    ctx.restore();
+  }
+
+  function drawPerson(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    color: string,
+    morph: number,
+    lean: number,
+    onto: number,
+    hold: number
+  ) {
+    const s = 1 - onto * 0.15;
+    const person = 1 - morph;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(lean * person * 0.25);
+    ctx.fillStyle = color;
+    ctx.strokeStyle = color;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    if (person > 0.04) {
+      ctx.save();
+      ctx.globalAlpha = person;
+      ctx.translate(0, 6 * s);
+      ctx.beginPath();
+      ctx.arc(0, -16 * s, 5.1 * s, 0, Math.PI * 2);
+      ctx.fill();
+      roundBody(ctx, -5.2 * s, -9 * s, 10.4 * s, 13 * s, 5 * s);
+      ctx.fill();
+      ctx.lineWidth = 2.1 * s;
+      ctx.beginPath();
+      ctx.moveTo(-3.2 * s, 4 * s);
+      ctx.lineTo(-5.4 * s, 12 * s);
+      ctx.moveTo(3.2 * s, 4 * s);
+      ctx.lineTo(5.6 * s, 12 * s);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    const dotR = 3.1 + morph * 1.6 + hold * 0.2;
+    ctx.globalAlpha = 0.25 + morph * 0.75;
+    ctx.beginPath();
+    ctx.arc(0, (1 - morph) * -8 * s, dotR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function roundBody(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    r: number
+  ) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function toPlot(
+    box: { l: number; r: number; t: number; b: number },
+    x: number,
+    y: number
+  ) {
+    return {
+      x: box.l + x * (box.r - box.l),
+      y: box.b - y * (box.b - box.t),
+    };
+  }
+
+  function ols(xs: number[], ys: number[]) {
+    const n = xs.length;
+    const mx = xs.reduce((s, v) => s + v, 0) / n;
+    const my = ys.reduce((s, v) => s + v, 0) / n;
+    let num = 0;
+    let den = 0;
+    for (let i = 0; i < n; i++) {
+      num += (xs[i] - mx) * (ys[i] - my);
+      den += (xs[i] - mx) ** 2;
+    }
+    const b = den === 0 ? 0 : num / den;
+    return { a: my - b * mx, b };
+  }
+
+  function segment(t: number, a: number, b: number) {
+    return clamp((t - a) / (b - a), 0, 1);
+  }
+  function smooth(t: number) {
+    return t * t * (3 - 2 * t);
+  }
+  function clamp(v: number, a: number, b: number) {
+    return Math.max(a, Math.min(b, v));
+  }
+  function mulberry32(seed: number) {
+    let a = seed;
+    return () => {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
   boot();
   document.addEventListener("astro:page-load", boot);
 </script>
