@@ -418,32 +418,119 @@
   color: #5c5852;
 }
 
+.course-path.is-collapsed .unit-head,
+.course-path.is-collapsed .node-label {
+  display: none;
+}
+
+.course-path.is-collapsed .nodes {
+  position: relative;
+  width: auto;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.course-path.is-collapsed .nodes::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  width: 2px;
+  background: #f4c3d2;
+  transform: translateX(-50%);
+}
+
+.course-path.is-collapsed .node,
+.course-path.is-collapsed .node:nth-child(odd) {
+  flex-direction: column;
+  width: auto;
+  justify-content: center;
+}
+
+.course-path.is-collapsed .bubble {
+  width: 1.35rem;
+  height: 1.35rem;
+  font-size: 0;
+  box-shadow: none;
+  position: relative;
+  z-index: 1;
+}
+
+.course-path.is-collapsed {
+  position: sticky;
+  top: 5rem;
+  align-self: start;
+  max-height: calc(100vh - 6.5rem);
+  overflow: auto;
+}
+
+.path-toggle {
+  display: inline-flex;
+  margin: 0 0 0.85rem;
+  background: #fff;
+  color: #1f7a4d;
+  border: 1px solid #1f7a4d;
+  border-radius: 999px;
+  font-family: Nunito, sans-serif;
+  font-weight: 750;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+}
+
+.course-path.is-collapsed .path-toggle {
+  width: 100%;
+  justify-content: center;
+  font-size: 0.72rem;
+  padding: 0.4rem 0.25rem;
+}
+
+.node.here .bubble {
+  box-shadow: 0 0 0 4px #e5f5ec;
+}
+
+.psych-frame.path-collapsed {
+  grid-template-columns: 104px minmax(0, 1fr);
+}
+
+.psych-frame:not(.psych-home):not(.path-collapsed) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.psych-frame:not(.psych-home):not(.path-collapsed) .course-path {
+  max-width: 720px;
+  margin: 0 auto 1.5rem;
+}
+
 .nodes {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  width: min(100%, 640px);
-  margin: 0 auto;
-  gap: 0.85rem;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .node {
+  position: relative;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.9rem;
+  justify-content: center;
   text-decoration: none;
   color: inherit;
-  width: 100%;
+  width: 4.4rem;
 }
 
 .node:nth-child(odd) {
-  flex-direction: row-reverse;
+  transform: translateX(-28px);
 }
 
 .node:nth-child(even) {
-  flex-direction: row;
+  transform: translateX(28px);
+}
+
+.course-path.is-collapsed .node,
+.course-path.is-collapsed .node:nth-child(odd),
+.course-path.is-collapsed .node:nth-child(even) {
+  transform: none;
 }
 
 .bubble {
@@ -481,15 +568,23 @@
 }
 
 .node-label {
-  flex: 1;
-  text-align: left;
-  font-size: 1.05rem;
-  line-height: 1.3;
+  position: absolute;
+  top: 50%;
+  width: 12rem;
+  transform: translateY(-50%);
+  font-size: 0.98rem;
+  line-height: 1.25;
   font-weight: 700;
 }
 
 .node:nth-child(odd) .node-label {
+  right: calc(100% + 0.85rem);
   text-align: right;
+}
+
+.node:nth-child(even) .node-label {
+  left: calc(100% + 0.85rem);
+  text-align: left;
 }
 
 @keyframes bob {

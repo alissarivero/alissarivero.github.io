@@ -1,6 +1,6 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
-import CourseNav from "../components/psychstats/CourseNav.astro";
+import CoursePath from "../components/psychstats/CoursePath.astro";
 import "../styles/psych.css";
 
 const { title, description, current = "hub" } = Astro.props;
@@ -26,8 +26,8 @@ const { title, description, current = "hub" } = Astro.props;
         <a class="psych-exit" id="psych-account" href="/psychstats/portal/">Login</a>
       </div>
     </header>
-    <div class:list={["psych-frame", { "psych-home": current === "hub" }]}>
-      {current !== "hub" && <CourseNav current={current} />}
+    <div class:list={["psych-frame", { "psych-home": current === "hub", "path-collapsed": current !== "hub" }]}>
+      {current !== "hub" && <CoursePath current={current} collapsed />}
       <main class="psych-main">
         <slot />
       </main>
