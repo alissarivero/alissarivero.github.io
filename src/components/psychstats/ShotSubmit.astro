@@ -1,0 +1,74 @@
+<section class="shot-submit" id="shot-submit">
+  <h2>Upload the screenshot</h2>
+  <p>
+    The picture should show a Quarto document, the .qmd, with the sentence <strong>I downloaded R!</strong> visible.
+    A screenshot of the rendered preview is fine. A screenshot of the source is fine.
+  </p>
+  <label class="shot-drop" for="shot-file">
+    Choose a screenshot
+    <input id="shot-file" type="file" accept="image/*" />
+  </label>
+  <img id="shot-preview" alt="Your uploaded screenshot" hidden />
+  <p id="shot-note" role="status"></p>
+</section>
+
+<script>
+  import { saveProgress } from "../../lib/progress";
+
+  const KEY = "psychstats-r-setup-shot";
+
+  function bootShot() {
+    const input = document.getElementById("shot-file") as HTMLInputElement | null;
+    const preview = document.getElementById("shot-preview") as HTMLImageElement | null;
+    const note = document.getElementById("shot-note");
+    if (!input || !preview || !note || input.dataset.ready) return;
+    input.dataset.ready = "1";
+
+    const show = (src: string) => {
+      preview.src = src;
+      preview.hidden = false;
+      note.textContent = "Screenshot saved on this device. This assignment is marked completed.";
+    };
+
+    const stored = localStorage.getItem(KEY);
+    if (stored) show(stored);
+
+    input.addEventListener("change", () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const image = new Image();
+        image.onload = () => {
+          const scale = Math.min(1, 900 / image.width);
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.round(image.width * scale);
+          canvas.height = Math.round(image.height * scale);
+          const ctx = canvas.getContext("2d");
+          if (!ctx) return;
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+          const src = canvas.toDataURL("image/jpeg", 0.72);
+          localStorage.setItem(KEY, src);
+          show(src);
+          const mark = document.getElementById("mark-complete") as HTMLButtonElement | null;
+          void saveProgress(
+            { slug: "r-setup", status: "checked", xp: 20, badges: ["r-setup"] },
+            true
+          ).then(() => {
+            mark?.classList.add("is-done");
+            if (mark) {
+              mark.dataset.done = "1";
+              mark.textContent = "Mark as not completed";
+            }
+            document.querySelector<HTMLElement>('#course-path [data-module="r-setup"]')?.classList.add("done");
+          });
+        };
+        image.src = String(reader.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  bootShot();
+  document.addEventListener("astro:page-load", bootShot);
+</script>

@@ -3,6 +3,7 @@ import CourseLayout from "../../layouts/CourseLayout.astro";
 import RPlayground from "../../components/psychstats/RPlayground.astro";
 import Levels from "../../components/psychstats/Levels.astro";
 import TestFlow from "../../components/psychstats/TestFlow.astro";
+import ShotSubmit from "../../components/psychstats/ShotSubmit.astro";
 import { MODULES, REDIRECTS } from "../../data/psychstats/modules";
 
 export function getStaticPaths() {
@@ -57,6 +58,7 @@ const kicker =
           </aside>
         )}
         {module.showFlow && <TestFlow />}
+        {module.slug === "r-setup" && <ShotSubmit />}
         {module.starter && (
           <RPlayground
             slug={module.slug}
