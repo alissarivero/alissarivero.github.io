@@ -208,6 +208,15 @@
   border-radius: 999px;
   padding: 0.55rem 0.95rem;
   font: inherit;
+  background: #00539B;
+  color: #fff;
+  caret-color: #fff;
+  -webkit-text-fill-color: #fff;
+}
+
+.topic-search-form input::placeholder {
+  color: rgba(255, 255, 255, 0.78);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.78);
 }
 
 .topic-results {
