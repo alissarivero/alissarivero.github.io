@@ -57,20 +57,17 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
 
     const apply = () => {
       const q = input.value.trim().toLowerCase();
-      const nodes = document.querySelectorAll<HTMLElement>("#course-path .node");
-      nodes.forEach((node) => {
+      document.querySelectorAll<HTMLElement>("#course-path .node").forEach((node) => {
         const label = node.querySelector(".node-label")?.textContent?.toLowerCase() ?? "";
         node.classList.toggle("topic-miss", q.length > 0 && !label.includes(q));
       });
-      const hit = document.querySelector<HTMLElement>("#course-path .node:not(.topic-miss)");
-      if (q && hit) hit.scrollIntoView({ behavior: "smooth", block: "center" });
     };
 
     open.addEventListener("click", () => {
       form.hidden = false;
       input.focus();
-      document.getElementById("course-path")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+    form.addEventListener("submit", (event) => event.preventDefault());
     input.addEventListener("input", apply);
   }
 
