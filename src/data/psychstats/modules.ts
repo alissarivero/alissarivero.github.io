@@ -619,6 +619,33 @@ t.test(extra ~ group, data = sleep, paired = TRUE)
   }),
 ];
 
+const FIGURES: Record<string, { after: number; id: string }[]> = {
+  "why-researchers-use-r": [{ after: 2, id: "ggplot-gallery" }],
+  "stats-answer-questions": [{ after: 0, id: "describe-infer" }],
+  "inferential-stats": [{ after: 0, id: "describe-infer" }],
+  significance: [{ after: 0, id: "chance-grid" }],
+  "variable-types": [{ after: 0, id: "column-types" }],
+  "visualization-examples": [{ after: 0, id: "plot-gallery" }],
+  "difference-between-two-samples": [{ after: 0, id: "mean-gap" }],
+  "1v2-sample-t-test": [{ after: 0, id: "t-kind" }],
+  "correlation-interpretation": [{ after: 0, id: "hug" }],
+  "linear-regression": [{ after: 1, id: "mbti-line" }],
+  "line-of-best-fit": [{ after: 0, id: "fit-line" }],
+  "reading-the-line": [{ after: 0, id: "read-line" }],
+  "nested-data": [{ after: 0, id: "nested" }],
+  "multilevel-models": [{ after: 0, id: "nested" }],
+  glm: [{ after: 0, id: "sigmoid" }],
+  "logistic-regression": [{ after: 0, id: "sigmoid" }],
+  anova: [{ after: 0, id: "anova-groups" }],
+  ancova: [{ after: 0, id: "ancova-lines" }],
+  independence: [{ after: 0, id: "cluster" }],
+  normality: [{ after: 0, id: "shape" }],
+  "skew-kurtosis": [{ after: 0, id: "shape" }],
+  "cohens-d": [{ after: 0, id: "mean-gap" }],
+  "confidence-intervals": [{ after: 0, id: "interval" }],
+  figures: [{ after: 0, id: "write-sentence" }],
+};
+
 const toPage = (page: (typeof LESSON_PAGES)[number]): PsychModule =>
   item({
     slug: page.slug,
@@ -630,14 +657,7 @@ const toPage = (page: (typeof LESSON_PAGES)[number]): PsychModule =>
     minutes: 8,
     xp: 0,
     levels: { overview: page.overview, detailed: page.detailed, points: page.points, credit: page.credit },
-    figures:
-      page.slug === "why-researchers-use-r"
-        ? [{ after: 2, id: "ggplot-gallery" }]
-        : page.slug === "significance"
-          ? [{ after: 0, id: "chance-grid" }]
-          : page.slug === "stats-answer-questions"
-            ? [{ after: 0, id: "describe-infer" }]
-            : undefined,
+    figures: FIGURES[page.slug],
   });
 
 const withAssignments = (lessonSlug: string): PsychModule[] => {

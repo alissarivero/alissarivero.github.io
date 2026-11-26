@@ -322,6 +322,7 @@ export const LESSON_PAGES: LessonPage[] = [
     "A straight line for the mean of an outcome.",
     [
       "Linear regression describes the mean of an outcome as a straight line in one or more predictors. With one predictor, the line has an intercept and a slope.",
+      "A claim students already know: a Myers–Briggs letter, E or I, is often treated as a prediction of real behavior, such as how often someone speaks up in a meeting. The picture puts that behavior on the vertical axis. The letter piles people into two columns, and the line stays nearly flat. A measured extraversion score spreads the same people out, and the slope is how much speaking-up changes for one step up the score. The letter is a weak predictor. A regression needs a number.",
       "The line is a summary of the mean, not a claim that every person sits on it. The next pages are what 'best' means and how to read the numbers."
     ],
     []

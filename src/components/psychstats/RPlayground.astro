@@ -32,9 +32,17 @@ const { slug, starter, setup = "", check, checkHint, xp, badge = "" } = Astro.pr
 <script>
   import { saveProgress } from "../../lib/progress";
 
+  type CaptureLine = { type?: string; data?: string };
   type WebRLike = {
     init: () => Promise<void>;
     evalR: (code: string) => Promise<{ toJs: () => Promise<{ values?: string[] } | string> }>;
+    Shelter: new () => {
+      captureR: (
+        code: string,
+        options: { withAutoprint: boolean; captureStreams: boolean; captureConditions: boolean }
+      ) => Promise<{ output?: CaptureLine[] }>;
+      purge: () => Promise<void>;
+    };
     FS: {
       mkdir: (path: string) => Promise<void>;
       writeFile: (path: string, data: string | Uint8Array) => Promise<void>;
@@ -82,23 +90,28 @@ const { slug, starter, setup = "", check, checkHint, xp, badge = "" } = Astro.pr
     return textOf(await result.toJs());
   }
 
+  async function capture(webR: WebRLike, code: string) {
+    const shelter = await new webR.Shelter();
+    try {
+      const result = await shelter.captureR(code, {
+        withAutoprint: true,
+        captureStreams: true,
+        captureConditions: true,
+      });
+      return (result.output ?? [])
+        .map((line) => line.data || "")
+        .join("")
+        .replace(/\n+$/, "");
+    } finally {
+      await shelter.purge();
+    }
+  }
+
   async function runCode(webR: WebRLike, setup: string, user: string) {
     await ensureCsv(webR);
-    await webR.FS.writeFile("/tmp/setup.R", setup);
-    await webR.FS.writeFile("/tmp/user.R", user);
-    const expr = `
-      err <- NULL
-      setup_out <- capture.output({
-        tryCatch(source("/tmp/setup.R", local = TRUE, echo = FALSE, print.eval = TRUE),
-                 error = function(e) { err <<- conditionMessage(e) })
-      })
-      user_out <- capture.output({
-        tryCatch(source("/tmp/user.R", local = TRUE, echo = FALSE, print.eval = TRUE),
-                 error = function(e) { err <<- conditionMessage(e) })
-      })
-      paste(c(setup_out, user_out, if (!is.null(err)) paste("Error:", err) else NULL), collapse = "\\n")
-    `;
-    return evalString(webR, expr);
+    const setupText = setup.trim() ? await capture(webR, setup) : "";
+    const userText = await capture(webR, user);
+    return [setupText, userText].filter(Boolean).join("\n");
   }
 
   async function maybePlot(webR: WebRLike, user: string) {

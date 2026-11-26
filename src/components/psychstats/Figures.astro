@@ -450,91 +450,412 @@ const { ids = [] } = Astro.props;
   function mountChance(root: HTMLElement) {
     const svg = root.querySelector("svg")!;
     const cap = root.querySelector("figcaption")!;
+    const controls = root.querySelector(".fig-controls")!;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Suppose the effect is real";
+    controls.appendChild(button);
+    let real = false;
     const cols = 10;
     const gap = 32;
     const r = 12;
     const originX = (W - (cols - 1) * gap) / 2;
     const originY = 24;
     const rare = new Set([3, 27, 61, 84]);
-    for (let i = 0; i < 100; i++) {
-      const col = i % cols;
-      const row = Math.floor(i / cols);
-      const hot = rare.has(i);
-      svg.appendChild(
-        el("circle", {
-          cx: String(originX + col * gap),
-          cy: String(originY + row * gap),
-          r: String(r),
-          fill: hot ? "#E89923" : "#00539B",
-        })
-      );
-    }
-    cap.textContent =
-      "One hundred studies in which nothing is really going on. The four orange circles are the samples that would look as extreme as yours by chance. That is fewer than 5 in 100.";
+    const paint = () => {
+      svg.replaceChildren();
+      for (let i = 0; i < 100; i++) {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const hot = real ? i % 3 !== 0 : rare.has(i);
+        svg.appendChild(
+          el("circle", {
+            cx: String(originX + col * gap),
+            cy: String(originY + row * gap),
+            r: String(r),
+            fill: hot ? "#E89923" : "#00539B",
+          })
+        );
+      }
+      cap.textContent = real
+        ? "Same 100 studies, now with a real effect. Most samples show it. A significant result is common when something is actually there."
+        : "One hundred studies in which nothing is really going on. The four orange circles are the samples that would look as extreme as yours by chance. That is fewer than 5 in 100.";
+    };
+    button.addEventListener("click", () => {
+      real = !real;
+      button.textContent = real ? "Nothing is really going on" : "Suppose the effect is real";
+      button.setAttribute("aria-pressed", real ? "true" : "false");
+      paint();
+    });
+    paint();
   }
 
   function mountDescribeInfer(root: HTMLElement) {
     const svg = root.querySelector("svg")!;
     const cap = root.querySelector("figcaption")!;
+    const controls = root.querySelector(".fig-controls")!;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Draw a new set of samples";
+    controls.appendChild(button);
     const sample = [42, 55, 48, 70, 46, 62, 51, 58, 44, 66, 49, 60];
-    const left = 36;
-    const base = 168;
-    sample.forEach((value, i) => {
-      const h = value * 1.15;
-      svg.appendChild(
-        el("rect", {
-          x: String(left + i * 22),
-          y: String(base - h),
-          width: "14",
-          height: String(h),
-          rx: "3",
-          fill: "#00539B",
-        })
-      );
+    let draw = 0;
+    const paint = () => {
+      svg.replaceChildren();
+      const left = 36;
+      const base = 300;
+      sample.forEach((value, i) => {
+        const h = value * 1.7;
+        svg.appendChild(el("rect", { x: String(left + i * 22), y: String(base - h), width: "14", height: String(h), rx: "3", fill: "#00539B" }));
+      });
+      const mean = sample.reduce((sum, value) => sum + value, 0) / sample.length;
+      const meanY = base - mean * 1.7;
+      svg.appendChild(el("line", { x1: String(left), y1: String(meanY), x2: String(left + sample.length * 22), y2: String(meanY), stroke: "#E89923", "stroke-width": "3" }));
+      const leftLabel = el("text", { x: "150", y: "28", "text-anchor": "middle", fill: "#111", "font-size": "16", "font-weight": "700" });
+      leftLabel.textContent = "Descriptive";
+      svg.appendChild(leftLabel);
+      const leftNote = el("text", { x: "150", y: "328", "text-anchor": "middle", fill: "#5c5852", "font-size": "13" });
+      leftNote.textContent = "What this sample did";
+      svg.appendChild(leftNote);
+      const rare = new Set([(draw * 3) % 40, (draw * 7 + 11) % 40]);
+      for (let i = 0; i < 40; i++) {
+        const x = 360 + (i % 10) * 26;
+        const y = 70 + Math.floor(i / 10) * 52;
+        const hot = rare.has(i);
+        svg.appendChild(el("circle", { cx: String(x), cy: String(y), r: "9", fill: hot ? "#E89923" : "#d7e6f5", stroke: hot ? "#E89923" : "#00539B", "stroke-width": "1.5" }));
+      }
+      const rightLabel = el("text", { x: "490", y: "28", "text-anchor": "middle", fill: "#111", "font-size": "16", "font-weight": "700" });
+      rightLabel.textContent = "Inferential";
+      svg.appendChild(rightLabel);
+      const rightNote = el("text", { x: "490", y: "328", "text-anchor": "middle", fill: "#5c5852", "font-size": "13" });
+      rightNote.textContent = "New samples, if nothing is true";
+      svg.appendChild(rightNote);
+      cap.textContent = "Left stays put: it is the people you already measured. Right is a fresh set of samples drawn as if there were no real difference. Only the orange ones look like a strong result, and which ones they are changes every draw.";
+    };
+    button.addEventListener("click", () => {
+      draw += 1;
+      paint();
     });
-    const mean = sample.reduce((sum, value) => sum + value, 0) / sample.length;
-    const meanY = base - mean * 1.15;
-    svg.appendChild(
-      el("line", {
-        x1: String(left),
-        y1: String(meanY),
-        x2: String(left + sample.length * 22),
-        y2: String(meanY),
-        stroke: "#E89923",
-        "stroke-width": "3",
-      })
-    );
-    const leftLabel = el("text", { x: "150", y: "28", "text-anchor": "middle", fill: "#111", "font-size": "16", "font-weight": "700" });
-    leftLabel.textContent = "Descriptive";
-    svg.appendChild(leftLabel);
-    const leftNote = el("text", { x: "150", y: "196", "text-anchor": "middle", fill: "#5c5852", "font-size": "13" });
-    leftNote.textContent = "What this sample did";
-    svg.appendChild(leftNote);
+    paint();
+  }
 
-    const means = Array.from({ length: 40 }, (_, i) => 28 + ((i * 17) % 23));
-    const rare = new Set([2, 37]);
-    means.forEach((value, i) => {
-      const x = 360 + (i % 10) * 26;
-      const y = 70 + Math.floor(i / 10) * 28;
-      svg.appendChild(
-        el("circle", {
-          cx: String(x),
-          cy: String(y),
-          r: "8",
-          fill: rare.has(i) ? "#E89923" : "#d7e6f5",
-          stroke: rare.has(i) ? "#E89923" : "#00539B",
-          "stroke-width": "1.5",
-        })
-      );
+  function sliderControl(root: HTMLElement, text: string, min: string, max: string, step: string, value: string) {
+    const controls = root.querySelector(".fig-controls")!;
+    const label = document.createElement("label");
+    label.textContent = text;
+    const slider = document.createElement("input");
+    slider.type = "range";
+    slider.min = min;
+    slider.max = max;
+    slider.step = step;
+    slider.value = value;
+    label.appendChild(slider);
+    controls.appendChild(label);
+    return slider;
+  }
+
+  function mountTKind(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const one = document.createElement("button");
+    const two = document.createElement("button");
+    one.type = "button";
+    two.type = "button";
+    one.textContent = "One sample";
+    two.textContent = "Two samples";
+    const controls = root.querySelector(".fig-controls")!;
+    controls.append(one, two);
+    let mode: "one" | "two" = "one";
+    const shift = sliderControl(root, "Move the sample ", "-1.4", "1.4", "0.05", "0.8");
+    const paint = () => {
+      const gap = Number(shift.value);
+      svg.replaceChildren();
+      one.setAttribute("aria-pressed", mode === "one" ? "true" : "false");
+      two.setAttribute("aria-pressed", mode === "two" ? "true" : "false");
+      if (mode === "one") {
+        axes(svg, "people", "score");
+        svg.appendChild(el("line", { x1: String(sx(0.4, 0, 5)), y1: String(sy(3, 0, 6)), x2: String(sx(4.6, 0, 5)), y2: String(sy(3, 0, 6)), stroke: "#E89923", "stroke-width": "3", "stroke-dasharray": "6 4" }));
+        const known = el("text", { x: String(sx(4.6, 0, 5)), y: String(sy(3, 0, 6) - 8), "text-anchor": "end", fill: "#c47d12", "font-size": "13" });
+        known.textContent = "known number";
+        svg.appendChild(known);
+        for (let i = 0; i < 8; i++) {
+          svg.appendChild(el("circle", { cx: String(sx(1.2 + i * 0.35, 0, 5)), cy: String(sy(3 + gap + ((i % 3) - 1) * 0.28, 0, 6)), r: "6", fill: "#00539B" }));
+        }
+        cap.textContent = "One sample asks whether this mean differs from a number you already know, such as zero or a published norm. A paired test is this picture applied to each person's difference.";
+      } else {
+        axes(svg, "group", "score");
+        const lift = gap;
+        [1.3, 3.5].forEach((x, group) => {
+          for (let i = 0; i < 6; i++) {
+            const y = 2.4 + group * lift + ((i % 3) - 1) * 0.28;
+            svg.appendChild(el("circle", { cx: String(sx(x + (i - 2.5) * 0.12, 0, 5)), cy: String(sy(y, 0, 6)), r: "6", fill: group ? "#E89923" : "#00539B" }));
+          }
+        });
+        cap.textContent = "Two samples compare two means with each other. There is no known number on the page. If the same person is in both groups, this is the wrong picture.";
+      }
+    };
+    one.addEventListener("click", () => { mode = "one"; paint(); });
+    two.addEventListener("click", () => { mode = "two"; paint(); });
+    shift.addEventListener("input", paint);
+    paint();
+  }
+
+  function mountAnova(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const slider = sliderControl(root, "How far the third group sits ", "0", "1.8", "0.05", "1.2");
+    const paint = () => {
+      const lift = Number(slider.value);
+      svg.replaceChildren();
+      axes(svg, "group", "outcome");
+      [1, 2.4, 3.8].forEach((x, group) => {
+        const mean = 2.2 + (group === 2 ? lift : 0);
+        for (let i = 0; i < 6; i++) {
+          svg.appendChild(el("circle", { cx: String(sx(x + (i - 2.5) * 0.08, 0, 5)), cy: String(sy(mean + ((i % 3) - 1) * 0.22, 0, 6)), r: "6", fill: group === 2 ? "#E89923" : "#00539B" }));
+        }
+        svg.appendChild(el("line", { x1: String(sx(x - 0.28, 0, 5)), y1: String(sy(mean, 0, 6)), x2: String(sx(x + 0.28, 0, 5)), y2: String(sy(mean, 0, 6)), stroke: "#111", "stroke-width": "2" }));
+      });
+      cap.textContent = lift < 0.35
+        ? "Three means, sitting together. ANOVA would not claim that the groups differ."
+        : "The third mean has moved. ANOVA says the means differ somewhere. It does not say which pair. That is a later comparison.";
+    };
+    slider.addEventListener("input", paint);
+    paint();
+  }
+
+  function mountAncova(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const slider = sliderControl(root, "How much older group B is ", "0", "2.2", "0.05", "1.4");
+    const paint = () => {
+      const shift = Number(slider.value);
+      svg.replaceChildren();
+      axes(svg, "age", "score");
+      const line = (x: number, group: number) => 1.4 + 0.7 * x + group * 0.9;
+      for (const group of [0, 1]) {
+        const color = group ? "#E89923" : "#00539B";
+        for (let i = 0; i < 7; i++) {
+          const x = 0.6 + i * 0.45 + group * shift;
+          const y = line(x - group * shift, group) + ((i % 3) - 1) * 0.18;
+          svg.appendChild(el("circle", { cx: String(sx(Math.min(x, 4.8), 0, 5)), cy: String(sy(y, 0, 7)), r: "5.5", fill: color }));
+        }
+        svg.appendChild(el("line", { x1: String(sx(0.4, 0, 5)), y1: String(sy(line(0.4, group), 0, 7)), x2: String(sx(4.4, 0, 5)), y2: String(sy(line(4.4, group), 0, 7)), stroke: color, "stroke-width": "2.5" }));
+      }
+      cap.textContent = shift < 0.4
+        ? "The groups have similar ages. The vertical gap between the lines is the group difference."
+        : "Group B is older, so a raw mean can mix age with the treatment. ANCOVA reads the gap between the lines at the same age.";
+    };
+    slider.addEventListener("input", paint);
+    paint();
+  }
+
+  function mountNested(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Pretend every row is a new person";
+    root.querySelector(".fig-controls")!.appendChild(button);
+    let ignore = false;
+    const people = ["#00539B", "#E89923", "#111", "#7aa6d4"];
+    const paint = () => {
+      svg.replaceChildren();
+      axes(svg, ignore ? "row, treated as its own person" : "trial, inside a person", "score");
+      people.forEach((color, p) => {
+        for (let t = 0; t < 5; t++) {
+          const x = ignore ? 0.4 + (p * 5 + t) * 0.22 : 0.8 + t * 0.7;
+          const y = 1.5 + p * 0.9 + ((t % 3) - 1) * 0.18;
+          svg.appendChild(el("circle", { cx: String(sx(x, 0, 5)), cy: String(sy(y, 0, 6)), r: "6", fill: ignore ? "#00539B" : color }));
+        }
+      });
+      cap.textContent = ignore
+        ? "Every dot is now the same color, as if 20 rows were 20 people. The study looks more precise than it was."
+        : "Four people, five trials each. Trials that share a color share a person. A multi-level model keeps that color in the analysis.";
+    };
+    button.addEventListener("click", () => {
+      ignore = !ignore;
+      button.textContent = ignore ? "Show which rows share a person" : "Pretend every row is a new person";
+      button.setAttribute("aria-pressed", ignore ? "true" : "false");
+      paint();
     });
-    const rightLabel = el("text", { x: "490", y: "28", "text-anchor": "middle", fill: "#111", "font-size": "16", "font-weight": "700" });
-    rightLabel.textContent = "Inferential";
-    svg.appendChild(rightLabel);
-    const rightNote = el("text", { x: "490", y: "196", "text-anchor": "middle", fill: "#5c5852", "font-size": "13" });
-    rightNote.textContent = "New samples, if nothing is true";
-    svg.appendChild(rightNote);
-    cap.textContent =
-      "Left: the people you measured, and their average. Right: many new samples drawn as if there were no real difference. Only the orange ones look like a strong result.";
+    paint();
+  }
+
+  function mountInterval(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Draw a new sample";
+    root.querySelector(".fig-controls")!.appendChild(button);
+    const truth = 2.4;
+    let n = 0;
+    const paint = () => {
+      svg.replaceChildren();
+      axes(svg, "possible size of the effect", "");
+      const y = sy(4.2, 0, 6);
+      svg.appendChild(el("line", { x1: String(sx(truth, 0, 5)), y1: String(sy(0.6, 0, 6)), x2: String(sx(truth, 0, 5)), y2: String(sy(5.4, 0, 6)), stroke: "#E89923", "stroke-width": "3" }));
+      const tag = el("text", { x: String(sx(truth, 0, 5)), y: "22", "text-anchor": "middle", fill: "#c47d12", "font-size": "13", "font-weight": "700" });
+      tag.textContent = "true effect";
+      svg.appendChild(tag);
+      const center = 1.1 + ((n * 1.7) % 2.6);
+      const half = 0.7;
+      const caught = center - half <= truth && truth <= center + half;
+      svg.appendChild(el("line", { x1: String(sx(center - half, 0, 5)), y1: String(y), x2: String(sx(center + half, 0, 5)), y2: String(y), stroke: caught ? "#00539B" : "#c4553a", "stroke-width": "8", "stroke-linecap": "round" }));
+      svg.appendChild(el("circle", { cx: String(sx(center, 0, 5)), cy: String(y), r: "6", fill: "#111" }));
+      cap.textContent = caught
+        ? "This sample's interval covers the true effect. Most samples from a 95% procedure do. The dot is the estimate. The bar is the range still compatible with the data."
+        : "This sample's interval missed. That happens. The procedure is built so that most intervals catch the truth, not so that every one does.";
+    };
+    button.addEventListener("click", () => { n += 1; paint(); });
+    paint();
+  }
+
+  function mountShape(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const slider = sliderControl(root, "Pull the tail out ", "0", "1", "0.01", "0");
+    const paint = () => {
+      const skew = Number(slider.value);
+      svg.replaceChildren();
+      axes(svg, "score", "how many people");
+      const bins = 16;
+      for (let i = 0; i < bins; i++) {
+        const z = (i - 6) / 3;
+        const normal = Math.exp(-0.5 * z * z);
+        const tail = Math.exp(-((i - 14) ** 2) / 8) * skew;
+        const h = (normal * (1 - skew * 0.45) + tail) * 150;
+        svg.appendChild(el("rect", { x: String(PAD.l + 8 + i * 32), y: String(sy(0, 0, 9) - h), width: "26", height: String(h), fill: skew > 0.45 && i > 11 ? "#E89923" : "#00539B" }));
+      }
+      cap.textContent = skew < 0.25
+        ? "A roughly symmetric pile. Normality is about this shape for the residuals or the differences, not a claim that people are normal."
+        : "The pile now has a long right tail. The mean is pulled toward those few high scores. Look at this picture before you trust the mean.";
+    };
+    slider.addEventListener("input", paint);
+    paint();
+  }
+
+  function mountCluster(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Break the rows apart";
+    root.querySelector(".fig-controls")!.appendChild(button);
+    let apart = false;
+    const paint = () => {
+      svg.replaceChildren();
+      const colors = ["#00539B", "#E89923", "#111"];
+      colors.forEach((color, g) => {
+        for (let i = 0; i < 8; i++) {
+          const x = apart ? 40 + ((g * 8 + i) % 12) * 48 : 70 + g * 190 + (i % 4) * 28;
+          const y = apart ? 50 + Math.floor((g * 8 + i) / 12) * 70 + (i % 3) * 18 : 80 + Math.floor(i / 4) * 70;
+          svg.appendChild(el("circle", { cx: String(x), cy: String(y), r: "10", fill: apart ? "#00539B" : color }));
+        }
+      });
+      cap.textContent = apart
+        ? "Shuffled, the rows look independent. A test that ignores the grouping treats every dot as a new person."
+        : "Three rooms, or three people. Dots of one color share something. Independence says that, once the model is in, one row does not know about another. Here they do.";
+    };
+    button.addEventListener("click", () => {
+      apart = !apart;
+      button.textContent = apart ? "Put the rows back in groups" : "Break the rows apart";
+      button.setAttribute("aria-pressed", apart ? "true" : "false");
+      paint();
+    });
+    paint();
+  }
+
+  function mountTypes(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const labelBtn = document.createElement("button");
+    const numberBtn = document.createElement("button");
+    labelBtn.type = "button";
+    numberBtn.type = "button";
+    labelBtn.textContent = "A label";
+    numberBtn.textContent = "A measurement";
+    root.querySelector(".fig-controls")!.append(labelBtn, numberBtn);
+    let numeric = false;
+    const paint = () => {
+      svg.replaceChildren();
+      labelBtn.setAttribute("aria-pressed", numeric ? "false" : "true");
+      numberBtn.setAttribute("aria-pressed", numeric ? "true" : "false");
+      if (!numeric) {
+        ["congruent", "incongruent"].forEach((name, i) => {
+          const h = i ? 150 : 90;
+          svg.appendChild(el("rect", { x: String(160 + i * 160), y: String(250 - h), width: "90", height: String(h), rx: "6", fill: i ? "#E89923" : "#00539B" }));
+          const t = el("text", { x: String(205 + i * 160), y: "290", "text-anchor": "middle", fill: "#3f3c38", "font-size": "14" });
+          t.textContent = name;
+          svg.appendChild(t);
+        });
+        cap.textContent = "Condition is a label. You can count how many rows wear each name. You cannot average the words congruent and incongruent.";
+      } else {
+        [40, 70, 120, 150, 110, 60, 30].forEach((h, i) => {
+          svg.appendChild(el("rect", { x: String(90 + i * 70), y: String(250 - h), width: "52", height: String(h), fill: "#00539B" }));
+        });
+        const axis = el("text", { x: "320", y: "300", "text-anchor": "middle", fill: "#3f3c38", "font-size": "14" });
+        axis.textContent = "reaction time (ms)";
+        svg.appendChild(axis);
+        cap.textContent = "Reaction time is a measurement. A histogram is legal, and so is a mean. The unit belongs on the axis.";
+      }
+    };
+    labelBtn.addEventListener("click", () => { numeric = false; paint(); });
+    numberBtn.addEventListener("click", () => { numeric = true; paint(); });
+    paint();
+  }
+
+  function mountMbti(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const cap = root.querySelector("figcaption")!;
+    const controls = root.querySelector(".fig-controls")!;
+    const letter = document.createElement("button");
+    const score = document.createElement("button");
+    letter.type = "button";
+    score.type = "button";
+    letter.textContent = "Myers–Briggs letter";
+    score.textContent = "Measured extraversion";
+    controls.append(letter, score);
+    const speak = [2.1, 6.2, 3.0, 6.8, 1.6, 5.4, 4.2, 2.8, 6.5, 3.6, 5.8, 1.9, 4.8, 3.3];
+    const binary: [number, number][] = speak.map((y, i) => [i < 7 ? 1.15 : 3.85, y]);
+    const measured: [number, number][] = [
+      [0.4, 2.2], [0.8, 1.5], [1.1, 2.9], [1.5, 2.4], [1.9, 3.8], [2.2, 3.1], [2.6, 4.6],
+      [2.9, 3.9], [3.3, 5.2], [3.6, 4.4], [3.9, 6.1], [4.2, 5.3], [4.5, 6.6], [4.8, 5.9],
+    ];
+    let mode: "letter" | "score" = "letter";
+    const paint = () => {
+      const pts = mode === "letter" ? binary : measured;
+      const { intercept, slope } = ols(pts);
+      svg.replaceChildren();
+      letter.setAttribute("aria-pressed", mode === "letter" ? "true" : "false");
+      score.setAttribute("aria-pressed", mode === "score" ? "true" : "false");
+      axes(svg, mode === "letter" ? "Myers–Briggs letter" : "extraversion score", "times speaking up");
+      if (mode === "letter") {
+        const iLabel = el("text", { x: String(sx(1.15)), y: String(H - 22), "text-anchor": "middle", fill: "#00539B", "font-size": "13", "font-weight": "700" });
+        iLabel.textContent = "I";
+        svg.appendChild(iLabel);
+        const eLabel = el("text", { x: String(sx(3.85)), y: String(H - 22), "text-anchor": "middle", fill: "#c47d12", "font-size": "13", "font-weight": "700" });
+        eLabel.textContent = "E";
+        svg.appendChild(eLabel);
+      }
+      svg.appendChild(el("line", {
+        x1: String(sx(0.3)),
+        y1: String(sy(intercept + slope * 0.3)),
+        x2: String(sx(4.8)),
+        y2: String(sy(intercept + slope * 4.8)),
+        stroke: "#00539B",
+        "stroke-width": "3",
+      }));
+      pts.forEach(([x, y], i) => {
+        svg.appendChild(el("circle", { cx: String(sx(x)), cy: String(sy(y)), r: "6", fill: mode === "letter" && i >= 7 ? "#E89923" : "#00539B" }));
+      });
+      cap.textContent = mode === "letter"
+        ? "E and I sit in two piles. People with the same letter speak up anywhere from rarely to often, so the line barely climbs. The letter does not predict the behavior."
+        : "The same kind of behavior, now against a measured extraversion score. The slope is the extra times someone speaks up for one step up the score. That is what a regression is for.";
+    };
+    letter.addEventListener("click", () => { mode = "letter"; paint(); });
+    score.addEventListener("click", () => { mode = "score"; paint(); });
+    paint();
   }
 
   const mounts: Record<string, (root: HTMLElement) => void> = {
@@ -548,6 +869,15 @@ const { ids = [] } = Astro.props;
     "write-sentence": mountSentence,
     "chance-grid": mountChance,
     "describe-infer": mountDescribeInfer,
+    "t-kind": mountTKind,
+    "anova-groups": mountAnova,
+    "ancova-lines": mountAncova,
+    nested: mountNested,
+    interval: mountInterval,
+    shape: mountShape,
+    cluster: mountCluster,
+    "column-types": mountTypes,
+    "mbti-line": mountMbti,
   };
 
   function boot() {
