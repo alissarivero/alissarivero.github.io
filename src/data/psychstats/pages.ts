@@ -93,7 +93,19 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
-    "one-row",
+    "inspect-variables",
+    "understanding-data",
+    "What variables are in my dataset?",
+    "Inspect",
+    "Look at the columns before you compute anything.",
+    [
+      "Open the file and name every column before you call mean() or plot(). In R, names(data) lists the columns, str(data) shows the type R stored, and head(data) shows the first rows. A column you cannot explain in a sentence is not ready to analyze.",
+      "Write down, for each column, what one number or label means and what unit it is in. Reaction time in milliseconds is not the same object as a count of errors. This page is that inventory."
+    ],
+    []
+  ),
+  page(
+    "observations",
     "understanding-data",
     "One row is one what?",
     "One row",
@@ -106,7 +118,7 @@ export const LESSON_PAGES: LessonPage[] = [
   page(
     "variable-types",
     "understanding-data",
-    "What kind of column is this?",
+    "Variable Types",
     "Column types",
     "You may average a duration. You may not average a label.",
     [
@@ -115,35 +127,109 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
-    "describing-a-column",
-    "understanding-data",
-    "Describing one column",
-    "Descriptives",
-    "Center, spread, and the awkward rows.",
+    "raw-data-issues",
+    "cleaning",
+    "What could possibly go wrong collecting data from humans?",
+    "Raw data",
+    "Human data arrives with mistakes.",
     [
-      "mean() and sd() describe a pile that is roughly balanced. median() and the interquartile range describe a pile with a long tail, which reaction times usually have. min(), max(), and a quick histogram tell you whether someone typed 99999. Describe the column you have, not the column a textbook drew.",
+      "People skip items, tap the wrong key, take a break in the middle of a trial, or type an age of 213. A spreadsheet from a survey can contain duplicate rows, a dropped participant, or a free-text answer where you expected a number.",
+      "None of that is a reason to throw the file away. It is a reason to look before you summarize. The next page is the cleaning you do after you have seen those problems."
     ],
     []
   ),
   page(
-    "which-plot",
-    "understanding-data",
-    "Which plot is legal",
-    "Which plot",
-    "The picture has to match the kind of column.",
+    "cleaning-data",
+    "cleaning",
+    "Cleaning data",
+    "Cleaning",
+    "Decide what a bad row is, and write the decision down.",
     [
-      "One continuous column wants a distribution: a histogram or a box. Groups compared on a number want a boxplot or the points themselves, not only a bar of means. Two numbers want a scatter. Categories want counts. A bar of means hides the very spread a psychologist should be looking at.",
+      "Cleaning is a set of rules you can rerun: drop duplicate IDs, turn blank cells into missing values, and set aside trials that finished faster than a person can respond. The rule belongs in the script, not only in your memory.",
+      "Say how many rows you removed and why. A reader should be able to start from the raw file and reach the same analysis file by running your code."
+    ],
+    []
+  ),
+  page(
+    "visualization-examples",
+    "visualizing",
+    "What types of visualizations are possible?",
+    "Examples",
+    "A figure is a choice about which pattern to show.",
+    [
+      "A histogram or density shows one numeric column. A box or a set of points shows a number split by a group. A scatter shows two numbers. A bar of counts shows categories. Those are the pictures this course uses.",
+      "The same table can support all of them. The question decides the picture. A mean difference wants a comparison of groups. A relationship wants a scatter."
+    ],
+    []
+  ),
+  page(
+    "visualization-variable-type",
+    "visualizing",
+    "Different types of variables get visualized differently",
+    "By type",
+    "The column type decides which picture is legal.",
+    [
+      "A label such as condition cannot be a histogram of the word 'incongruent.' It can be a count, or the group on the x-axis of a plot of reaction time. A duration can be a histogram, a box, or the y-axis of a scatter.",
+      "If you are unsure, name the column type first, then pick the mark. The assignment after the basics page is where you draw one."
+    ],
+    []
+  ),
+  page(
+    "graph-basics",
+    "visualizing",
+    "Graph basics",
+    "Basics",
+    "Units, a readable scale, and the raw pattern.",
+    [
+      "Label the axes in the units of the study: milliseconds, hours, counts. Start a count axis at zero. Do not start a reaction-time axis at zero if the whole study lives between 400 and 800 ms and the zero makes the difference disappear.",
+      "Prefer a picture that still shows the spread. A bar of means with no spread hides the thing a later test is about."
+    ],
+    []
+  ),
+  page(
+    "ggplot",
+    "visualizing",
+    "What is ggplot?",
+    "ggplot",
+    "ggplot2 builds a figure in layers from a table.",
+    [
+      "ggplot2 is the R package most psychologists use when the figure has to carry the result. You name the table, map columns onto x, y, and color, then add a mark: points, a box, a smooth line.",
+      "It is not a menu of chart types. It is a sentence about the data: which columns, which marks, which labels. The next page is how that sentence is assembled."
     ],
     []
   ),
   page(
     "ggplot-layers",
-    "understanding-data",
+    "visualizing",
     "How a ggplot is built",
     "ggplot",
     "Data, then the mapping, then the mark.",
     [
       "The data is the table. aes() maps columns onto x, y, and color. geom_point(), geom_boxplot(), or geom_col() is the mark. In RStudio it looks like ggplot(stroop, aes(condition, rt_ms)) + geom_boxplot(). The browser on this site runs base R, so the practice draws with plot() and boxplot() and shows the ggplot version beside it.",
+    ],
+    []
+  ),
+  page(
+    "descriptives",
+    "describing",
+    "What is descriptive statistics?",
+    "Descriptives",
+    "Description stays with the people you measured.",
+    [
+      "A mean, a median, a spread, and a picture answer what this sample did. They do not yet answer whether a new sample would do it. That second question is inference, and it comes later.",
+      "Description still has a job. If you skip it, a test can look decisive while the raw scores are a handful of typos and one extreme person."
+    ],
+    []
+  ),
+  page(
+    "inferential-stats",
+    "analyzing-data",
+    "What is inferential statistics?",
+    "Inference",
+    "Inference asks whether the pattern would show up again.",
+    [
+      "Description reports the sample in front of you. Inference asks what this sample implies about a larger population, or about what would happen if you ran the study again.",
+      "A test is one inferential tool. It compares the pattern you found with the patterns you would expect if nothing were really going on. The significance page is that comparison, drawn as 100 repeated studies."
     ],
     []
   ),
@@ -159,35 +245,14 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
-    "reading-a-t-test",
+    "analyses",
     "analyzing-data",
-    "Reading a t-test",
-    "A t-test",
-    "Two means, and whether the gap is large beside the spread.",
+    "What are the different types of analyses?",
+    "Analyses",
+    "The analysis follows the question and the columns.",
     [
-      "A t-test compares two means. Paired, or one-sample against a known value, uses the same people twice. Two-sample uses different people. The output gives the means, the t statistic, the degrees of freedom, and a p-value. The thing you wanted was the difference in the original units: hours of sleep, milliseconds, points on a scale. The t is how that gap compares with the noise.",
-    ],
-    []
-  ),
-  page(
-    "reading-a-correlation",
-    "analyzing-data",
-    "Reading a correlation",
-    "Correlation",
-    "Two numbers that move together, and how tightly.",
-    [
-      "A correlation, r, is how tightly two numeric columns move together, from -1 to 1. Zero is no straight-line relationship. The sign is the direction. The size is the tightness, and a tight relationship can still be small in the units that matter. cor.test() adds a p-value for the dull story that the true correlation is zero.",
-    ],
-    []
-  ),
-  page(
-    "anova-ancova",
-    "analyzing-data",
-    "ANOVA and ANCOVA",
-    "ANOVA",
-    "More than two groups, and a numeric nuisance you want to hold still.",
-    [
-      "ANOVA asks whether the group means differ more than the spread inside the groups would suggest. It does not tell you which group differs from which. That is a follow-up comparison, decided before you go fishing. ANCOVA is the same idea with an extra numeric column held constant, such as age, so the group difference is not just 'the older people were in one condition.'",
+      "Two groups and a numeric outcome is a comparison of means, often a t-test. More than two groups is an ANOVA. Two numeric columns that move together is a correlation or a regression. A yes-or-no outcome is a logistic model. Rows that share a person need a model that remembers the person.",
+      "You do not collect analyses. You name the outcome, the predictors, and whether the rows are independent, and the analysis is the one that matches."
     ],
     []
   ),
@@ -203,9 +268,68 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
-    "best-fit",
+    "difference-between-two-samples",
+    "t-tests",
+    "Are my two samples meaningfully different?",
+    "Two samples",
+    "A difference is a gap in the original units, not a p-value.",
+    [
+      "Two samples are meaningfully different when the gap between them is large beside the spread, in a unit a reader cares about: hours of sleep, milliseconds, points on a scale.",
+      "A tiny gap can be 'significant' in a huge sample, and a large gap can be quiet in a small one. Look at the two distributions, then the difference, before you read the test."
+    ],
+    []
+  ),
+  page(
+    "1v2-sample-t-test",
+    "t-tests",
+    "Should I do a one or two-sample t-test?",
+    "One or two",
+    "One sample compares a mean to a known number. Two samples compare two means.",
+    [
+      "A one-sample t-test asks whether a mean differs from a fixed value, such as zero or a published norm. A paired test is the one-sample test applied to differences from the same people measured twice.",
+      "A two-sample t-test compares two separate groups. If the same person is in both columns, it is not a two-sample test. Use the paired form."
+    ],
+    []
+  ),
+  page(
+    "reading-a-t-test",
+    "t-tests",
+    "Interpreting a t-test",
+    "A t-test",
+    "Two means, and whether the gap is large beside the spread.",
+    [
+      "A t-test compares two means. Paired, or one-sample against a known value, uses the same people twice. Two-sample uses different people. The output gives the means, the t statistic, the degrees of freedom, and a p-value. The thing you wanted was the difference in the original units: hours of sleep, milliseconds, points on a scale. The t is how that gap compares with the noise.",
+    ],
+    []
+  ),
+  page(
+    "correlation-interpretation",
+    "correlations",
+    "Interpreting a correlation",
+    "Correlation",
+    "r is direction and tightness, not importance by itself.",
+    [
+      "A correlation, r, runs from -1 to 1. The sign is the direction. The size is how tightly two numeric columns move together in a straight line. Zero is no straight-line relationship.",
+      "A large r can still be a small change in the units that matter, and a plot can show a curve or a clump that r misses. Read the scatter, then r, then the test of whether the true correlation could be zero."
+    ],
+    []
+  ),
+  page(
+    "linear-regression",
     "regression-models",
-    "The line that shrinks the gaps",
+    "What is a linear regression?",
+    "Linear regression",
+    "A straight line for the mean of an outcome.",
+    [
+      "Linear regression describes the mean of an outcome as a straight line in one or more predictors. With one predictor, the line has an intercept and a slope.",
+      "The line is a summary of the mean, not a claim that every person sits on it. The next pages are what 'best' means and how to read the numbers."
+    ],
+    []
+  ),
+  page(
+    "line-of-best-fit",
+    "regression-models",
+    "What does 'line of best fit' mean?",
     "Best fit",
     "The line is the one that makes the vertical misses as small as they can be.",
     [
@@ -216,7 +340,7 @@ export const LESSON_PAGES: LessonPage[] = [
   page(
     "reading-the-line",
     "regression-models",
-    "Intercept and slope, in the units",
+    "Interpreting a linear regression",
     "The line",
     "The intercept is a height. The slope is how the outcome changes when the predictor steps by one.",
     [
@@ -225,33 +349,7 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
-    "what-a-glm-is",
-    "regression-models",
-    "What a GLM changes",
-    "A GLM",
-    "The same linear idea, with a rule that keeps the prediction inside the legal range.",
-    [
-      "A straight line through probabilities will eventually leave 0 and 1. A count cannot be negative. A GLM keeps a straight-line piece, the linear predictor, and then bends it through a link so the prediction stays legal. The link is the new piece. The coefficients are still a height and a tilt, but they are on the link’s scale until you translate them.",
-    ],
-    [
-      "You do not need a new philosophy. You need to notice when the outcome is not a free number. Binary answers, counts, and proportions are the usual reasons a psychologist reaches for glm() instead of lm(). The next page is the binary case.",
-    ]
-  ),
-  page(
-    "logistic",
-    "regression-models",
-    "Logistic regression",
-    "Logistic",
-    "A curve for a yes-or-no outcome that stays between 0 and 1.",
-    [
-      "When the outcome is yes or no, the logistic curve is the link that stays inside 0 and 1. glm(correct ~ age, family = binomial) is the call. The coefficient is on the log-odds scale. A positive coefficient means the probability of 'yes' rises as the predictor rises. Report a direction, and if you can, a probability or an odds ratio a reader can picture.",
-    ],
-    [
-      "Do not describe the coefficient as 'the change in the probability.' It is not, until you translate it. The figure in the parent lesson toggles the straight line and the curve so you can see why the line was never going to stay inside the legal range.",
-    ]
-  ),
-  page(
-    "multilevel",
+    "nested-data",
     "regression-models",
     "When the rows are nested in people",
     "Multi-level",
@@ -262,6 +360,80 @@ export const LESSON_PAGES: LessonPage[] = [
     [
       "Ignoring the nesting makes the sample look larger than it is and the p-value look more certain than it is. Aggregating to one number per person is the honest simple version. A mixed model is the version that keeps the trials and still remembers the person. Either is better than a t-test on raw trials that pretends every row was a new participant.",
     ]
+  ),
+  page(
+    "multilevel-models",
+    "multilevel-unit",
+    "What is a multi-level model?",
+    "Multi-level",
+    "A model that remembers which rows share a person.",
+    [
+      "When many rows belong to one person, those rows are not independent. A multi-level model gives each person a baseline and estimates the experimental effect with that clustering acknowledged.",
+      "If you only have one row per person, you do not have this problem. You have an ordinary regression. The assignment asks you to point at which term is the trial, which is the person, and which is the condition."
+    ],
+    []
+  ),
+  page(
+    "glm",
+    "glms",
+    "What is a GLM?",
+    "A GLM",
+    "The same linear idea, with a rule that keeps the prediction inside the legal range.",
+    [
+      "A straight line through probabilities will eventually leave 0 and 1. A count cannot be negative. A GLM keeps a straight-line piece, the linear predictor, and then bends it through a link so the prediction stays legal. The link is the new piece. The coefficients are still a height and a tilt, but they are on the link’s scale until you translate them.",
+    ],
+    [
+      "You do not need a new philosophy. You need to notice when the outcome is not a free number. Binary answers, counts, and proportions are the usual reasons a psychologist reaches for glm() instead of lm(). The next page is the binary case.",
+    ]
+  ),
+  page(
+    "logistic-regression",
+    "glms",
+    "What is logistic regression?",
+    "Logistic",
+    "A curve for a yes-or-no outcome that stays between 0 and 1.",
+    [
+      "When the outcome is yes or no, the logistic curve is the link that stays inside 0 and 1. glm(correct ~ age, family = binomial) is the call. The coefficient is on the log-odds scale. A positive coefficient means the probability of 'yes' rises as the predictor rises. Report a direction, and if you can, a probability or an odds ratio a reader can picture.",
+    ],
+    [
+      "Do not describe the coefficient as 'the change in the probability.' It is not, until you translate it. The figure in the parent lesson toggles the straight line and the curve so you can see why the line was never going to stay inside the legal range.",
+    ]
+  ),
+  page(
+    "anova",
+    "variance",
+    "What is ANOVA?",
+    "ANOVA",
+    "A comparison of more than two means.",
+    [
+      "ANOVA asks whether a set of means differs somewhere. It does not say which pair differs. After a significant ANOVA, the pair comparisons are a separate step.",
+      "Two groups is the t-test. Three or more groups, or a design with more than one factor, is where ANOVA is the first test."
+    ],
+    []
+  ),
+  page(
+    "ancova",
+    "variance",
+    "What is ANCOVA and how is it different from ANOVA?",
+    "ANCOVA",
+    "ANOVA plus a measured variable you want to hold steady.",
+    [
+      "ANCOVA is the group comparison while a numeric covariate, such as age or a pretest, is held in the model. The group effect is then the difference that remains after that covariate.",
+      "It is not a cure for a bad design. The covariate has to be something you did not create with the manipulation, or the adjustment answers a question you did not run."
+    ],
+    []
+  ),
+  page(
+    "what-is-an-assumption",
+    "assumptions",
+    "What is an assumption?",
+    "Assumptions",
+    "A condition the test used when it produced the p-value.",
+    [
+      "Every test computes its p-value under conditions: independent rows, a shape for the residuals, a straight line if you fit a line. Those conditions are the assumptions.",
+      "An assumption is not a moral rule about your participants. It is a claim about the noise. The pages after this one are the assumptions psychologists actually have to look at."
+    ],
+    []
   ),
   page(
     "independence",
@@ -330,9 +502,9 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
-    "intervals",
+    "confidence-intervals",
     "effect-size",
-    "Intervals",
+    "Confidence intervals",
     "Intervals",
     "The range of effects still compatible with the data.",
     [
@@ -341,42 +513,128 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
-    "the-sentence",
+    "writeup",
     "communicating",
-    "The sentence is about the behavior",
-    "The sentence",
-    "Lead with what people did. The statistic waits.",
+    "Writing up results",
+    "Write-up",
+    "The sentence is about the behavior. The statistic sits in parentheses.",
     [
-      "Weak: 'The t-test was significant (p < .05).' Strong: 'Patients slept 1.6 hours longer on the second drug than on the first.' The first sentence is about the software. The second is about the study. Every result in this course should be able to survive that swap.",
+      "Weak: 'The t-test was significant (p < .05).' Strong: 'Patients slept 1.6 hours longer on the second drug than on the first (mean difference = 1.58 hours, 95% CI [0.70, 2.46]).'",
+      "Lead with what people did, in the units of the study. Put the test, the interval, and the effect size in parentheses. A reader who skips the parentheses should still know the result."
     ],
     []
   ),
   page(
-    "parentheses",
+    "figures",
     "communicating",
-    "What goes in the parentheses",
-    "Parentheses",
-    "The statistic supports the sentence. It does not replace it.",
+    "The importance of a good figure",
+    "Figures",
+    "The figure should show the comparison the sentence claims.",
     [
-      "The APA habit is the behavior first, then the statistic in parentheses. A t-test looks like t(11) = 4.06, p = .002, and beside it the mean difference and the interval. A correlation looks like r(18) = .42, p = .06. A regression slope is reported in the outcome’s units, with its interval or its standard error. Match the symbol to the test you actually ran.",
+      "If the sentence is about two means, the figure shows the two distributions or the two means with an interval, not a 3D bar. If the sentence is about a relationship, the figure is the scatter with the line.",
+      "Label the units. A figure that only shows stars has not shown the result. The caption can repeat the sentence in shorter form."
     ],
     []
   ),
   page(
-    "the-figure",
-    "communicating",
-    "The figure carries the comparison",
-    "The figure",
-    "A reader should see the result before they read the parentheses.",
+    "great-visualization-examples",
+    "great-figures",
+    "What types of visualizations are possible?",
+    "Great examples",
+    "A strong figure is still one of a few kinds.",
     [
-      "If the sentence is about two means, the figure shows the two distributions or the two means with the interval, not a 3D bar. If the sentence is about a relationship, the figure is the scatter with the line. Label the units. The caption can repeat the sentence in shorter form. A figure that only shows stars has not shown the result.",
+      "The legal pictures have not changed: a distribution, a comparison of groups, a scatter, a count of categories. What changes at this point in the course is the standard. The figure has to be able to carry a result in a paper or a poster.",
+      "Choose the kind that matches the sentence you would write, then spend the time on labels, scale, and the raw pattern."
     ],
     []
   ),
   page(
-    "bayesian-in-practice",
+    "great-visualization-variable-type",
+    "great-figures",
+    "Different types of variables get visualized differently",
+    "Great types",
+    "The column type still decides the mark.",
+    [
+      "A category is a group or a count. A measurement is a position on an axis that has units. Mixing those up is still the fastest way to make a figure that cannot be read.",
+      "Before you open ggplot, write the type of each column you plan to show. If a column is a label stored as 1 and 2, it is still a label."
+    ],
+    []
+  ),
+  page(
+    "great-ggplot",
+    "great-figures",
+    "What is ggplot?",
+    "ggplot again",
+    "The same layered grammar, held to a higher standard.",
+    [
+      "ggplot2 is still the package: a table, a mapping, and a mark. For a figure you would show someone else, add labels with labs(), keep the scale honest, and do not hide the points behind a bar of means.",
+      "The next page is the call. The assignment is one figure you would let a reader see."
+    ],
+    []
+  ),
+  page(
+    "great-ggplot-layers",
+    "great-figures",
+    "How a ggplot is built",
+    "ggplot",
+    "Data, then the mapping, then the mark.",
+    [
+      "The data is the table. aes() maps columns onto x, y, and color. geom_point(), geom_boxplot(), or geom_col() is the mark. In RStudio it looks like ggplot(stroop, aes(condition, rt_ms)) + geom_boxplot(). The browser on this site runs base R, so the practice draws with plot() and boxplot() and shows the ggplot version beside it.",
+    ],
+    []
+  ),
+  page(
+    "publications",
+    "outputs",
+    "Publications",
+    "Papers",
+    "A paper is the sentence, the figure, and the parentheses.",
+    [
+      "A psychology paper reports what people did, in the units of the study, with the estimate and the interval a reader can check. The test is evidence, not the subject of the sentence.",
+      "The methods say what a row is, what you excluded, and which model you fit. A reader who was not in the room should be able to tell what you did."
+    ],
+    []
+  ),
+  page(
+    "posters",
+    "outputs",
+    "Scientific posters",
+    "Posters",
+    "A poster is a few sentences and one figure, readable from a step away.",
+    [
+      "A poster is not a paper pasted onto a board. Lead with the question and the result. One figure should carry the comparison. The statistic can be a small line under the figure.",
+      "If someone stops for a minute, they should leave knowing what you found."
+    ],
+    []
+  ),
+  page(
+    "conferences",
+    "outputs",
+    "Conferences",
+    "Talks",
+    "A talk is the same result, spoken in order.",
+    [
+      "Start with the question, then what people did, then the figure, then the sentence you want remembered. A slide of a p-value without the effect is the weak sentence, spoken.",
+      "Leave time for the question you cannot answer yet. That is part of the result, not a failure of the talk."
+    ],
+    []
+  ),
+  page(
+    "open-science-practices",
+    "outputs",
+    "Open science: Best practices",
+    "Open science",
+    "The script and the data should be able to travel.",
+    [
+      "Open science here is a folder: the data, or a clear note about why it cannot be shared, the script, and the packages to load. Someone else should be able to rerun the figure.",
+      "A Quarto document or a script with comments is enough. The point is that the analysis is written down, not only clicked."
+    ],
+    []
+  ),
+  page(
+    "bayesian",
     "frontiers",
-    "Bayesian work, in practice",
+    "Bayesian statistics",
     "Bayesian",
     "A prior, then the data, then a range of plausible values.",
     [
@@ -407,13 +665,61 @@ export const LESSON_PAGES: LessonPage[] = [
     []
   ),
   page(
+    "nlp",
+    "frontiers",
+    "Natural language processing",
+    "Language",
+    "Text becomes numbers, then the statistics you already know.",
+    [
+      "Natural language processing turns words into counts, categories, or the numeric codes from an encoder. A study might count the emotion words in a diary, or relate a sentence embedding to a rating.",
+      "After that conversion, the analysis is often a correlation, a regression, or a comparison of groups. The new step is how the text became a column. The test is not new."
+    ],
+    []
+  ),
+  page(
     "machine-learning",
     "frontiers",
-    "Machine learning in a psychology paper",
+    "Machine learning",
     "Learning",
     "Prediction on held-out people, with the same duty to explain the result.",
     [
       "When a paper classifies depression from speech, or predicts grades from a survey, it is in the prediction business. The honest check is accuracy on people the model did not train on. A high accuracy on the training rows is the line passing through yesterday’s points. Cross-validation and a held-out sample are the usual repairs.",
+    ],
+    []
+  ),
+  page(
+    "history-of-statistics",
+    "reads",
+    "Statistics has a complicated history",
+    "History",
+    "The tools were built by people, in institutions, for particular decisions.",
+    [
+      "The tests in this course were developed in particular places: agriculture, industry, medicine, and psychology, often tied to decisions about groups of people. Knowing that does not make the mean invalid. It does mean the default procedure is not neutral just because it is old.",
+      "When you choose a test, you are also choosing a tradition. You can still ask whether it answers the question you actually have."
+    ],
+    []
+  ),
+  page(
+    "replication-crisis",
+    "reads",
+    "Replication crisis",
+    "Replication",
+    "A surprising result that never appears again was not a finding.",
+    [
+      "Psychology spent a decade learning that many published 'significant' results did not show up in a new sample. Small samples, flexible analyses, and a file drawer of nulls were part of the reason.",
+      "The repair in this course is ordinary: say what you planned to test, report the size of the effect and the interval, and keep the script. A p-value alone was never the result."
+    ],
+    []
+  ),
+  page(
+    "costly-mistakes",
+    "reads",
+    "Why you should triple-check your code",
+    "Mistakes",
+    "A wrong column or a flipped sign can become a published sentence.",
+    [
+      "Famous corrections in psychology and economics started as a spreadsheet error, a miscoded condition, or a script that dropped the wrong rows. The paper was confident because nobody reran the file.",
+      "Before you write the sentence, rerun the script from a clean session, check that the number of rows is what you think, and look at the figure. If the result only appears after a step you cannot explain, it is not ready."
     ],
     []
   ),
