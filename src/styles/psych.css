@@ -602,7 +602,7 @@
 
 .edge-pattern {
   width: 100vw;
-  height: 180px;
+  height: 220px;
   margin: 2.5rem 0 -4rem;
   margin-left: calc(50% - 50vw);
   overflow: hidden;
@@ -1410,7 +1410,8 @@
   }
 
   .edge-pattern {
-    height: 140px;
+    height: 168px;
+    margin-bottom: -3rem;
   }
 
   .psych-frame {
