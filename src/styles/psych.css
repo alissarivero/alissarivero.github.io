@@ -602,7 +602,7 @@
 
 .edge-pattern {
   width: 100vw;
-  height: 220px;
+  height: 240px;
   margin: 2.5rem 0 -4rem;
   margin-left: calc(50% - 50vw);
   overflow: hidden;
@@ -1410,7 +1410,7 @@
   }
 
   .edge-pattern {
-    height: 168px;
+    height: 190px;
     margin-bottom: -3rem;
   }
 
