@@ -620,21 +620,22 @@
   flex-direction: column;
   gap: 0.35rem;
   padding: 1.1rem 1.15rem 1.2rem;
-  background: #fff;
-  border: 1.5px solid #E89923;
+  background: #00539B;
+  border: 1.5px solid #00539B;
   border-radius: 16px;
   text-decoration: none;
-  color: inherit;
-  box-shadow: 0 6px 0 #c47d12;
-}
-
-.project-card:hover {
-  border-color: #00539B;
+  color: #fff;
   box-shadow: 0 6px 0 #003f7a;
 }
 
+.project-card:hover {
+  background: #003f7a;
+  border-color: #003f7a;
+  box-shadow: 0 6px 0 #002a52;
+}
+
 .project-xp {
-  color: #00539B;
+  color: #f4f7fb;
   font-size: 0.78rem;
   font-weight: 750;
   letter-spacing: 0.08em;
@@ -648,7 +649,7 @@
 
 .project-card p {
   margin: 0;
-  color: #3d463f;
+  color: #f4f7fb;
   font-size: 1rem;
   line-height: 1.45;
 }
