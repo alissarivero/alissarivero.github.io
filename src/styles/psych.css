@@ -642,7 +642,7 @@
   text-transform: uppercase;
 }
 
-.project-title {
+.project-card .project-title {
   margin: 0;
   font-size: 1.45rem;
   color: #fff;
