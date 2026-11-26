@@ -72,17 +72,35 @@ const { slug, starter, setup = "", check, checkHint, xp, badge = "" } = Astro.pr
     return engine;
   }
 
+  async function writeDataFile(webR: WebRLike, name: string) {
+    const res = await fetch(`/psychstats/${name}`);
+    const csv = await res.text();
+    if (!res.ok || !csv.includes(",") || csv.trim().length < 20) {
+      throw new Error("The data file did not load.");
+    }
+    await webR.FS.writeFile(`/data/${name}`, new TextEncoder().encode(csv));
+  }
+
   async function ensureCsv(webR: WebRLike) {
     if (csvReady) return;
-    const res = await fetch("/psychstats/stroop.csv");
-    const csv = await res.text();
     try {
       await webR.FS.mkdir("/data");
     } catch {
       /* already exists */
     }
-    await webR.FS.writeFile("/data/stroop.csv", csv);
+    await writeDataFile(webR, "stroop.csv");
+    await writeDataFile(webR, "looking.csv");
     csvReady = true;
+  }
+
+  function explain(text: string) {
+    if (/did not load|empty beginning|cannot open the connection|No such file/.test(text)) {
+      return `The data file did not load. Wait a moment and run the code again.\n\n${text}`;
+    }
+    if (/object '.*' not found/.test(text)) {
+      return `This name is not defined yet. Run the earlier lines, or start again from the code already in the box.\n\n${text}`;
+    }
+    return text;
   }
 
   async function evalString(webR: WebRLike, code: string) {
@@ -159,7 +177,7 @@ const { slug, starter, setup = "", check, checkHint, xp, badge = "" } = Astro.pr
       try {
         const webR = await getEngine();
         status.textContent = "Running…";
-        const text = await runCode(webR, setup, area.value);
+        const text = explain(await runCode(webR, setup, area.value));
         output.textContent = text || "(no printed output)";
         const url = await maybePlot(webR, area.value);
         if (url) {
@@ -174,6 +192,13 @@ const { slug, starter, setup = "", check, checkHint, xp, badge = "" } = Astro.pr
           lastCode: area.value,
         });
         status.textContent = "Finished.";
+        let ok = false;
+        try {
+          ok = new RegExp(check).test(text);
+        } catch {
+          ok = false;
+        }
+        root.dispatchEvent(new CustomEvent("psychstats-output", { bubbles: true, detail: { slug, ok } }));
         return text;
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);

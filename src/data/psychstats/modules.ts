@@ -17,6 +17,9 @@ export type PsychModule = {
   /** On the path, place this assignment after the page or assignment with this slug. */
   after?: string;
   datasetNote?: string;
+  /** Short recording that belongs above the text. Empty until the file exists. */
+  videoSlot?: string;
+  video?: string;
   levels: { overview: string[]; detailed: string[]; points?: string[]; credit?: string };
   figures?: { after: number; id: string }[];
   showFlow?: boolean;
@@ -646,6 +649,15 @@ const FIGURES: Record<string, { after: number; id: string }[]> = {
   figures: [{ after: 0, id: "write-sentence" }],
 };
 
+const VIDEO_SLOTS: Record<string, string> = {
+  "r-setup": "Installing R, RStudio, and a Quarto document",
+  "r-walkthrough": "Starting a project and a first mean",
+  "inspect-variables": "Looking at names, str, and head",
+  "cleaning-data": "Cleaning one messy file in a script",
+  ggplot: "Building a ggplot in RStudio",
+  "reading-a-t-test": "Reading a t-test out loud",
+};
+
 const toPage = (page: (typeof LESSON_PAGES)[number]): PsychModule =>
   item({
     slug: page.slug,
@@ -658,6 +670,7 @@ const toPage = (page: (typeof LESSON_PAGES)[number]): PsychModule =>
     xp: 0,
     levels: { overview: page.overview, detailed: page.detailed, points: page.points, credit: page.credit },
     figures: FIGURES[page.slug],
+    videoSlot: VIDEO_SLOTS[page.slug],
   });
 
 const withAssignments = (lessonSlug: string): PsychModule[] => {
@@ -677,7 +690,7 @@ export const MODULES: PsychModule[] = [
     if (module.kind !== "lesson") return [module];
     return [module, ...withAssignments(module.slug)];
   }),
-];
+].map((module) => (VIDEO_SLOTS[module.slug] ? { ...module, videoSlot: VIDEO_SLOTS[module.slug] } : module));
 
 export const REDIRECTS: { slug: string; to: string }[] = [
   { slug: "which-test", to: "/psychstats/picking-a-test/" },

@@ -39,11 +39,13 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
     </li>
     {
       lessons.map((lesson, i) => (
-        <li class="unit">
+        <li class:list={["unit", { "unit-shut": current ? !under(lesson.slug).some((task) => task.slug === current) && lesson.slug !== current : i > 0 }]}>
           <header class="unit-head">
+            <button type="button" class="unit-toggle" aria-expanded={current ? String(under(lesson.slug).some((task) => task.slug === current) || lesson.slug === current) : String(i === 0)}>
             <span>Unit {i + 1}</span>
             <h2>{lesson.title}</h2>
             <p>{lesson.blurb}</p>
+            </button>
           </header>
           <div class="nodes">
             {under(lesson.slug).map((task) =>
@@ -52,6 +54,7 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
                   class:list={["node", "guide", { here: current === task.slug }]}
                   href={task.href}
                   data-module={task.slug}
+                  data-search={`${task.title} ${task.blurb} ${task.levels.overview.join(" ")}`}
                   data-kind="guide"
                   aria-current={current === task.slug ? "page" : undefined}
                 >
@@ -63,6 +66,7 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
                   class:list={["node", "assignment", { here: current === task.slug }]}
                   href={task.href}
                   data-module={task.slug}
+                  data-search={`${task.title} ${task.blurb} ${task.levels.overview.join(" ")}`}
                   data-xp={task.xp}
                   data-kind="check"
                   aria-current={current === task.slug ? "page" : undefined}
@@ -162,6 +166,13 @@ const under = (slug: string) => MODULES.filter((m) => m.parent === slug);
       root.dataset.ready = "1";
       const button = root.querySelector<HTMLButtonElement>(".path-toggle");
       const frame = root.closest(".psych-frame");
+      root.querySelectorAll<HTMLButtonElement>(".unit-toggle").forEach((toggle) => {
+        toggle.addEventListener("click", () => {
+          const unit = toggle.closest(".unit");
+          const shut = unit?.classList.toggle("unit-shut");
+          toggle.setAttribute("aria-expanded", String(!shut));
+        });
+      });
       button?.addEventListener("click", () => {
         const collapsed = root.classList.toggle("is-collapsed");
         frame?.classList.toggle("path-collapsed", collapsed);

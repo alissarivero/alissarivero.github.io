@@ -23,7 +23,8 @@ const { module, redirect } = Astro.props;
 const steps = MODULES.filter((item) => item.kind === "page" || item.kind === "assignment" || item.kind === "project");
 const stepIndex = steps.findIndex((item) => item.slug === module?.slug);
 const nextStep = stepIndex >= 0 ? steps[stepIndex + 1] : undefined;
-const away = redirect || (module?.kind === "lesson" ? "/psychstats/#course-path" : "");
+const away = redirect || "";
+const unitPages = module ? MODULES.filter((item) => item.parent === module.slug && item.kind !== "lesson") : [];
 const kicker =
   module?.kind === "assignment"
     ? "Assignment"
@@ -54,7 +55,31 @@ const kicker =
       <article>
         <p class="psych-kicker">{kicker}</p>
         <h1>{module.title}</h1>
-        <Levels overview={module.levels.overview} detailed={module.levels.detailed} points={module.levels.points} credit={module.levels.credit} figures={module.figures} />
+        {(module.video || module.videoSlot) && (
+          <figure class="lesson-video">
+            {module.video ? (
+              <iframe src={module.video} title={module.videoSlot || module.title} allow="fullscreen" />
+            ) : (
+              <p>A short video will go here: {module.videoSlot}</p>
+            )}
+          </figure>
+        )}
+        {module.kind === "lesson" ? (
+          <>
+            <p>{module.blurb}</p>
+            {unitPages.length > 0 && (
+              <ul class="unit-contents">
+                {unitPages.map((item) => (
+                  <li>
+                    <a href={item.href}>{item.title}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
+        ) : (
+          <Levels overview={module.levels.overview} detailed={module.levels.detailed} points={module.levels.points} credit={module.levels.credit} figures={module.figures} />
+        )}
         {module.slug === "introduction-to-course" && (
           <div class="path-key" aria-label="How to read the path">
             <div class="key-item">
@@ -92,6 +117,8 @@ const kicker =
             data-slug={module.slug}
             data-xp={module.xp}
             data-badge={module.badge || ""}
+            data-gated={module.starter && module.check ? "1" : undefined}
+            disabled={Boolean(module.starter && module.check)}
           >
             Mark as completed
           </button>
@@ -126,9 +153,24 @@ const kicker =
     button.dataset.ready = "1";
     const rows = await loadProgress();
     const current = rows.find((row) => row.slug === button.dataset.slug);
-    paint(button, current?.status === "checked");
+    const doneNow = current?.status === "checked";
+    paint(button, doneNow);
+    if (button.dataset.gated === "1") button.disabled = !doneNow;
+    document.addEventListener("psychstats-output", (event) => {
+      const detail = (event as CustomEvent<{ slug: string; ok: boolean }>).detail;
+      if (!detail || detail.slug !== button.dataset.slug || button.dataset.gated !== "1") return;
+      if (button.dataset.done === "1") return;
+      button.disabled = !detail.ok;
+      const note = document.getElementById("mark-status");
+      if (note) {
+        note.textContent = detail.ok
+          ? "That output is right. You can mark this complete."
+          : "That output is not the one this page is looking for yet.";
+      }
+    });
     button.addEventListener("click", async () => {
       const done = button.dataset.done !== "1";
+      if (done && button.dataset.gated === "1" && button.disabled) return;
       const saved = await saveProgress(
         {
           slug: button.dataset.slug || "",
@@ -139,6 +181,7 @@ const kicker =
         true
       );
       paint(button, done);
+      if (!done && button.dataset.gated === "1") button.disabled = true;
       const status = document.getElementById("mark-status");
       if (status) {
         const where = saved.remote ? "Saved to your account." : "Saved on this device.";

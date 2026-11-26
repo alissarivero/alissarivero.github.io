@@ -529,6 +529,57 @@
   font-size: 2.85rem;
 }
 
+.course-path:not(.is-collapsed) .unit.unit-shut .nodes,
+.course-path:not(.is-collapsed) .unit.unit-shut .unit-head p {
+  display: none;
+}
+
+.unit-toggle {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lesson-video,
+.unit-contents {
+  margin: 0 0 1.25rem;
+}
+
+.lesson-video {
+  padding: 1rem 1.1rem;
+  background: #f4f7fb;
+  border: 1px dashed #00539B;
+  border-radius: 16px;
+}
+
+.lesson-video p {
+  margin: 0;
+  color: #00539B;
+  font-weight: 700;
+}
+
+.lesson-video iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 12px;
+}
+
+.unit-contents {
+  padding-left: 1.2rem;
+}
+
+.unit-contents a {
+  color: #00539B;
+  font-weight: 700;
+}
+
 .unit-head p {
   margin: 0 0 0.9rem;
   color: #5c5852;
@@ -903,6 +954,11 @@
 .psych-shell button#mark-complete.is-done {
   background: #00539B;
   color: #fff;
+}
+
+.psych-shell button#mark-complete:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .path-key {

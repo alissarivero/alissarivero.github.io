@@ -100,7 +100,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "Look at the columns before you compute anything.",
     [
       "Open the file and name every column before you call mean() or plot(). In R, names(data) lists the columns, str(data) shows the type R stored, and head(data) shows the first rows. A column you cannot explain in a sentence is not ready to analyze.",
-      "Write down, for each column, what one number or label means and what unit it is in. Reaction time in milliseconds is not the same object as a count of errors. This page is that inventory."
+      "Write down, for each column, what one number or label means and what unit it is in. Reaction time in milliseconds is not the same object as a count of errors. This page is that inventory.",
+      "The file used for this look is stroop.csv. It is simulated teaching data, built to resemble an ink-naming experiment. It is not anyone's raw data, and it is not Stroop's 1935 study."
     ],
     []
   ),
@@ -134,7 +135,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "Human data arrives with mistakes.",
     [
       "People skip items, tap the wrong key, take a break in the middle of a trial, or type an age of 213. A spreadsheet from a survey can contain duplicate rows, a dropped participant, or a free-text answer where you expected a number.",
-      "None of that is a reason to throw the file away. It is a reason to look before you summarize. The next page is the cleaning you do after you have seen those problems."
+      "None of that is a reason to throw the file away. It is a reason to look before you summarize. The next page is the cleaning you do after you have seen those problems.",
+      "On the teaching Stroop file, a reaction time of 12 ms is not a trial a person could have finished. That row is one to set aside, and the script should say so. stroop.csv is simulated for this course. It is not a published study."
     ],
     []
   ),
@@ -146,7 +148,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "Decide what a bad row is, and write the decision down.",
     [
       "Cleaning is a set of rules you can rerun: drop duplicate IDs, turn blank cells into missing values, and set aside trials that finished faster than a person can respond. The rule belongs in the script, not only in your memory.",
-      "Say how many rows you removed and why. A reader should be able to start from the raw file and reach the same analysis file by running your code."
+      "Say how many rows you removed and why. A reader should be able to start from the raw file and reach the same analysis file by running your code.",
+      "A rule you can rerun: drop any trial faster than 200 ms, then print how many rows remain. The simulated Stroop file in this course has no such row. You would notice if one showed up, because the count would change."
     ],
     []
   ),
@@ -299,6 +302,7 @@ export const LESSON_PAGES: LessonPage[] = [
     "Two means, and whether the gap is large beside the spread.",
     [
       "A t-test compares two means. Paired, or one-sample against a known value, uses the same people twice. Two-sample uses different people. The output gives the means, the t statistic, the degrees of freedom, and a p-value. The thing you wanted was the difference in the original units: hours of sleep, milliseconds, points on a scale. The t is how that gap compares with the noise.",
+      "The numbers in a classroom t-test usually come from sleep, which ships with R: the same patients measured on two drugs. That is a built-in dataset, not data from your lab."
     ],
     []
   ),
@@ -323,7 +327,8 @@ export const LESSON_PAGES: LessonPage[] = [
     [
       "Linear regression describes the mean of an outcome as a straight line in one or more predictors. With one predictor, the line has an intercept and a slope.",
       "A claim students already know: a Myers–Briggs letter, E or I, is often treated as a prediction of real behavior, such as how often someone speaks up in a meeting. The picture puts that behavior on the vertical axis. The letter piles people into two columns, and the line stays nearly flat. A measured extraversion score spreads the same people out, and the slope is how much speaking-up changes for one step up the score. The letter is a weak predictor. A regression needs a number.",
-      "The line is a summary of the mean, not a claim that every person sits on it. The next pages are what 'best' means and how to read the numbers."
+      "The line is a summary of the mean, not a claim that every person sits on it. The next pages are what 'best' means and how to read the numbers.",
+      "The personality picture on this page is a teaching drawing, not a sample from a published study. Do not cite it as evidence about Myers–Briggs. The claim it illustrates is that a letter is a weak predictor and a score is a number a line can use."
     ],
     []
   ),
@@ -521,7 +526,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "The sentence is about the behavior. The statistic sits in parentheses.",
     [
       "Weak: 'The t-test was significant (p < .05).' Strong: 'Patients slept 1.6 hours longer on the second drug than on the first (mean difference = 1.58 hours, 95% CI [0.70, 2.46]).'",
-      "Lead with what people did, in the units of the study. Put the test, the interval, and the effect size in parentheses. A reader who skips the parentheses should still know the result."
+      "Lead with what people did, in the units of the study. Put the test, the interval, and the effect size in parentheses. A reader who skips the parentheses should still know the result.",
+      "The usual numbers for this sentence come from sleep, a small dataset that ships with R: ten patients and two drugs. The result is a difference in hours of sleep. Quote the hours. The file is not something you collected."
     ],
     []
   ),
@@ -533,7 +539,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "The figure should show the comparison the sentence claims.",
     [
       "If the sentence is about two means, the figure shows the two distributions or the two means with an interval, not a 3D bar. If the sentence is about a relationship, the figure is the scatter with the line.",
-      "Label the units. A figure that only shows stars has not shown the result. The caption can repeat the sentence in shorter form."
+      "Label the units. A figure that only shows stars has not shown the result. The caption can repeat the sentence in shorter form.",
+      "For a Stroop comparison, the figure is reaction time in milliseconds by condition. The teaching file is simulated. A reader should be able to tell that from the caption, so they do not cite it as the original experiment."
     ],
     []
   ),
@@ -545,7 +552,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "A strong figure is still one of a few kinds.",
     [
       "The legal pictures have not changed: a distribution, a comparison of groups, a scatter, a count of categories. What changes at this point in the course is the standard. The figure has to be able to carry a result in a paper or a poster.",
-      "Choose the kind that matches the sentence you would write, then spend the time on labels, scale, and the raw pattern."
+      "Choose the kind that matches the sentence you would write, then spend the time on labels, scale, and the raw pattern.",
+      "A figure of the sleep result shows the extra hours, not a star. sleep is built into R. The axis is hours, and the comparison is the two drugs on the same people."
     ],
     []
   ),
@@ -557,7 +565,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "The column type still decides the mark.",
     [
       "A category is a group or a count. A measurement is a position on an axis that has units. Mixing those up is still the fastest way to make a figure that cannot be read.",
-      "Before you open ggplot, write the type of each column you plan to show. If a column is a label stored as 1 and 2, it is still a label."
+      "Before you open ggplot, write the type of each column you plan to show. If a column is a label stored as 1 and 2, it is still a label.",
+      "On the simulated Stroop file, condition is a label even if it was stored as 1 and 2. rt_ms is the measurement, in milliseconds. The picture uses the label as groups and the measurement as the axis."
     ],
     []
   ),
@@ -569,7 +578,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "The same layered grammar, held to a higher standard.",
     [
       "ggplot2 is still the package: a table, a mapping, and a mark. For a figure you would show someone else, add labels with labs(), keep the scale honest, and do not hide the points behind a bar of means.",
-      "The next page is the call. The assignment is one figure you would let a reader see."
+      "The next page is the call. The assignment is one figure you would let a reader see.",
+      "In RStudio the simulated Stroop file is ggplot(stroop, aes(condition, rt_ms)) + geom_boxplot() + labs(y = 'Reaction time (ms)'). Say in the caption that the file was made for teaching."
     ],
     []
   ),
@@ -592,7 +602,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "A paper is the sentence, the figure, and the parentheses.",
     [
       "A psychology paper reports what people did, in the units of the study, with the estimate and the interval a reader can check. The test is evidence, not the subject of the sentence.",
-      "The methods say what a row is, what you excluded, and which model you fit. A reader who was not in the room should be able to tell what you did."
+      "The methods say what a row is, what you excluded, and which model you fit. A reader who was not in the room should be able to tell what you did.",
+      "A results paragraph for the sleep data, which ships with R, says how many extra hours patients slept on the second drug, then puts the test in parentheses. It does not begin with the name of the test."
     ],
     []
   ),
@@ -604,7 +615,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "A poster is a few sentences and one figure, readable from a step away.",
     [
       "A poster is not a paper pasted onto a board. Lead with the question and the result. One figure should carry the comparison. The statistic can be a small line under the figure.",
-      "If someone stops for a minute, they should leave knowing what you found."
+      "If someone stops for a minute, they should leave knowing what you found.",
+      "A poster of that same sleep result can be the question, one sentence about the extra hours, and one figure. The statistic is a line under the figure."
     ],
     []
   ),
@@ -616,7 +628,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "A talk is the same result, spoken in order.",
     [
       "Start with the question, then what people did, then the figure, then the sentence you want remembered. A slide of a p-value without the effect is the weak sentence, spoken.",
-      "Leave time for the question you cannot answer yet. That is part of the result, not a failure of the talk."
+      "Leave time for the question you cannot answer yet. That is part of the result, not a failure of the talk.",
+      "A talk can use the same sleep example: what the two drugs were, the figure of extra hours, and the one sentence you want remembered. sleep is a built-in dataset, which you can say in one clause."
     ],
     []
   ),
@@ -628,7 +641,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "The script and the data should be able to travel.",
     [
       "Open science here is a folder: the data, or a clear note about why it cannot be shared, the script, and the packages to load. Someone else should be able to rerun the figure.",
-      "A Quarto document or a script with comments is enough. The point is that the analysis is written down, not only clicked."
+      "A Quarto document or a script with comments is enough. The point is that the analysis is written down, not only clicked.",
+      "For the simulated Stroop file, the folder is the csv, the script that reads it, and a note that the rows were generated for teaching. Someone else should be able to rerun the figure from that folder."
     ],
     []
   ),
@@ -673,7 +687,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "Text becomes numbers, then the statistics you already know.",
     [
       "Natural language processing turns words into counts, categories, or the numeric codes from an encoder. A study might count the emotion words in a diary, or relate a sentence embedding to a rating.",
-      "After that conversion, the analysis is often a correlation, a regression, or a comparison of groups. The new step is how the text became a column. The test is not new."
+      "After that conversion, the analysis is often a correlation, a regression, or a comparison of groups. The new step is how the text became a column. The test is not new.",
+      "A diary study might count anxiety words and relate that count to a rating. After the words become a column, the analysis is a correlation or a regression you already know. Say how the text became the column."
     ],
     []
   ),
@@ -696,7 +711,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "The tools were built by people, in institutions, for particular decisions.",
     [
       "The tests in this course were developed in particular places: agriculture, industry, medicine, and psychology, often tied to decisions about groups of people. Knowing that does not make the mean invalid. It does mean the default procedure is not neutral just because it is old.",
-      "When you choose a test, you are also choosing a tradition. You can still ask whether it answers the question you actually have."
+      "When you choose a test, you are also choosing a tradition. You can still ask whether it answers the question you actually have.",
+      "The t-test students meet through the sleep data was built for small agricultural and industrial experiments, then carried into psychology. Knowing that history does not change the hours. It does mean the default test is a choice."
     ],
     []
   ),
@@ -708,7 +724,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "A surprising result that never appears again was not a finding.",
     [
       "Psychology spent a decade learning that many published 'significant' results did not show up in a new sample. Small samples, flexible analyses, and a file drawer of nulls were part of the reason.",
-      "The repair in this course is ordinary: say what you planned to test, report the size of the effect and the interval, and keep the script. A p-value alone was never the result."
+      "The repair in this course is ordinary: say what you planned to test, report the size of the effect and the interval, and keep the script. A p-value alone was never the result.",
+      "A result that appears in one simulated Stroop file and never again was a property of that file. The repair is the same as with a published study: say what you planned to test, report the size in milliseconds, and keep the script."
     ],
     []
   ),
@@ -720,7 +737,8 @@ export const LESSON_PAGES: LessonPage[] = [
     "A wrong column or a flipped sign can become a published sentence.",
     [
       "Famous corrections in psychology and economics started as a spreadsheet error, a miscoded condition, or a script that dropped the wrong rows. The paper was confident because nobody reran the file.",
-      "Before you write the sentence, rerun the script from a clean session, check that the number of rows is what you think, and look at the figure. If the result only appears after a step you cannot explain, it is not ready."
+      "Before you write the sentence, rerun the script from a clean session, check that the number of rows is what you think, and look at the figure. If the result only appears after a step you cannot explain, it is not ready.",
+      "A script that averages the word condition, or that swaps congruent and incongruent in the simulated Stroop file, will still print a number. The number is not the result until you have checked which column it came from."
     ],
     []
   ),

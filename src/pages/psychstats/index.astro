@@ -75,14 +75,16 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
 
     const topics = () =>
       [...document.querySelectorAll<HTMLElement>("#course-path .node, #course-path .project-card")].map((node) => ({
-        title: node.querySelector(".node-label, .project-title")?.textContent?.trim() || "",
+        title: `${node.querySelector(".node-label, .project-title")?.textContent?.trim() || ""} ${node.dataset.search || ""}`,
         href: node.getAttribute("href") || "#course-path",
         node,
       }));
 
     const paintPath = (q: string) => {
       topics().forEach(({ title, node }) => {
-        node.classList.toggle("topic-miss", q.length > 0 && !title.toLowerCase().includes(q));
+        const miss = q.length > 0 && !`${title} ${node.dataset.search || ""}`.toLowerCase().includes(q);
+        node.classList.toggle("topic-miss", miss);
+        if (q && !miss) node.closest(".unit")?.classList.remove("unit-shut");
       });
     };
 
@@ -98,7 +100,7 @@ const firstStep = opener ?? MODULES.find((m) => m.parent === firstLesson?.slug);
       matches.slice(0, 6).forEach(({ title, href }) => {
         const link = document.createElement("a");
         link.href = href;
-        link.textContent = title;
+        link.textContent = node.querySelector(".node-label, .project-title")?.textContent?.trim() || title;
         results.appendChild(link);
       });
       if (matches.length === 0) {
