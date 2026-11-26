@@ -602,7 +602,7 @@
 
 .edge-pattern {
   width: 100vw;
-  height: 240px;
+  height: 140px;
   margin: 2.5rem 0 -4rem;
   margin-left: calc(50% - 50vw);
   overflow: hidden;
@@ -645,6 +645,7 @@
 .project-title {
   margin: 0;
   font-size: 1.45rem;
+  color: #fff;
 }
 
 .project-card p {
@@ -1411,7 +1412,7 @@
   }
 
   .edge-pattern {
-    height: 190px;
+    height: 110px;
     margin-bottom: -3rem;
   }
 
